@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutHeader.Text" xml:space="preserve">
+    <value>à propos</value>
+  </data>
+  <data name="BackgroundsTasksHeader.Text" xml:space="preserve">
+    <value>tâches en arrière-plan</value>
+  </data>
+  <data name="ContributeFifthLine.Text" xml:space="preserve">
+    <value>Visitez le lien suivant pour plus d'information</value>
+  </data>
+  <data name="ContributeFirstLine.Text" xml:space="preserve">
+    <value>Ce projet est open source et vous pouvez y contribuer de plusieurs manières:</value>
+  </data>
+  <data name="ContributeFourthLine.Text" xml:space="preserve">
+    <value>- éditer le code de l'application</value>
+  </data>
+  <data name="ContributeSecondLine.Text" xml:space="preserve">
+    <value>- signaler un bug</value>
+  </data>
+  <data name="ContributeSixthLine.Text" xml:space="preserve">
+    <value>et venez participer à ce projet :)</value>
+  </data>
+  <data name="ContributeThirdLine.Text" xml:space="preserve">
+    <value>- suggérer une fonctionnalité</value>
+  </data>
+  <data name="ContributeTitle.Text" xml:space="preserve">
+    <value>Contribuer</value>
+  </data>
+  <data name="Dark.Text" xml:space="preserve">
+    <value>Sombre</value>
+  </data>
+  <data name="DataContent1.Text" xml:space="preserve">
+    <value>Les données des citations proviennent des sites</value>
+  </data>
+  <data name="DataContent2.Text" xml:space="preserve">
+    <value>et cette application n'est aucunement liée à ces sites.</value>
+  </data>
+  <data name="DataTitle.Text" xml:space="preserve">
+    <value>Données</value>
+  </data>
+  <data name="DynamicTileLabel.Text" xml:space="preserve">
+    <value>Mettre à jour la tuile de l'application périodiquement</value>
+  </data>
+  <data name="DynamicTileTitle.Text" xml:space="preserve">
+    <value>Tuile dynamique</value>
+  </data>
+  <data name="FeedbackButton.Content" xml:space="preserve">
+    <value>Envoyer un avis</value>
+  </data>
+  <data name="FeedbackLabel.Text" xml:space="preserve">
+    <value>Suggérer une amélioration ou signaler un problème</value>
+  </data>
+  <data name="FeedbackTitle.Text" xml:space="preserve">
+    <value>Mon avis</value>
+  </data>
+  <data name="GithubRepository.Text" xml:space="preserve">
+    <value>répertoire GitHub</value>
+  </data>
+  <data name="ImagesSourceContent.Text" xml:space="preserve">
+    <value>Les images proviennent de</value>
+  </data>
+  <data name="ImagesSourceTitle.Text" xml:space="preserve">
+    <value>Images</value>
+  </data>
+  <data name="LanguageButton.Content" xml:space="preserve">
+    <value>Langue</value>
+  </data>
+  <data name="Loading.Text" xml:space="preserve">
+    <value>Chargement...</value>
+  </data>
+  <data name="PersonalizationHeader.Text" xml:space="preserve">
+    <value>personalisation</value>
+  </data>
+  <data name="RatingButton.Content" xml:space="preserve">
+    <value>Noter l'app</value>
+  </data>
+  <data name="RatingLabel.Text" xml:space="preserve">
+    <value>Notez l'application sur le Store</value>
+  </data>
+  <data name="RatingTitle.Text" xml:space="preserve">
+    <value>Notation</value>
+  </data>
+  <data name="Tasks.Text" xml:space="preserve">
+    <value>Tâches</value>
+  </data>
+  <data name="Theme.Text" xml:space="preserve">
+    <value>Thème</value>
+  </data>
+  <data name="ThemeSwitch.OffContent" xml:space="preserve">
+    <value>Thème Sombre</value>
+  </data>
+  <data name="ThemeSwitch.OnContent" xml:space="preserve">
+    <value>Thème Clair</value>
+  </data>
+</root>
