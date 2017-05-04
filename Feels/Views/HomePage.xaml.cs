@@ -57,7 +57,7 @@ namespace Feels.Views {
             var geo = new Geolocator();
             var position = await geo.GetGeopositionAsync();
             var coord = position.Coordinate.Point.Position;
-            await PageDataSource.FetchCurrentWether(coord.Latitude, coord.Longitude);
+            await PageDataSource.FetchCurrentWeather(coord.Latitude, coord.Longitude);
             MainCityPivot.DataContext = PageDataSource.Cities[0];
         }
         

@@ -53,7 +53,7 @@ namespace Feels.Services {
             if (IsNight(weather)) {
                 topScene = AddMoon(topScene);
                 topScene = AddNightOtherIcons(topScene, weather.Current.Description);
-                //topScene = AddStars(topScene);
+                topScene = AddStars(topScene);
             } else {
                 topScene = AddCurrentWeatherIcon(topScene, weather.Current.Description);
             }
@@ -87,7 +87,8 @@ namespace Feels.Services {
                 Glyph = "\uF0CE",
                 Margin = new Thickness(0, 0, 5, 0),
                 HorizontalAlignment = HorizontalAlignment.Right,
-                FontSize = 100
+                FontSize = 100,
+                Name = "Moon"
             };
 
             sceneIcons.Children.Add(moon);
@@ -123,29 +124,38 @@ namespace Feels.Services {
         }
 
         static Grid AddStars(Grid topScene) {
+            var secondaryScene = new Grid() {
+                Name = "Stars"
+            };
+            topScene.Children.Add(secondaryScene);
+
             var star = new FontIcon() {
                 Glyph = "\uE735",
-                FontSize = 10,
-                Margin = new Thickness(0,80,60,0),
-                Foreground = new SolidColorBrush(Color.FromArgb(255, 244, 179, 80))
+                FontSize = 15,
+                Opacity = 1,
+                Margin = new Thickness(0,-30,50,0),
+                Foreground = new SolidColorBrush(Colors.White)
             };
 
             var star2 = new FontIcon() {
                 Glyph = "\uE735",
                 FontSize = 20,
-                Margin = new Thickness(0, 40, 200, 0),
-                Foreground = new SolidColorBrush(Color.FromArgb(255, 248, 148, 6))
+                Opacity = 1,
+                Margin = new Thickness(0, 90, 90, 0),
+                Foreground = new SolidColorBrush(Colors.White)
             };
 
             var star3 = new FontIcon() {
                 Glyph = "\uE735",
-                Margin = new Thickness(20, 20, 320, 0),
-                FontSize = 30
+                Margin = new Thickness(0, 120, 0, 0),
+                FontSize = 10,
+                Opacity = 1,
+                Foreground = new SolidColorBrush(Colors.White)
             };
 
-            topScene.Children.Add(star);
-            topScene.Children.Add(star2);
-            topScene.Children.Add(star3);
+            secondaryScene.Children.Add(star);
+            secondaryScene.Children.Add(star2);
+            secondaryScene.Children.Add(star3);
 
             return topScene;
         }
