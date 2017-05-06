@@ -1,7 +1,5 @@
 ﻿using DarkSkyApi;
 using DarkSkyApi.Models;
-using Feels.Models;
-using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;

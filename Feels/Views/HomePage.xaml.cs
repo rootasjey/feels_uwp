@@ -17,6 +17,8 @@ namespace Feels.Views {
 
         CoreDispatcher _UIDispatcher { get; set; }
 
+        private int _HourForcastAnimDelay { get; set; }
+
         public HomePage() {
             InitializeComponent();
             PageDataSource = App.DataSource;
@@ -49,6 +51,8 @@ namespace Feels.Views {
             await FetchCurrentLocation();
             HideLoadingView();
             PopulateFirstPage();
+
+            BindHourlyListData();
         }
 
         async Task FetchCurrentLocation() {
@@ -84,7 +88,7 @@ namespace Feels.Views {
                         delay = 1000 / div;
 
                         await _UIDispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                            Temperature.Text = curr.ToString();
+                            Temperature.Text = string.Format("{0}°", curr);
                         });
                     });
                 }
@@ -128,6 +132,12 @@ namespace Feels.Views {
             LocationDisabledMessage.Visibility = Visibility.Collapsed;
 
             AnimateSlideUP(LoadingView);
+        }
+
+        void BindHourlyListData() {
+            HourlyList.ItemsSource = PageDataSource.Forecast.Hourly.Hours;
+
+            HourlySummary.Text = PageDataSource.Forecast.Hourly.Summary;
         }
 
         async Task AnimateSlideUP(Panel view) {
@@ -181,5 +191,30 @@ namespace Feels.Views {
         private void TryAgainButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
             InitializePageData();
         }
+
+        private void CurrentToHourlyButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
+            PagePivot.SelectedIndex = 1;
+        }
+
+        private void CurrentToDailyButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
+            PagePivot.SelectedIndex = 2;
+        }
+
+        private async void HourForecast_Loaded(object sender, RoutedEventArgs e) {
+            var HourForecast = (Grid)sender;
+
+            _HourForcastAnimDelay += 100;
+            await HourForecast.Offset(0, 50,0)
+                                .Then()
+                                .Fade(1, 500, _HourForcastAnimDelay)
+                                .Offset(0, 0, 500, _HourForcastAnimDelay)
+                                .StartAsync();
+        }
+        
+        private void HourlySummary_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
+            //HourlyList.ScrollIntoView(PageDataSource.Forecast.Hourly.Hours[0]);
+            HourlyList.ScrollToIndex(0);
+        }
+        
     }
 }

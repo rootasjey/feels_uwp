@@ -4,16 +4,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:hourlydata="using:DarkSkyApi.Models"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        
-        <Pivot x:Name="HomePivot">
+        <Pivot x:Name="PagePivot">
             <PivotItem x:Name="NowPivot" Margin="0,-51,0,0">
-                <PivotItem.Header>
-                    <TextBlock Text="now" Typography.Capitals="SmallCaps"
-                               FontWeight="Bold" Visibility="Collapsed"/>
-                </PivotItem.Header>
 
                 <ScrollViewer x:Name="PivotContent">
                     <Grid>
@@ -31,12 +28,21 @@
                         </StackPanel>
 
                         <Grid x:Name="WeatherView" 
-                              VerticalAlignment="Center"
+                              VerticalAlignment="Top"
                               HorizontalAlignment="Center"
-                              Margin="24,150,24,0" 
+                              Margin="24,100,24,0" 
                               Visibility="Visible">
 
                             <StackPanel x:Name="WeatherViewContent">
+                                <TextBlock x:Name="Status" 
+                                            Text="Clair" 
+                                            Width="200"
+                                           FontWeight="SemiBold"
+                                            Typography.Capitals="SmallCaps"
+                                            TextAlignment="Center"
+                                            TextWrapping="Wrap"
+                                            FontSize="32"/>
+                                
                                 <TextBlock x:Name="City" Text="paris"
                                                Typography.Capitals="AllSmallCaps"
                                                FontWeight="Light"
@@ -62,13 +68,7 @@
 
                                 <TextBlock x:Name="FeelsLike" Text="Feels more like "
                                                HorizontalAlignment="Center"/>
-                                <TextBlock x:Name="Status" 
-                                               Text="Clair" 
-                                               Width="200"
-                                               Typography.Capitals="SmallCaps"
-                                               TextAlignment="Center"
-                                               TextWrapping="Wrap"
-                                               FontSize="32"/>
+                                
 
                                 <StackPanel x:Name="MinMaxTemp"
                                                 HorizontalAlignment="Center"
@@ -162,20 +162,24 @@
                                 <StackPanel Margin="0,50,0,0">
                                     <Button Margin="0,0,0,0">
                                         <Button.Content>
-                                            <TextBlock Text="swype right to see hourly forecast"
-                                                           TextWrapping="Wrap"
-                                                           Typography.Capitals="SmallCaps"
-                                                           FontWeight="Bold"/>
+                                            <TextBlock x:Name="CurrentToHourlyButton" 
+                                                       Text="swype right to see hourly forecast"
+                                                        TextWrapping="Wrap"
+                                                        Typography.Capitals="SmallCaps"
+                                                        FontWeight="Bold"
+                                                       Tapped="CurrentToHourlyButton_Tapped"/>
                                         </Button.Content>
                                     </Button>
 
                                     <Button Margin="0,5,0,0"
                                                 HorizontalAlignment="Center">
                                         <Button.Content>
-                                            <TextBlock Text="swype left to see daily forecast"
-                                                           TextWrapping="Wrap"
-                                                           Typography.Capitals="SmallCaps"
-                                                           FontWeight="Bold"/>
+                                            <TextBlock x:Name="CurrentToDailyButton" 
+                                                       Text="swype left to see daily forecast"
+                                                        TextWrapping="Wrap"
+                                                        Typography.Capitals="SmallCaps"
+                                                        FontWeight="Bold"
+                                                       Tapped="CurrentToDailyButton_Tapped"/>
                                         </Button.Content>
                                     </Button>
                                 </StackPanel>
@@ -234,10 +238,16 @@
                 </ScrollViewer>
             </PivotItem>
 
-            <PivotItem x:Name="HourlyPivot">
+            <PivotItem x:Name="HourlyPivot"
+                       Margin="0,-50,0,0">
                 <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
                     <StackPanel x:Name="EmptyHourly"
-                                Visibility="Visible"
+                                Visibility="Collapsed"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Margin="24,0,24,0">
@@ -245,6 +255,104 @@
                                    FontSize="26"
                                    TextWrapping="Wrap"/>
                     </StackPanel>
+
+                    <ListView x:Name="HourlyList"
+                              Grid.Row="2">
+                        <ListView.Header>
+                            <controls:ScrollHeader TargetListViewBase="{x:Bind HourlyList}"
+                                                   Mode="QuickReturn">
+
+                                <StackPanel Padding="20" 
+                                            Background="{ThemeResource SystemControlHighlightAccentBrush}">                                
+                                    <StackPanel x:Name="PanelHourlyNavigation" 
+                                                Margin="0,0,0,0"
+                                                Grid.Row="0"
+                                                Padding="30,0,30,0"
+                                                Orientation="Horizontal"
+                                                HorizontalAlignment="Left">
+                                        <Button Margin="0,0,0,0">
+                                            <Button.Content>
+                                                <TextBlock x:Name="HourlyTourrentButton" 
+                                                Text="current forecast"
+                                                Typography.Capitals="SmallCaps"
+                                                FontWeight="Bold"
+                                                Tapped="CurrentToHourlyButton_Tapped"/>
+                                            </Button.Content>
+                                        </Button>
+
+                                        <Button Margin="10,0,0,0"
+                                                    HorizontalAlignment="Center">
+                                            <Button.Content>
+                                                <TextBlock x:Name="HourlyToDailyButton" 
+                                                Text="daily forecast"
+                                                Typography.Capitals="SmallCaps"
+                                                FontWeight="Bold"
+                                                Tapped="CurrentToDailyButton_Tapped"/>
+                                            </Button.Content>
+                                        </Button>
+                                    </StackPanel>
+
+                                    <TextBlock x:Name="HourlySummary" 
+                                           Text="Summary" Grid.Row="1" 
+                                           Padding="30,20"
+                                           Foreground="White"
+                                           Tapped="HourlySummary_Tapped"/>
+                                </StackPanel>
+
+                            </controls:ScrollHeader>
+                        </ListView.Header>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="hourlydata:HourDataPoint">
+                                <Grid x:Name="HourForecast" 
+                                      Height="100" Padding="20"
+                                      Opacity="0"
+                                      Loaded="HourForecast_Loaded">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="60"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="50"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="{x:Bind Time, Converter={StaticResource TimeParser}}"
+                                               VerticalAlignment="Center"
+                                               FontSize="26"
+                                               FontWeight="Light"
+                                               Grid.Row="0"
+                                               />
+                                    
+                                    <BitmapIcon UriSource="{x:Bind Icon, Converter={StaticResource WeatherIcon}}"
+                                                Height="30"
+                                                Width="30"
+                                                VerticalAlignment="Center"
+                                                Foreground="White"
+                                                Grid.Column="1"
+                                                />
+
+                                    <TextBlock Text="{x:Bind Summary}"
+                                               Grid.Column="2"
+                                               Padding="10"
+                                               Width="180"
+                                               TextWrapping="Wrap"
+                                               VerticalAlignment="Center"
+                                               Typography.Capitals="AllSmallCaps"
+                                               FontSize="20"
+                                               FontWeight="Light"/>
+                                    
+                                    <TextBlock x:Name="Temperature"
+                                               Grid.Column="3"
+                                               FontWeight="Bold"
+                                               FontSize="32"
+                                               Padding="12,0,0,0"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Right"
+                                               Text="{x:Bind Temperature, Converter={StaticResource SimpleTemperature}}"/>
+
+
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </Grid>
             </PivotItem>
 

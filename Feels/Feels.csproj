@@ -95,6 +95,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\SimpleTemperature.cs" />
+    <Compile Include="Converters\TimeParser.cs" />
+    <Compile Include="Converters\WeatherIcon.cs" />
     <Compile Include="Data\SourceModel.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -109,6 +112,7 @@
     <Compile Include="Services\Scene.cs" />
     <Compile Include="Services\Settings.cs" />
     <Compile Include="Services\UI.cs" />
+    <Compile Include="Services\VisualTreeExtensions.cs" />
     <Compile Include="Services\Wallpaper.cs" />
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
@@ -139,11 +143,19 @@
     <Content Include="Assets\BadgeLogo.scale-200.png" />
     <Content Include="Assets\BadgeLogo.scale-400.png" />
     <Content Include="Assets\icon.png" />
-    <Content Include="Assets\Icons\cloud.png" />
+    <Content Include="Assets\Icons\clair.png" />
+    <Content Include="Assets\Icons\cloudy.png" />
     <Content Include="Assets\Icons\cloudrain.png" />
+    <Content Include="Assets\Icons\fog.png" />
+    <Content Include="Assets\Icons\moon.png" />
     <Content Include="Assets\Icons\moonstars.png" />
+    <Content Include="Assets\Icons\partycloudy_day.png" />
+    <Content Include="Assets\Icons\partycloudy_night.png" />
+    <Content Include="Assets\Icons\sleet.png" />
+    <Content Include="Assets\Icons\snow.png" />
     <Content Include="Assets\Icons\thermoter_max.png" />
     <Content Include="Assets\Icons\thermoter_min.png" />
+    <Content Include="Assets\Icons\wind.png" />
     <Content Include="Assets\LargeTile.scale-100.png" />
     <Content Include="Assets\LargeTile.scale-125.png" />
     <Content Include="Assets\LargeTile.scale-150.png" />
@@ -229,6 +241,9 @@
       <Version>1.4.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Animations">
+      <Version>1.4.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls">
       <Version>1.4.1</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">

@@ -207,8 +207,8 @@ namespace Feels.Services {
 
         static Grid AddCurrentWeatherIcon(Grid topScene, string condition) {
             var icon = new BitmapIcon() {
-                Height = 90,
-                Width = 90
+                Height = 60,
+                Width = 60
             };
             var fontIcon = new FontIcon() {
                 Glyph = "\uE706",
