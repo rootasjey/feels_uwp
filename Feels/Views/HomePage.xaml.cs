@@ -7,15 +7,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 using Windows.System;
-using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
 
 namespace Feels.Views {
     public sealed partial class HomePage : Page {
-        private SourceModel PageDataSource;
+        private SourceModel PageDataSource { get; set; }
 
         CoreDispatcher _UIDispatcher { get; set; }
 
@@ -58,26 +56,22 @@ namespace Feels.Views {
             var position = await geo.GetGeopositionAsync();
             var coord = position.Coordinate.Point.Position;
             await PageDataSource.FetchCurrentWeather(coord.Latitude, coord.Longitude);
-            MainCityPivot.DataContext = PageDataSource.Cities[0];
+            NowPivot.DataContext = PageDataSource.Forecast.Currently;
         }
         
         async void PopulateFirstPage() {
-            var mainCity = PageDataSource.Cities[0];
-            var currentWeather = mainCity.Current;
+            var currentWeather = PageDataSource.Forecast.Currently;
 
             await AnimateSlideUP(WeatherViewContent);
             AnimateTemperature();
             FillInData();
-            DrawScene(mainCity);
+            DrawScene();
 
             async void AnimateTemperature()
             {
-                var temperature = currentWeather.Temperature;
-                var index = temperature.IndexOf(".");
-                
-                if (index != -1) temperature = currentWeather.Temperature.Substring(0, index);
+                int temperature = (int)currentWeather.Temperature;
 
-                var max = int.Parse(temperature);
+                var max = temperature;
                 var curr = 0;
                 var step = max > 0 ? 1 : -1;
                 var div = Math.Abs(max - curr);
@@ -98,21 +92,38 @@ namespace Feels.Views {
 
             void FillInData()
             {
-                Status.Text = currentWeather.Description;
-                City.Text = mainCity.Location.City;
-                SunriseBlock.Text = currentWeather.Sunrise;
-                SunsetBlock.Text = currentWeather.Sunset;
+                Status.Text = currentWeather.Summary;
+                City.Text = PageDataSource.Forecast.TimeZone;
+                FeelsLike.Text = string.Format("{0} {1}", "Feels more like ", currentWeather.ApparentTemperature);
+                PrecipValue.Text = string.Format("{0}%", currentWeather.PrecipitationProbability * 100);
+                //SunriseBlock.Text = currentWeather.Sunrise;
+                //SunsetBlock.Text = currentWeather.Sunset;
+
+                if (PageDataSource.Forecast.Daily.Days == null ||
+                    PageDataSource.Forecast.Daily.Days.Count == 0) return;
+
+                var currentDay = PageDataSource.Forecast.Daily.Days[0];
+                var maxTemp = (int)currentDay.MaxTemperature;
+                var minTemp = (int)currentDay.MinTemperature;
+
+                MaxTempValue.Text = maxTemp.ToString();
+                MinTempValue.Text = minTemp.ToString();
             }
         }
 
-        void DrawScene(Weather weather) {
-            var scene = Scene.CreateNew(weather);
+        async void DrawScene() {
+            var scene = Scene.CreateNew(PageDataSource.Forecast.Currently, PageDataSource.Forecast.Daily.Days[0]);
             Theater.Children.Add(scene);
 
+            await scene.Fade(0, 0).Offset(0, 200, 0).StartAsync();
+
             Theater.Fade(1, 1000).Start();
+
+            scene.Fade(1, 1000).Offset(0, 0, 1000).Start();
         }
 
         async void ShowLoadingView() {
+            SplashView.Visibility = Visibility.Collapsed;
             WeatherView.Visibility = Visibility.Collapsed;
             LocationDisabledMessage.Visibility = Visibility.Collapsed;
 
@@ -142,7 +153,9 @@ namespace Feels.Views {
                 var delay = 0;
                 foreach (var child in children) {
                     delay += 200;
-                    child.Fade((float)opacities[index], 1000, delay).Offset(0, 0, 1000, delay).Start();
+                    child.Fade((float)opacities[index], 1000, delay)
+                         .Offset(0, 0, 1000, delay)
+                         .Start();
                     index++;
                 }
             }
@@ -155,6 +168,7 @@ namespace Feels.Views {
         }
 
         async void ShowNoAccessView() {
+            SplashView.Visibility = Visibility.Collapsed;
             WeatherView.Visibility = Visibility.Collapsed;
 
             AnimateSlideUP(LocationDisabledMessage);

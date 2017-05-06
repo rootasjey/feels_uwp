@@ -7,85 +7,179 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        
         <Pivot x:Name="HomePivot">
-            <PivotItem x:Name="MainCityPivot" Margin="0,-50,0,0">
-                <!--<PivotItem.Header>
-                    <TextBlock Text="Paris" Typography.Capitals="AllSmallCaps" Canvas.ZIndex="2"/>
-                </PivotItem.Header>-->
+            <PivotItem x:Name="NowPivot" Margin="0,-51,0,0">
+                <PivotItem.Header>
+                    <TextBlock Text="now" Typography.Capitals="SmallCaps"
+                               FontWeight="Bold" Visibility="Collapsed"/>
+                </PivotItem.Header>
 
                 <ScrollViewer x:Name="PivotContent">
                     <Grid>
-                        <!--<Image x:Name="Background" Source="/Assets/Backgrounds/sunny1.jpg" Stretch="UniformToFill"
-                               Canvas.ZIndex="1" Opacity="1"/>-->
                         <Grid x:Name="Theater" Opacity="0"></Grid>
+
+                        <StackPanel x:Name="SplashView"
+                                    Visibility="Collapsed"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center">
+                            <BitmapIcon UriSource="/Assets/icon.png" 
+                                        Foreground="White" 
+                                        Height="90" Width="90"/>
+                            <TextBlock Text="feels" FontSize="60"
+                                       Opacity=".5"/>
+                        </StackPanel>
 
                         <Grid x:Name="WeatherView" 
                               VerticalAlignment="Center"
-                              Margin="24,0,24,0" 
+                              HorizontalAlignment="Center"
+                              Margin="24,150,24,0" 
                               Visibility="Visible">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="500"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
 
-                            <Grid HorizontalAlignment="Center">
-                                <StackPanel x:Name="WeatherViewContent">
-                                    <TextBlock x:Name="City" Text="paris"
+                            <StackPanel x:Name="WeatherViewContent">
+                                <TextBlock x:Name="City" Text="paris"
                                                Typography.Capitals="AllSmallCaps"
                                                FontWeight="Light"
                                                FontSize="24"
                                                Opacity=".5"
                                                TextAlignment="Center"/>
+
+                                <StackPanel Orientation="Horizontal"
+                                                HorizontalAlignment="Center">
                                     <TextBlock x:Name="Temperature"
-                                               Width="200"
-                                               Text="0" 
-                                               TextAlignment="Center"
-                                               FontWeight="Bold" FontSize="90"/>
-                                    <TextBlock x:Name="TempUnit" 
+                                                   Text="42"
+                                                   Margin="0,0,0,0"
+                                                   FontWeight="Bold" 
+                                                   FontSize="90"/>
+                                </StackPanel>
+                                <TextBlock x:Name="TempUnit" 
                                                Text="celcius"
                                                FontSize="22"
+                                               Visibility="Collapsed"
                                                FontWeight="Bold"
                                                Opacity=".5"
                                                TextAlignment="Center"/>
-                                    <TextBlock x:Name="Status" 
+
+                                <TextBlock x:Name="FeelsLike" Text="Feels more like "
+                                               HorizontalAlignment="Center"/>
+                                <TextBlock x:Name="Status" 
                                                Text="Clair" 
                                                Width="200"
+                                               Typography.Capitals="SmallCaps"
                                                TextAlignment="Center"
                                                TextWrapping="Wrap"
                                                FontSize="32"/>
 
-                                    <StackPanel x:Name="SunriseSunset"
-                                                Margin="0,42,0,0" 
+                                <StackPanel x:Name="MinMaxTemp"
+                                                HorizontalAlignment="Center"
+                                                Orientation="Horizontal"
+                                                Opacity="1"
+                                                Margin="0,50,0,0">
+                                    <Grid x:Name="MaxTemp" 
+                                                Margin="0,0,0,0"
                                                 HorizontalAlignment="Center">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="40"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <FontIcon FontFamily="Segoe MDL2 Assets"
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="30"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <BitmapIcon UriSource="/Assets/Icons/thermoter_max.png"
+                                                        Height="30"
+                                                        Width="30"/>
+                                        <TextBlock x:Name="MaxTempValue" 
+                                                        Text="40" 
+                                                        FontSize="30" Grid.Column="1"/>
+                                    </Grid>
+
+                                    <Grid x:Name="MinTemp" 
+                                                  Margin="20,0,0,0"
+                                                  HorizontalAlignment="Center">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="30"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <BitmapIcon UriSource="/Assets/Icons/thermoter_min.png"
+                                                            Height="30"
+                                                            Width="30"/>
+                                        <TextBlock x:Name="MinTempValue" 
+                                                           Text="30" 
+                                                           FontSize="30" 
+                                                           Grid.Column="1"/>
+                                    </Grid>
+                                </StackPanel>
+
+                                <Grid x:Name="Precip" 
+                                          Margin="0,20,0,0"
+                                          HorizontalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <FontIcon FontFamily="Segoe MDL2 Assets" 
+                                                  Glyph="&#xEB42;"
+                                                  FontSize="30"/>
+                                    <TextBlock x:Name="PrecipValue" Text="40" FontSize="28" Grid.Column="1"/>
+                                </Grid>
+
+                                <Button x:Name="WeatherDetailButton" 
+                                            Content="more"
+                                            MinWidth="80"
+                                            Visibility="Collapsed"
+                                            HorizontalAlignment="Center"
+                                            Margin="0,20,0,0"/>
+
+                                <StackPanel x:Name="SunriseSunset"
+                                                Margin="0,42,0,0"
+                                                Visibility="Collapsed"
+                                                HorizontalAlignment="Center">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="40"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <FontIcon FontFamily="Segoe MDL2 Assets"
                                                       Glyph="&#xED39;" FontSize="40"/>
-                                            <TextBlock x:Name="SunriseBlock"
+                                        <TextBlock x:Name="SunriseBlock"
                                                        Margin="18,0,0,0"
                                                        VerticalAlignment="Bottom"
                                                        Text="6:00" Grid.Column="1" 
                                                        FontSize="20" FontWeight="Light"/>
-                                        </Grid>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="40"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <FontIcon FontFamily="Segoe MDL2 Assets" 
+                                    </Grid>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="40"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <FontIcon FontFamily="Segoe MDL2 Assets" 
                                                       Glyph="&#xED3A;" FontSize="40"/>
-                                            <TextBlock x:Name="SunsetBlock" 
+                                        <TextBlock x:Name="SunsetBlock" 
                                                        Margin="18,0,0,0"
                                                        VerticalAlignment="Bottom"
                                                        Text="19:00" Grid.Column="1" 
                                                        FontSize="20" FontWeight="Light"/>
-                                        </Grid>
-                                    </StackPanel>
+                                    </Grid>
                                 </StackPanel>
-                            </Grid>
+
+                                <StackPanel Margin="0,50,0,0">
+                                    <Button Margin="0,0,0,0">
+                                        <Button.Content>
+                                            <TextBlock Text="swype right to see hourly forecast"
+                                                           TextWrapping="Wrap"
+                                                           Typography.Capitals="SmallCaps"
+                                                           FontWeight="Bold"/>
+                                        </Button.Content>
+                                    </Button>
+
+                                    <Button Margin="0,5,0,0"
+                                                HorizontalAlignment="Center">
+                                        <Button.Content>
+                                            <TextBlock Text="swype left to see daily forecast"
+                                                           TextWrapping="Wrap"
+                                                           Typography.Capitals="SmallCaps"
+                                                           FontWeight="Bold"/>
+                                        </Button.Content>
+                                    </Button>
+                                </StackPanel>
+                            </StackPanel>
                         </Grid>
 
                         <StackPanel x:Name="LoadingView"
@@ -139,6 +233,44 @@
                     </Grid>
                 </ScrollViewer>
             </PivotItem>
+
+            <PivotItem x:Name="HourlyPivot">
+                <Grid>
+                    <StackPanel x:Name="EmptyHourly"
+                                Visibility="Visible"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Margin="24,0,24,0">
+                        <TextBlock Text="Hourly Forecast no data to show :("
+                                   FontSize="26"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Grid>
+            </PivotItem>
+
+            <PivotItem x:Name="DailyPivot">
+                <Grid>
+                    <StackPanel x:Name="EmptyDaily"
+                                Visibility="Visible"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Margin="24,0,24,0">
+                        <TextBlock Text="Daily Forecast no data to show :("
+                                   FontSize="26"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Grid>
+            </PivotItem>
         </Pivot>
+
+        <CommandBar x:Name="AppBar"
+                    Background="Transparent"
+                    VerticalAlignment="Bottom" 
+                    ClosedDisplayMode="Minimal">
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Label="settings" />
+            </CommandBar.SecondaryCommands>
+            
+        </CommandBar>
     </Grid>
 </Page>

@@ -4,69 +4,112 @@ using Windows.UI;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml;
+using Microsoft.Toolkit.Uwp.UI.Animations;
+using DarkSkyApi.Models;
 
 namespace Feels.Services {
     public class Scene {
-        public static Grid CreateNew(Weather weather) {
+        public static Grid CreateNew(CurrentDataPoint current, DayDataPoint day) {
             var scene = new Grid();
-            scene = PaintBackground(scene, weather);
-            scene = AddWeatherIcons(scene, weather);
+            scene = PaintBackground(scene, current, day);
+            scene = AddWeatherIcons(scene, current);
             return scene;
         }
 
-        static Grid PaintBackground(Grid scene, Weather weather) {
-            var current = DateTime.Now;
-            var sunrise = DateTime.Parse(weather.Current.Sunrise);
-            var sunset = DateTime.Parse(weather.Current.Sunset);
+        static Grid PaintBackground(Grid scene, CurrentDataPoint current, DayDataPoint day) {
+            //var timeNow = DateTime.Now;
+            //var sunrise = day.SunriseTime;
+            //var sunset = day.SunsetTime;
+            //if (IsNight(timeNow, sunrise, sunset)) {
+            //    scene.Background = new SolidColorBrush(Color.FromArgb(0, 34, 49, 63));
+            //} else {
+            //    scene.Background = PaintFromWeatherCondition(current.Icon);
+            //}
 
-            if (IsNight(weather)) {
-                scene.Background = new SolidColorBrush(Color.FromArgb(0, 34, 49, 63));
-            }
-            else {
-                scene.Background = PaintFromWeatherCondition(weather.Current.Description);
-            }
+            scene.Background = PaintFromWeatherCondition(current.Icon);
 
             return scene;
         }
 
-        static SolidColorBrush PaintFromWeatherCondition(string condition) {
+        static GradientBrush PaintFromWeatherCondition(string condition) {
+            var gradient = new LinearGradientBrush();
+            var firstStop = new GradientStop() { Offset = 0.0 };
+            var lastStop = new GradientStop() { Offset = 0.5 };
+
             switch (condition) {
-                case "Light rain":
-                    return new SolidColorBrush(Color.FromArgb(255, 52, 73, 94));
-                case "Sunny":
-                    return new SolidColorBrush(Color.FromArgb(255, 245, 171, 53));
-                case "Clear sky":
-                    return new SolidColorBrush(Color.FromArgb(255, 68, 108, 179));
+                case "clear-day":
+                    firstStop.Color = Color.FromArgb(255, 249, 191, 59);
+                    lastStop.Color = Color.FromArgb(255, 249, 105, 14);
+                    break;
+                case "clear-night":
+                    firstStop.Color = Color.FromArgb(255, 249, 191, 59);
+                    lastStop.Color = Color.FromArgb(255, 249, 105, 14);
+                    break;
+                case "partly-cloudy-day":
+                    firstStop.Color = Color.FromArgb(255, 249, 191, 59);
+                    lastStop.Color = Color.FromArgb(255, 189, 195, 199);
+                    break;
+                case "partly-cloudy-night":
+                    firstStop.Color = Color.FromArgb(255, 103, 128, 159);
+                    lastStop.Color = Color.FromArgb(100, 34, 49, 63);
+                    break;
+                case "cloudy":
+                    firstStop.Color = Color.FromArgb(255, 34, 49, 63);
+                    lastStop.Color = Color.FromArgb(255, 103, 128, 159);
+                    break;
+                case "rain":
+                    firstStop.Color = Color.FromArgb(255, 31, 58, 147);
+                    lastStop.Color = Color.FromArgb(255, 75, 119, 190);
+                    break;
+                case "sleet": // neige fondu
+                    firstStop.Color = Color.FromArgb(255, 236, 240, 241);
+                    lastStop.Color = Color.FromArgb(255, 191, 191, 191);
+                    break;
+                case "snow":
+                    firstStop.Color = Color.FromArgb(255, 236, 236, 236);
+                    lastStop.Color = Color.FromArgb(255, 255, 255, 255);
+                    break;
+                case "wind":
+                    firstStop.Color = Color.FromArgb(255, 236, 236, 236);
+                    lastStop.Color = Color.FromArgb(255, 137, 196, 244);
+                    break;
+                case "fog":
+                    firstStop.Color = Color.FromArgb(255, 107, 185, 240);
+                    lastStop.Color = Color.FromArgb(255, 174, 168, 211);
+                    break;
                 default:
-                    return new SolidColorBrush(Color.FromArgb(255, 68, 108, 179));
+                    firstStop.Color = Color.FromArgb(255, 249, 191, 59);
+                    lastStop.Color = Color.FromArgb(255, 211, 84, 0);
+                    break;
             }
+
+            gradient.GradientStops.Add(firstStop);
+            gradient.GradientStops.Add(lastStop);
+            return gradient;
         }
 
-        static Grid AddWeatherIcons(Grid scene, Weather weather) {
+        static Grid AddWeatherIcons(Grid scene, CurrentDataPoint current) {
             var topScene = new Grid() {
                 VerticalAlignment = VerticalAlignment.Top,
-                HorizontalAlignment = HorizontalAlignment.Right,
-                Margin = new Thickness(0, 10, 30, 0)
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Margin = new Thickness(0, 30, 0, 0)
                 
             };
 
-            if (IsNight(weather)) {
-                topScene = AddMoon(topScene);
-                topScene = AddNightOtherIcons(topScene, weather.Current.Description);
-                topScene = AddStars(topScene);
-            } else {
-                topScene = AddCurrentWeatherIcon(topScene, weather.Current.Description);
-            }
+            //if (IsNight(weather)) {
+            //    topScene = AddMoon(topScene);
+            //    topScene = AddNightOtherIcons(topScene, weather.Current.Description);
+            //    topScene = AddStars(topScene);
+            //} else {
+            //    topScene = AddCurrentWeatherIcon(topScene, weather.Current.Description);
+            //}
 
+            topScene = AddCurrentWeatherIcon(topScene, current.Icon);
             scene.Children.Add(topScene);
             return scene;
         }
 
-        static bool IsNight(Weather weather) {
-            var current = DateTime.Now;
-            var sunrise = DateTime.Parse(weather.Current.Sunrise);
-            var sunset = DateTime.Parse(weather.Current.Sunset);
-
+        static bool IsNight(DateTime current, DateTimeOffset sunrise, DateTimeOffset sunset) {
             if (current > sunrise && current < sunset) {
                 return false;
             }
@@ -153,6 +196,8 @@ namespace Feels.Services {
                 Foreground = new SolidColorBrush(Colors.White)
             };
 
+            star.Light(30, 5000, 2000).Start();
+
             secondaryScene.Children.Add(star);
             secondaryScene.Children.Add(star2);
             secondaryScene.Children.Add(star3);
@@ -161,26 +206,42 @@ namespace Feels.Services {
         }
 
         static Grid AddCurrentWeatherIcon(Grid topScene, string condition) {
-            var icon = new BitmapIcon();
-            var sun = new FontIcon() {
-                Glyph = "\uE706"
+            var icon = new BitmapIcon() {
+                Height = 90,
+                Width = 90
+            };
+            var fontIcon = new FontIcon() {
+                Glyph = "\uE706",
+                FontSize = 90
             };
 
             switch (condition) {
-                case "Light rain":
+                case "clear-day":
+                    break;
+                case "clear-night":
+                    break;
+                case "partly-cloudy-day":
+                    break;
+                case "partly-cloudy-night":
+                    break;
+                case "cloudy":
+                    break;
+                case "rain":
                     icon.UriSource = new Uri("ms-appx:///Assets/Icons/cloudrain.png");
                     topScene.Children.Add(icon);
                     break;
-                case "Sunny":
-                    topScene.Children.Add(sun);
+                case "sleet": // neige fondu
                     break;
-                case "Clear sky":
-                    icon.UriSource = new Uri("");
+                case "snow":
+                    break;
+                case "wind":
+                    break;
+                case "fog":
                     break;
                 default:
-                    topScene.Children.Add(sun);
                     break;
             }
+
 
             return topScene;
         }
