@@ -7,9 +7,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 using Windows.System;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace Feels.Views {
     public sealed partial class HomePage : Page {
@@ -53,6 +55,7 @@ namespace Feels.Views {
             PopulateFirstPage();
 
             BindHourlyListData();
+            BindDailyListData();
         }
 
         async Task FetchCurrentLocation() {
@@ -136,8 +139,12 @@ namespace Feels.Views {
 
         void BindHourlyListData() {
             HourlyList.ItemsSource = PageDataSource.Forecast.Hourly.Hours;
-
             HourlySummary.Text = PageDataSource.Forecast.Hourly.Summary;
+        }
+
+        void BindDailyListData() {
+            DailyList.ItemsSource = PageDataSource.Forecast.Daily.Days;
+            DailySummary.Text = PageDataSource.Forecast.Daily.Summary;
         }
 
         async Task AnimateSlideUP(Panel view) {
@@ -200,6 +207,10 @@ namespace Feels.Views {
             PagePivot.SelectedIndex = 2;
         }
 
+        private void HourlyToCurrentButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
+            PagePivot.SelectedIndex = 0;
+        }
+
         private async void HourForecast_Loaded(object sender, RoutedEventArgs e) {
             var HourForecast = (Grid)sender;
 
@@ -212,9 +223,19 @@ namespace Feels.Views {
         }
         
         private void HourlySummary_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
-            //HourlyList.ScrollIntoView(PageDataSource.Forecast.Hourly.Hours[0]);
             HourlyList.ScrollToIndex(0);
         }
-        
+
+        private void DailySummary_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
+            DailyList.ScrollToIndex(0);
+        }
+
+        private void AppBar_Closed(object sender, object e) {
+            AppBar.Background = new SolidColorBrush(Colors.Transparent);
+        }
+
+        private void AppBar_Opening(object sender, object e) {
+            AppBar.Background = new SolidColorBrush(Colors.Black);
+        }
     }
 }

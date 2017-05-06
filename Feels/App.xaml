@@ -9,5 +9,11 @@
         <converters:WeatherIcon x:Name="WeatherIcon"/>
         <converters:SimpleTemperature x:Name="SimpleTemperature"/>
         <converters:TimeParser x:Name="TimeParser"/>
+
+        <Style x:Key="ListViewItemFill" TargetType="ListViewItem">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        </Style>
     </Application.Resources>
 </Application>

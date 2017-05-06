@@ -5,6 +5,11 @@ Minimalistic weather app
 
 <img src="./home.png" height="400" alt="home weather"/>
 
+## features
+
+* Current weather based on geolocalization
+* Hourly forecast
+
 ## setup
 Steps to build and run this project:
 
@@ -44,7 +49,6 @@ You can contribute to improve this project by:
 * Polish UI
 * Add weather scenes for all status (sunny, cloudy, ...)
 * Add weather animations
-* Add hourly forecast
 * Add daily forecast
 * Add city manually
 
