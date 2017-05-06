@@ -9,6 +9,7 @@ using Windows.Foundation.Metadata;
 using Windows.Globalization;
 using Windows.Phone.UI.Input;
 using Windows.Storage;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -85,23 +86,23 @@ namespace Feels {
             }
 
             UpdateAppTheme();
+            UpdateTitleBarThemeButton();
 
             // Ensure the current window is active
             Window.Current.Activate();
         }
 
         public static void UpdateAppTheme() {
-            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-            var theme = localSettings.Values.ContainsKey("Theme") ?
-                (string)localSettings.Values["Theme"] : "Dark";
-
             var frame = (Frame)Window.Current.Content;
-            if (theme == ApplicationTheme.Light.ToString()) {
-                frame.RequestedTheme = ElementTheme.Light;
-                return;
-            }
-
             frame.RequestedTheme = ElementTheme.Dark;
+        }
+
+        void UpdateTitleBarThemeButton() {
+            var titleBar = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TitleBar;
+            titleBar.ButtonBackgroundColor = Colors.Transparent;
+            titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
+            titleBar.ButtonInactiveForegroundColor = Colors.White;
+            titleBar.ButtonForegroundColor = Colors.White;
         }
 
         // handle hardware back button press

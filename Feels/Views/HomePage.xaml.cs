@@ -5,6 +5,7 @@ using Microsoft.Toolkit.Uwp.UI.Animations;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
 using Windows.Devices.Geolocation;
 using Windows.System;
 using Windows.UI;
@@ -23,12 +24,49 @@ namespace Feels.Views {
 
         public HomePage() {
             InitializeComponent();
+            InitializeTitleBar();
+
+            Window.Current.Activated += Current_Activated;
+
             PageDataSource = App.DataSource;
 
             _UIDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
 
             InitializePageData();
         }
+
+        #region titlebar
+        void InitializeTitleBar() {
+            CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            coreTitleBar.ExtendViewIntoTitleBar = true;
+
+            TitleBar.Height = coreTitleBar.Height;
+            Window.Current.SetTitleBar(MainTitleBar);
+            
+            coreTitleBar.IsVisibleChanged += CoreTitleBar_IsVisibleChanged;
+            coreTitleBar.LayoutMetricsChanged += CoreTitleBar_LayoutMetricsChanged;
+        }
+
+        void CoreTitleBar_IsVisibleChanged(CoreApplicationViewTitleBar titleBar, object args) {
+            TitleBar.Visibility = titleBar.IsVisible ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args) {
+            TitleBar.Height = sender.Height;
+            RightMask.Width = sender.SystemOverlayRightInset;
+        }
+
+        private void Current_Activated(object sender, WindowActivatedEventArgs e) {
+            if (e.WindowActivationState != CoreWindowActivationState.Deactivated) {
+                //BackButtonGrid.Visibility = Visibility.Visible;
+                MainTitleBar.Opacity = 1;
+            } else {
+                //BackButtonGrid.Visibility = Visibility.Collapsed;
+                MainTitleBar.Opacity = 0.5;
+            }
+        }
+
+        #endregion titlebar
 
         async Task<bool> GetLocationPermission() {
             var accessStatus = await Geolocator.RequestAccessAsync();
@@ -230,6 +268,7 @@ namespace Feels.Views {
             DailyList.ScrollToIndex(0);
         }
 
+        #region appbar
         private void AppBar_Closed(object sender, object e) {
             AppBar.Background = new SolidColorBrush(Colors.Transparent);
         }
@@ -237,5 +276,10 @@ namespace Feels.Views {
         private void AppBar_Opening(object sender, object e) {
             AppBar.Background = new SolidColorBrush(Colors.Black);
         }
+
+        private void GoToSettings_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
+            Frame.Navigate(typeof(SettingsPage_Desktop));
+        }
+        #endregion appbar
     }
 }

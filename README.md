@@ -9,6 +9,7 @@ Minimalistic weather app
 
 * Current weather based on geolocalization
 * Hourly forecast
+* Daily forecast
 
 ## setup
 Steps to build and run this project:
@@ -47,9 +48,7 @@ You can contribute to improve this project by:
 ## todo
 
 * Polish UI
-* Add weather scenes for all status (sunny, cloudy, ...)
 * Add weather animations
-* Add daily forecast
 * Add city manually
 
 ## platforms

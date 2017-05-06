@@ -9,7 +9,38 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Pivot x:Name="PagePivot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="TitleBar" 
+              Background="Transparent" 
+              Grid.Row="0" 
+              Canvas.ZIndex="2"
+              Margin="0,0,0,-36">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid x:Name="BackButtonGrid" VerticalAlignment="Top"
+                  Visibility="Collapsed">
+                <Button x:Name="BackButton" Background="Transparent">
+                    <Button.Content>
+                        <FontIcon Glyph="&#xE096;" Foreground="White"/>
+                    </Button.Content>
+                </Button>
+            </Grid>
+            <Grid Grid.Column="1" x:Name="MainTitleBar" Background="Transparent">
+                <TextBlock Text="Feels" VerticalAlignment="Top"
+                           Visibility="Visible"
+                            FontSize="12" FontFamily="Segoe UI" FontWeight="Normal" Margin="10,0"></TextBlock>
+            </Grid>
+            <Grid Grid.Column="3" x:Name="RightMask" Background="Transparent"/>
+        </Grid>
+
+        <Pivot x:Name="PagePivot" Grid.Row="1">
             <PivotItem x:Name="NowPivot" Margin="0,-51,0,0">
 
                 <ScrollViewer x:Name="PivotContent">
@@ -258,7 +289,7 @@
                             <controls:ScrollHeader TargetListViewBase="{x:Bind HourlyList}"
                                                    Mode="QuickReturn">
 
-                                <StackPanel Padding="20" 
+                                <StackPanel Padding="20,42,0,0" 
                                             Background="{ThemeResource SystemControlHighlightAccentBrush}">                                
                                     <StackPanel x:Name="PanelHourlyNavigation" 
                                                 Margin="0,0,0,0"
@@ -289,10 +320,11 @@
                                     </StackPanel>
 
                                     <TextBlock x:Name="HourlySummary" 
-                                           Text="Summary" Grid.Row="1" 
-                                           Padding="30,20"
-                                           Foreground="White"
-                                           Tapped="HourlySummary_Tapped"/>
+                                               Text="Summary" Grid.Row="1" 
+                                               Padding="30,20"
+                                               Foreground="White"
+                                               TextWrapping="Wrap"
+                                                Tapped="HourlySummary_Tapped"/>
                                 </StackPanel>
 
                             </controls:ScrollHeader>
@@ -374,7 +406,7 @@
                             <controls:ScrollHeader TargetListViewBase="{x:Bind DailyList}"
                                                    Mode="QuickReturn">
 
-                                <StackPanel Padding="20" 
+                                <StackPanel Padding="20,42,0,0"
                                             Background="{ThemeResource SystemControlHighlightAccentBrush}">
                                     <StackPanel x:Name="PanelDailyNavigation" 
                                                 Margin="0,0,0,0"
@@ -479,14 +511,14 @@
         </Pivot>
 
         <CommandBar x:Name="AppBar"
-                    RequestedTheme="Dark"
+                    Grid.Row="1"
                     Background="Transparent"
                     VerticalAlignment="Bottom" 
                     Opening="AppBar_Opening"
                     Closed="AppBar_Closed"
                     ClosedDisplayMode="Minimal">
             <CommandBar.SecondaryCommands>
-                <AppBarButton Label="settings" />
+                <AppBarButton Label="settings" Tapped="GoToSettings_Tapped" />
             </CommandBar.SecondaryCommands>
             
         </CommandBar>
