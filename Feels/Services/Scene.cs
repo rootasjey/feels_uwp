@@ -3,7 +3,6 @@ using Windows.UI;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml;
-using Microsoft.Toolkit.Uwp.UI.Animations;
 using DarkSkyApi.Models;
 using Windows.Foundation;
 using Windows.UI.Xaml.Shapes;
@@ -13,6 +12,7 @@ using Windows.Graphics.Display;
 using Windows.UI.Composition;
 using System.Collections.Generic;
 using Feels.Composition;
+using System.Numerics;
 
 namespace Feels.Services {
     public class Scene {
@@ -120,7 +120,7 @@ namespace Feels.Services {
             var width = (float)_size.Width + 500;
 
             visual.Brush = compositor.CreateColorBrush(color1);
-            visual.Size = new System.Numerics.Vector2(height, width);
+            visual.Size = new Vector2(height, width);
             container.Children.InsertAtTop(visual);
 
             var colorAnimation = compositor.CreateColorKeyFrameAnimation();
@@ -133,6 +133,11 @@ namespace Feels.Services {
             colorAnimation.Duration = TimeSpan.FromSeconds(10);
             colorAnimation.IterationBehavior = AnimationIterationBehavior.Forever;
             visual.Brush.StartAnimation("Color", colorAnimation);
+
+            //var light = compositor.CreateAmbientLight();
+            //light.Color = Colors.White;
+            ////light.CoordinateSpace = container;
+            //light.Targets.Add(visual);
 
             ElementCompositionPreview.SetElementChildVisual(animatedBackground, container);
             scene.Children.Add(animatedBackground);
@@ -211,11 +216,13 @@ namespace Feels.Services {
                     MakeItShine("high");
                     break;
                 case "clear-night":
+                    MakeTheMoon();
                     break;
                 case "partly-cloudy-day":
                     MakeItShine("normal");
                     break;
                 case "partly-cloudy-night":
+                    MakeTheMoon();
                     break;
                 case "cloudy":
                     MakeItShine("low");
@@ -240,12 +247,12 @@ namespace Feels.Services {
                 topScene.Children.Add(sun);
             }
 
-            void MakeTheMoon(string _condition)
+            void MakeTheMoon(string _condition = "full")
             {
-
+                var moon = CreateMoon(_condition);
+                topScene.Children.Add(moon);
             }
 
-            //topScene = AddCurrentWeatherIcon(topScene, current.Icon);
             scene.Children.Add(topScene);
             return scene;
         }
@@ -262,49 +269,6 @@ namespace Feels.Services {
             return false;
         }
         
-        static Grid CreateCloud(int duration, int endX, int marginTop) {
-            var height = 70;
-            var width = height;
-
-            var grid = new Grid() {
-                Height = height,
-                Width = width,
-                Margin = new Thickness(0, marginTop, 0,0),
-                VerticalAlignment = VerticalAlignment.Top
-            };
-            
-            var compositor = ElementCompositionPreview.GetElementVisual(grid).Compositor;
-            var container = compositor.CreateContainerVisual();
-            container.Size = new System.Numerics.Vector2(height, width);
-
-            if (ImageLoader.Instance == null)
-                ImageLoader.Initialize(compositor);
-
-            ManagedSurface surface = ImageLoader.Instance.LoadFromUri(new Uri("ms-appx:///Assets/Icons/cloudy.png"));
-            
-            var visual = compositor.CreateSpriteVisual();
-            visual.Brush = compositor.CreateSurfaceBrush(surface.Surface);
-            visual.Size = new System.Numerics.Vector2(70, 70);
-            container.Children.InsertAtTop(visual);
-            container.Opacity = .5f;
-
-            ElementCompositionPreview.SetElementChildVisual(grid, container);
-
-            // ------------
-            // ANIMATION //
-            // ------------
-            var animation = compositor.CreateScalarKeyFrameAnimation();
-            animation.InsertKeyFrame(0f, 0f);
-            animation.InsertKeyFrame(1f, endX);
-            animation.Duration = TimeSpan.FromSeconds(duration);
-            animation.DelayTime = TimeSpan.FromSeconds(duration/2);
-            animation.IterationBehavior = AnimationIterationBehavior.Forever;
-            animation.Direction = AnimationDirection.Alternate;
-            visual.StartAnimation("Offset.x", animation);
-
-            return grid;
-        }
-
         static Grid CreateSun(string condition) {
             int duration = 30;
             float angle = 45;
@@ -342,9 +306,9 @@ namespace Feels.Services {
 
             ElementCompositionPreview.SetElementChildVisual(grid, container);
 
-            // ------------
-            // ANIMATION //
-            // ------------
+            // -----------
+            // ANIMATION |
+            // -----------
             var animation = compositor.CreateScalarKeyFrameAnimation();
             animation.InsertKeyFrame(0f, 0f);
             animation.InsertKeyFrame(1f, angle);
@@ -360,24 +324,55 @@ namespace Feels.Services {
             return grid;
         }
 
-        static Grid CreateMoon(Grid sceneIcons) {
-            var moon = new FontIcon() {
-                Glyph = "\uF0CE",
-                Margin = new Thickness(0, 0, 5, 0),
-                HorizontalAlignment = HorizontalAlignment.Right,
-                FontSize = 100,
-                Name = "Moon"
+        static Grid CreateMoon(string condition) {
+            var height = 70;
+            var width = height;
+
+            var grid = new Grid() {
+                Height = height,
+                Width = width,
+                Margin = new Thickness(0, 20, 0, 0),
+                VerticalAlignment = VerticalAlignment.Top
             };
 
-            sceneIcons.Children.Add(moon);
-            return sceneIcons;
+            var compositor = ElementCompositionPreview.GetElementVisual(grid).Compositor;
+            var container = compositor.CreateContainerVisual();
+            container.Size = new System.Numerics.Vector2(height, width);
+
+            if (ImageLoader.Instance == null)
+                ImageLoader.Initialize(compositor);
+
+            ManagedSurface surface = ImageLoader.Instance.LoadFromUri(new Uri("ms-appx:///Assets/Icons/moon.png"));
+
+            var visual = compositor.CreateSpriteVisual();
+            visual.Brush = compositor.CreateSurfaceBrush(surface.Surface);
+            visual.Size = new System.Numerics.Vector2(70, 70);
+            container.Children.InsertAtTop(visual);
+            container.Opacity = 1f;
+
+            ElementCompositionPreview.SetElementChildVisual(grid, container);
+
+            // -----------
+            // ANIMATION |
+            // -----------
+            var animation = compositor.CreateScalarKeyFrameAnimation();
+            animation.InsertKeyFrame(0f, 0f);
+            animation.InsertKeyFrame(1f, -3f);
+            animation.Duration = TimeSpan.FromSeconds(20);
+            animation.DelayTime = TimeSpan.FromSeconds(5);
+            animation.IterationBehavior = AnimationIterationBehavior.Forever;
+            animation.Direction = AnimationDirection.Alternate;
+
+            visual.RotationAxis = new System.Numerics.Vector3(0, 0, 1);
+            visual.CenterPoint = new System.Numerics.Vector3(height / 2, width / 2, 0);
+            visual.StartAnimation("RotationAngle", animation);
+
+            return grid;
         }
         
         static Grid AddAnimations(Grid scene, string condition) {
             var animationsScene = new Grid();
-
             var rand = new Random();
-            
 
             switch (condition) {
                 case "clear-day":
@@ -390,6 +385,7 @@ namespace Feels.Services {
                     break;
                 case "partly-cloudy-night":
                     MakeStars();
+                    MakeClouds();
                     break;
                 case "cloudy":
                     MakeLotOfCloudds();
@@ -420,25 +416,31 @@ namespace Feels.Services {
                 }
             }
 
-            void MakeStars()
+            void MakeStars(int starsNumber = 15)
             {
-                for (int i = 0; i < 20; i++) {
-                    var star = CreateRandomStar(i);
+                var x = (int)_size.Width;
+                for (int i = 0; i < starsNumber; i++) {
+                    var coord = new Vector2(rand.Next(-x, x), rand.Next(0, 400));
+                    var duration = rand.Next(10, 20);
+                    var radius = rand.Next(5, 10);
+
+                    var star = CreateStar(duration, coord, radius);
                     animationsScene.Children.Add(star);
-                    AnimateStar(star);
                 }
             }
 
             void MakeClouds(int cloudsNumber = 3)
             {
+                var x = (int)_size.Width / 2;
+
                 for (int i = 0; i < cloudsNumber; i++) {
                     var duration = rand.Next(10, 20);
-                    var endX = rand.Next(-400, 400);
+                    var endX = rand.Next(-x, x);
                     var marginTop = rand.Next(50, 300);
+
                     var cloud = CreateCloud(duration, endX, marginTop);
                     animationsScene.Children.Add(cloud);
                 }
-                
             }
 
             void MakeLotOfCloudds()
@@ -450,28 +452,100 @@ namespace Feels.Services {
             return scene;
         }
 
-        static Ellipse CreateRandomStar(int index) {
-            var rand = new Random();
-            //var x = rand.Next(0, (int)_size.Width);
-            //var y = rand.Next(0, (int)_size.Height);
-            var x = rand.Next(0, 300);
-            var y = rand.Next(0, 400);
+        static Grid CreateStar(int duration, Vector2 coord, int radius) {
+            var x = coord.X;
+            var y = coord.Y;
 
-            var height = rand.Next(5, 10);
+            var height = radius;
             var width = height;
 
-            var star = new Ellipse() {
-                Fill = new SolidColorBrush(Colors.White),
+            var grid = new Grid() {
                 Height = height,
                 Width = width,
-                //Opacity = .5,
-                Name = string.Format("star{0}", index),
-                Margin = new Thickness(x,y,0,0)
+                Margin = new Thickness(x, y, 0, 0),
+                VerticalAlignment = VerticalAlignment.Top
             };
 
-            
-            return star;
+            var compositor = ElementCompositionPreview.GetElementVisual(grid).Compositor;
+            var container = compositor.CreateContainerVisual();
+            container.Size = new Vector2(height, width);
+
+            if (ImageLoader.Instance == null)
+                ImageLoader.Initialize(compositor);
+
+            ManagedSurface surface = ImageLoader.Instance.LoadCircle(radius, Colors.White);
+
+            var visual = compositor.CreateSpriteVisual();
+            visual.Brush = compositor.CreateSurfaceBrush(surface.Surface);
+            visual.Size = new Vector2(radius, radius);
+            container.Children.InsertAtTop(visual);
+            //container.Opacity = .5f;
+
+            ElementCompositionPreview.SetElementChildVisual(grid, container);
+
+            // ------------
+            // ANIMATION //
+            // ------------
+            //var light = compositor.CreateAmbientLight();
+            //light.Color = Colors.White;
+            ////light.CoordinateSpace = container;
+            //light.Targets.Add(container);
+
+            var animation = compositor.CreateScalarKeyFrameAnimation();
+            animation.InsertKeyFrame(0f, .5f);
+            animation.InsertKeyFrame(1f, 0f);
+            animation.Duration = TimeSpan.FromSeconds(duration);
+            animation.DelayTime = TimeSpan.FromSeconds(duration/2);
+            animation.IterationBehavior = AnimationIterationBehavior.Forever;
+            animation.Direction = AnimationDirection.Alternate;
+            visual.StartAnimation("Opacity", animation);
+
+            return grid;
         }
+
+        static Grid CreateCloud(int duration, int endX, int marginTop) {
+            var height = 70;
+            var width = height;
+
+            var grid = new Grid() {
+                Height = height,
+                Width = width,
+                Margin = new Thickness(0, marginTop, 0, 0),
+                VerticalAlignment = VerticalAlignment.Top
+            };
+
+            var compositor = ElementCompositionPreview.GetElementVisual(grid).Compositor;
+            var container = compositor.CreateContainerVisual();
+            container.Size = new Vector2(height, width);
+
+            if (ImageLoader.Instance == null)
+                ImageLoader.Initialize(compositor);
+
+            ManagedSurface surface = ImageLoader.Instance.LoadFromUri(new Uri("ms-appx:///Assets/Icons/cloudy.png"));
+
+            var visual = compositor.CreateSpriteVisual();
+            visual.Brush = compositor.CreateSurfaceBrush(surface.Surface);
+            visual.Size = new Vector2(70, 70);
+            container.Children.InsertAtTop(visual);
+            container.Opacity = .5f;
+
+            ElementCompositionPreview.SetElementChildVisual(grid, container);
+
+            // ------------
+            // ANIMATION //
+            // ------------
+            var animation = compositor.CreateScalarKeyFrameAnimation();
+            animation.InsertKeyFrame(0f, 0f);
+            animation.InsertKeyFrame(1f, endX);
+            animation.Duration = TimeSpan.FromSeconds(duration);
+            animation.DelayTime = TimeSpan.FromSeconds(duration / 2);
+            animation.IterationBehavior = AnimationIterationBehavior.Forever;
+            animation.Direction = AnimationDirection.Alternate;
+            visual.StartAnimation("Offset.x", animation);
+
+            return grid;
+        }
+
 
         static void AnimateStar(Ellipse star) {
             var visual = ElementCompositionPreview.GetElementVisual(star);

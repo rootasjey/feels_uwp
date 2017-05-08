@@ -48,7 +48,7 @@
                         <Grid x:Name="Theater" Opacity="0"></Grid>
 
                         <StackPanel x:Name="SplashView"
-                                    Visibility="Collapsed"
+                                    Visibility="Visible"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Center">
                             <BitmapIcon UriSource="/Assets/icon.png" 
@@ -63,7 +63,7 @@
                               HorizontalAlignment="Center"
                               Margin="24,180,24,0"
                               Padding="0,0,0,100"
-                              Visibility="Visible">
+                              Visibility="Collapsed">
 
                             <StackPanel x:Name="WeatherViewContent">
                                 <TextBlock x:Name="Status" 
@@ -537,7 +537,7 @@
                                                 <ColumnDefinition x:Name="DayColunm" Width="130"/>
                                                 <ColumnDefinition x:Name="IconColunm" Width="60"/>
                                                 <ColumnDefinition x:Name="SummaryColumn" Width="200"/>
-                                                <ColumnDefinition x:Name="TempColumn" Width="60"/>
+                                                <ColumnDefinition x:Name="TempColumn" Width="40"/>
                                             </Grid.ColumnDefinitions>
                                             
                                             <TextBlock x:Name="Day" 
@@ -693,6 +693,7 @@
                     Opening="AppBar_Opening"
                     Closed="AppBar_Closed"
                     ClosedDisplayMode="Minimal">
+            <AppBarButton x:Name="CmdRefresh" Label="refresh" Icon="Refresh" Tapped="CmdRefresh_Tapped"/>
             <CommandBar.SecondaryCommands>
                 <AppBarButton Label="settings" Tapped="GoToSettings_Tapped" />
             </CommandBar.SecondaryCommands>

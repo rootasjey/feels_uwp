@@ -22,13 +22,17 @@ namespace Feels.Views {
 
         private int _HourForcastAnimDelay { get; set; }
 
+        static DateTime _LastFetchedTime { get; set; }
+
+        static BasicGeoposition _LastPosition { get; set; }
+
         public HomePage() {
             InitializeComponent();
             InitializeTitleBar();
 
             PageDataSource = App.DataSource;
             _UIDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
-            InitializePageData();
+            InitializePageData();            
         }
 
         #region titlebar
@@ -87,14 +91,24 @@ namespace Feels.Views {
         }
 
         async void InitializePageData() {
+            if (!await MustRefreshData()) {
+                HideLoadingView();
+                PopulateView();
+                return;
+            }
+
             var granted = await GetLocationPermission();
             if (!granted) { ShowNoAccessView(); return; }
 
             ShowLoadingView();
             await FetchCurrentLocation();
             HideLoadingView();
-            PopulateFirstPage();
 
+            PopulateView();            
+        }
+
+        void PopulateView() {
+            PopulateFirstPage();
             BindHourlyListData();
             BindDailyListData();
         }
@@ -105,12 +119,39 @@ namespace Feels.Views {
             var coord = position.Coordinate.Point.Position;
             await PageDataSource.FetchCurrentWeather(coord.Latitude, coord.Longitude);
             NowPivot.DataContext = PageDataSource.Forecast.Currently;
+
+            _LastFetchedTime = DateTime.Now;
+            _LastPosition = coord;
+        }
+
+        async Task<bool> MustRefreshData() {
+            if (PageDataSource.Forecast == null) return true;
+
+            if (DateTime.Now.Hour - _LastFetchedTime.Hour > 0) {
+                return true;
+            }
+
+            var geo = new Geolocator();
+            var position = await geo.GetGeopositionAsync();
+            var coord = position.Coordinate.Point.Position;
+
+            var currLat = (int)coord.Latitude;
+            var currLon = (int)coord.Longitude;
+
+            var prevLat = (int)_LastPosition.Latitude;
+            var prevLon = (int)_LastPosition.Longitude;
+
+            if (currLat != prevLat || currLon != prevLon) {
+                return true;
+            }
+
+            return false;
         }
         
         async void PopulateFirstPage() {
             var currentWeather = PageDataSource.Forecast.Currently;
 
-            await AnimateSlideUP(WeatherViewContent);
+            await AnimateSlideIn(WeatherViewContent);
             AnimateTemperature();
             FillInData();
             DrawScene();
@@ -180,7 +221,15 @@ namespace Feels.Views {
             WeatherView.Visibility = Visibility.Collapsed;
             LocationDisabledMessage.Visibility = Visibility.Collapsed;
 
-            AnimateSlideUP(LoadingView);
+            AnimateSlideIn(LoadingView);
+        }
+
+        void HideLoadingView() {
+            SplashView.Visibility = Visibility.Collapsed;
+            LoadingView.Visibility = Visibility.Collapsed;
+            LocationDisabledMessage.Visibility = Visibility.Collapsed;
+            WeatherView.Visibility = Visibility.Visible;
+            ResetOpacity(LoadingView);
         }
 
         void BindHourlyListData() {
@@ -193,7 +242,7 @@ namespace Feels.Views {
             DailySummary.Text = PageDataSource.Forecast.Daily.Summary;
         }
 
-        async Task AnimateSlideUP(Panel view) {
+        async Task AnimateSlideIn(Panel view) {
             view.Opacity = 0;
             view.Visibility = Visibility.Visible;
 
@@ -224,17 +273,20 @@ namespace Feels.Views {
             }
         }
 
-        void HideLoadingView() {
-            LoadingView.Visibility = Visibility.Collapsed;
-            LocationDisabledMessage.Visibility = Visibility.Collapsed;
-            WeatherView.Visibility = Visibility.Visible;
+        void ResetOpacity(Panel view) {
+            view.Opacity = 0;
+            var children = view.Children;
+
+            foreach (var child in children) {
+                child.Opacity = 0;
+            }
         }
 
         async void ShowNoAccessView() {
             SplashView.Visibility = Visibility.Collapsed;
             WeatherView.Visibility = Visibility.Collapsed;
 
-            AnimateSlideUP(LocationDisabledMessage);
+            AnimateSlideIn(LocationDisabledMessage);
         }
 
         #region buttons
@@ -291,5 +343,9 @@ namespace Feels.Views {
         }
         #endregion appbar
 
+        private void CmdRefresh_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
+            Theater.Children.Clear();
+            InitializePageData();
+        }
     }
 }
