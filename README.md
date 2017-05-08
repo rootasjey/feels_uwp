@@ -3,7 +3,9 @@ Minimalistic weather app
 
 ## screenshot
 
-<img src="./home.png" height="400" alt="home weather"/>
+<img src="./cloudy.png" height="400" alt="cloudy weather"/>
+
+<img src="./cloudy.gif" height="400" alt="cloudy weather animation"/>
 
 ## features
 
@@ -47,6 +49,9 @@ You can contribute to improve this project by:
 
 ## todo
 
+* Live tile
+* Lockscreen text status
+* Lockscreen background
 * Polish UI
 * Add weather animations
 * Add city manually
