@@ -1,41 +1,53 @@
-﻿using Feels.Models;
-using System;
+﻿using System;
 using Windows.UI;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml;
 using Microsoft.Toolkit.Uwp.UI.Animations;
 using DarkSkyApi.Models;
+using Windows.Foundation;
+using Windows.UI.Xaml.Shapes;
+using Windows.UI.Xaml.Hosting;
+using Windows.UI.ViewManagement;
+using Windows.Graphics.Display;
+using Windows.UI.Composition;
+using System.Collections.Generic;
+using Feels.Composition;
 
 namespace Feels.Services {
     public class Scene {
+        static Rect _bounds;
+        static double _scaleFactor;
+        static Size _size;
+
         public static Grid CreateNew(CurrentDataPoint current, DayDataPoint day) {
+            CalculateDeviceSize();
+
             var scene = new Grid();
             scene = PaintBackground(scene, current, day);
-            scene = AddWeatherIcons(scene, current);
+            scene = AnimateBackgroundColor(scene, current.Icon);
+            scene = CreateSunOrMoon(scene, current);
+            scene = AddAnimations(scene, current.Icon);
             return scene;
+        }
+
+        static void CalculateDeviceSize() {
+            _bounds = ApplicationView.GetForCurrentView().VisibleBounds;
+            _scaleFactor = DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
+            _size = new Size(_bounds.Width * _scaleFactor, _bounds.Height * _scaleFactor);
         }
 
         static Grid PaintBackground(Grid scene, CurrentDataPoint current, DayDataPoint day) {
             //var timeNow = DateTime.Now;
             //var sunrise = day.SunriseTime;
             //var sunset = day.SunsetTime;
-            //if (IsNight(timeNow, sunrise, sunset)) {
-            //    scene.Background = new SolidColorBrush(Color.FromArgb(0, 34, 49, 63));
-            //} else {
-            //    scene.Background = PaintFromWeatherCondition(current.Icon);
-            //}
 
-            scene.Background = PaintFromWeatherCondition(current.Icon);
+            var condition = current.Icon;
 
-            return scene;
-        }
-
-        static GradientBrush PaintFromWeatherCondition(string condition) {
             var gradient = new LinearGradientBrush();
             var firstStop = new GradientStop() { Offset = 0.0 };
             var lastStop = new GradientStop() { Offset = 0.5 };
-
+            
             switch (condition) {
                 case "clear-day":
                     firstStop.Color = Color.FromArgb(255, 249, 191, 59);
@@ -46,12 +58,12 @@ namespace Feels.Services {
                     lastStop.Color = Color.FromArgb(255, 249, 105, 14);
                     break;
                 case "partly-cloudy-day":
-                    firstStop.Color = Color.FromArgb(255, 249, 191, 59);
-                    lastStop.Color = Color.FromArgb(255, 189, 195, 199);
+                    firstStop.Color = Color.FromArgb(255, 58, 83, 155);
+                    lastStop.Color = Color.FromArgb(255, 34, 49, 63);
                     break;
                 case "partly-cloudy-night":
-                    firstStop.Color = Color.FromArgb(255, 103, 128, 159);
-                    lastStop.Color = Color.FromArgb(100, 34, 49, 63);
+                    firstStop.Color = Color.FromArgb(255, 58, 83, 155);
+                    lastStop.Color = Color.FromArgb(255, 34, 49, 63);
                     break;
                 case "cloudy":
                     firstStop.Color = Color.FromArgb(255, 34, 49, 63);
@@ -85,26 +97,155 @@ namespace Feels.Services {
 
             gradient.GradientStops.Add(firstStop);
             gradient.GradientStops.Add(lastStop);
-            return gradient;
+
+            scene.Background = gradient;
+
+            return scene;
         }
 
-        static Grid AddWeatherIcons(Grid scene, CurrentDataPoint current) {
+        static Grid AnimateBackgroundColor(Grid scene, string condition) {
+            var animatedBackground = new Grid();
+
+            var compositor = ElementCompositionPreview.GetElementVisual(animatedBackground).Compositor;
+            var container = compositor.CreateContainerVisual();
+            container.Opacity = .5f;
+
+            var visual = compositor.CreateSpriteVisual();
+            
+            var colors = GetColors(condition);
+            var color1 = colors[0];
+            var color2 = colors[1];
+
+            var height = (float)_size.Height + 500;
+            var width = (float)_size.Width + 500;
+
+            visual.Brush = compositor.CreateColorBrush(color1);
+            visual.Size = new System.Numerics.Vector2(height, width);
+            container.Children.InsertAtTop(visual);
+
+            var colorAnimation = compositor.CreateColorKeyFrameAnimation();
+
+            colorAnimation.InsertKeyFrame(0.0f, color1);
+            colorAnimation.InsertKeyFrame(1.0f, color2);
+
+            colorAnimation.InterpolationColorSpace = CompositionColorSpace.Hsl;
+            colorAnimation.Direction = AnimationDirection.Alternate;
+            colorAnimation.Duration = TimeSpan.FromSeconds(10);
+            colorAnimation.IterationBehavior = AnimationIterationBehavior.Forever;
+            visual.Brush.StartAnimation("Color", colorAnimation);
+
+            ElementCompositionPreview.SetElementChildVisual(animatedBackground, container);
+            scene.Children.Add(animatedBackground);
+            return scene;
+        }
+
+        static List<Color> GetColors(string condition) {
+            var colors = new List<Color>();
+
+            Color color1;
+            Color color2;
+
+            switch (condition) {
+                case "clear-day":
+                    color1 = Color.FromArgb(255, 233, 212, 96);
+                    color2 = Color.FromArgb(255, 107, 185, 240);
+                    break;
+                case "clear-night":
+                    color1 = Color.FromArgb(255, 44, 62, 80);
+                    color2 = Color.FromArgb(0, 0, 0, 0);
+                    break;
+                case "partly-cloudy-day":
+                    color1 = Color.FromArgb(255, 228, 241, 254);
+                    color2 = Color.FromArgb(255, 37, 116, 169);
+                    break;
+                case "partly-cloudy-night":
+                    color1 = Color.FromArgb(255, 103, 128, 159);
+                    color2 = Color.FromArgb(0, 0, 0, 0);
+                    break;
+                case "cloudy":
+                    color1 = Color.FromArgb(255, 103, 128, 159);
+                    color2 = Color.FromArgb(255, 189, 195, 199);
+                    break;
+                case "rain":
+                    color1 = Color.FromArgb(255, 103, 128, 159);
+                    color2 = Color.FromArgb(255, 37, 116, 169);
+                    break;
+                case "sleet": // neige fondu
+                    color1 = Color.FromArgb(255, 236, 240, 241);
+                    color2 = Color.FromArgb(255, 191, 191, 191);
+                    break;
+                case "snow":
+                    color1 = Color.FromArgb(255, 236, 240, 241);
+                    color2 = Colors.White;
+                    break;
+                case "wind":
+                    color1 = Color.FromArgb(255, 236, 236, 236);
+                    color2 = Color.FromArgb(255, 249, 191, 59);
+                    break;
+                case "fog":
+                    color1 = Color.FromArgb(255, 108, 122, 137);
+                    color2 = Color.FromArgb(255, 218, 223, 225);
+                    break;
+                default:
+                    color1 = Color.FromArgb(255, 255,255,255);
+                    color2 = Color.FromArgb(0, 0, 0, 0);
+                    break;
+            }
+
+            colors.Add(color1);
+            colors.Add(color2);
+            return colors;
+        }
+
+        static Grid CreateSunOrMoon(Grid scene, CurrentDataPoint current) {
             var topScene = new Grid() {
                 VerticalAlignment = VerticalAlignment.Top,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 Margin = new Thickness(0, 30, 0, 0)
-                
             };
 
-            //if (IsNight(weather)) {
-            //    topScene = AddMoon(topScene);
-            //    topScene = AddNightOtherIcons(topScene, weather.Current.Description);
-            //    topScene = AddStars(topScene);
-            //} else {
-            //    topScene = AddCurrentWeatherIcon(topScene, weather.Current.Description);
-            //}
+            var condition = current.Icon;
 
-            topScene = AddCurrentWeatherIcon(topScene, current.Icon);
+            switch (condition) {
+                case "clear-day":
+                    MakeItShine("high");
+                    break;
+                case "clear-night":
+                    break;
+                case "partly-cloudy-day":
+                    MakeItShine("normal");
+                    break;
+                case "partly-cloudy-night":
+                    break;
+                case "cloudy":
+                    MakeItShine("low");
+                    break;
+                case "rain":
+                    break;
+                case "sleet": // neige fondu
+                    break;
+                case "snow":
+                    break;
+                case "wind":
+                    break;
+                case "fog":
+                    break;
+                default:
+                    break;
+            }
+
+            void MakeItShine(string _condition)
+            {
+                var sun = CreateSun(_condition);
+                topScene.Children.Add(sun);
+            }
+
+            void MakeTheMoon(string _condition)
+            {
+
+            }
+
+            //topScene = AddCurrentWeatherIcon(topScene, current.Icon);
             scene.Children.Add(topScene);
             return scene;
         }
@@ -120,12 +261,106 @@ namespace Feels.Services {
 
             return false;
         }
+        
+        static Grid CreateCloud(int duration, int endX, int marginTop) {
+            var height = 70;
+            var width = height;
 
-        static Grid AddSun(Grid sceneIcons) {
-            return sceneIcons;
+            var grid = new Grid() {
+                Height = height,
+                Width = width,
+                Margin = new Thickness(0, marginTop, 0,0),
+                VerticalAlignment = VerticalAlignment.Top
+            };
+            
+            var compositor = ElementCompositionPreview.GetElementVisual(grid).Compositor;
+            var container = compositor.CreateContainerVisual();
+            container.Size = new System.Numerics.Vector2(height, width);
+
+            if (ImageLoader.Instance == null)
+                ImageLoader.Initialize(compositor);
+
+            ManagedSurface surface = ImageLoader.Instance.LoadFromUri(new Uri("ms-appx:///Assets/Icons/cloudy.png"));
+            
+            var visual = compositor.CreateSpriteVisual();
+            visual.Brush = compositor.CreateSurfaceBrush(surface.Surface);
+            visual.Size = new System.Numerics.Vector2(70, 70);
+            container.Children.InsertAtTop(visual);
+            container.Opacity = .5f;
+
+            ElementCompositionPreview.SetElementChildVisual(grid, container);
+
+            // ------------
+            // ANIMATION //
+            // ------------
+            var animation = compositor.CreateScalarKeyFrameAnimation();
+            animation.InsertKeyFrame(0f, 0f);
+            animation.InsertKeyFrame(1f, endX);
+            animation.Duration = TimeSpan.FromSeconds(duration);
+            animation.DelayTime = TimeSpan.FromSeconds(duration/2);
+            animation.IterationBehavior = AnimationIterationBehavior.Forever;
+            animation.Direction = AnimationDirection.Alternate;
+            visual.StartAnimation("Offset.x", animation);
+
+            return grid;
         }
 
-        static Grid AddMoon(Grid sceneIcons) {
+        static Grid CreateSun(string condition) {
+            int duration = 30;
+            float angle = 45;
+
+            if (condition == "low") {
+                duration *= 3;
+            } else if (condition == "normal") {
+                duration *= 2;
+            }
+
+            var height = 70;
+            var width = height;
+
+            var grid = new Grid() {
+                Height = height,
+                Width = width,
+                Margin = new Thickness(0, 20, 0, 0),
+                VerticalAlignment = VerticalAlignment.Top
+            };
+
+            var compositor = ElementCompositionPreview.GetElementVisual(grid).Compositor;
+            var container = compositor.CreateContainerVisual();
+            container.Size = new System.Numerics.Vector2(height, width);
+
+            if (ImageLoader.Instance == null)
+                ImageLoader.Initialize(compositor);
+
+            ManagedSurface surface = ImageLoader.Instance.LoadFromUri(new Uri("ms-appx:///Assets/Icons/sun.png"));
+
+            var visual = compositor.CreateSpriteVisual();
+            visual.Brush = compositor.CreateSurfaceBrush(surface.Surface);
+            visual.Size = new System.Numerics.Vector2(70, 70);
+            container.Children.InsertAtTop(visual);
+            container.Opacity = 1f;
+
+            ElementCompositionPreview.SetElementChildVisual(grid, container);
+
+            // ------------
+            // ANIMATION //
+            // ------------
+            var animation = compositor.CreateScalarKeyFrameAnimation();
+            animation.InsertKeyFrame(0f, 0f);
+            animation.InsertKeyFrame(1f, angle);
+            animation.Duration = TimeSpan.FromSeconds(duration);
+            animation.DelayTime = TimeSpan.FromSeconds(1);
+            animation.IterationBehavior = AnimationIterationBehavior.Forever;
+            animation.Direction = AnimationDirection.Alternate;
+
+            visual.RotationAxis = new System.Numerics.Vector3(0, 0, 1);
+            visual.CenterPoint = new System.Numerics.Vector3(height / 2, width / 2, 0);
+            visual.StartAnimation("RotationAngle", animation);
+
+            return grid;
+        }
+
+        static Grid CreateMoon(Grid sceneIcons) {
             var moon = new FontIcon() {
                 Glyph = "\uF0CE",
                 Margin = new Thickness(0, 0, 5, 0),
@@ -137,98 +372,30 @@ namespace Feels.Services {
             sceneIcons.Children.Add(moon);
             return sceneIcons;
         }
+        
+        static Grid AddAnimations(Grid scene, string condition) {
+            var animationsScene = new Grid();
 
-        static Grid AddNightOtherIcons(Grid topScene, string condition) {
-            switch (condition) {
-                case "Overcast clouds":
-                    var cloud = new BitmapIcon() {
-                        UriSource = new Uri("ms-appx:///Assets/Icons/cloud.png"),
-                        Height = 40,
-                        Width = 40,
-                        Opacity = 0.6,
-                        Margin = new Thickness(0,0,40,0),
-                    };
-                    topScene.Children.Add(cloud);
-                    break;
-                default:
-                    break;
-            }
-
-            return topScene;
-        }
-
-        static Grid AddCloud(Grid sceneIcons) {
-            var cloud = new BitmapIcon() {
-                UriSource = new Uri("ms-appx:///Assets/Icons/cloud.png")
-            };
-
-            sceneIcons.Children.Add(cloud);
-            return sceneIcons;
-        }
-
-        static Grid AddStars(Grid topScene) {
-            var secondaryScene = new Grid() {
-                Name = "Stars"
-            };
-            topScene.Children.Add(secondaryScene);
-
-            var star = new FontIcon() {
-                Glyph = "\uE735",
-                FontSize = 15,
-                Opacity = 1,
-                Margin = new Thickness(0,-30,50,0),
-                Foreground = new SolidColorBrush(Colors.White)
-            };
-
-            var star2 = new FontIcon() {
-                Glyph = "\uE735",
-                FontSize = 20,
-                Opacity = 1,
-                Margin = new Thickness(0, 90, 90, 0),
-                Foreground = new SolidColorBrush(Colors.White)
-            };
-
-            var star3 = new FontIcon() {
-                Glyph = "\uE735",
-                Margin = new Thickness(0, 120, 0, 0),
-                FontSize = 10,
-                Opacity = 1,
-                Foreground = new SolidColorBrush(Colors.White)
-            };
-
-            star.Light(30, 5000, 2000).Start();
-
-            secondaryScene.Children.Add(star);
-            secondaryScene.Children.Add(star2);
-            secondaryScene.Children.Add(star3);
-
-            return topScene;
-        }
-
-        static Grid AddCurrentWeatherIcon(Grid topScene, string condition) {
-            var icon = new BitmapIcon() {
-                Height = 60,
-                Width = 60
-            };
-            var fontIcon = new FontIcon() {
-                Glyph = "\uE706",
-                FontSize = 90
-            };
+            var rand = new Random();
+            
 
             switch (condition) {
                 case "clear-day":
                     break;
                 case "clear-night":
+                    MakeStars();
                     break;
                 case "partly-cloudy-day":
+                    MakeClouds();
                     break;
                 case "partly-cloudy-night":
+                    MakeStars();
                     break;
                 case "cloudy":
+                    MakeLotOfCloudds();
                     break;
                 case "rain":
-                    icon.UriSource = new Uri("ms-appx:///Assets/Icons/cloudrain.png");
-                    topScene.Children.Add(icon);
+                    MakeItRain();
                     break;
                 case "sleet": // neige fondu
                     break;
@@ -242,8 +409,137 @@ namespace Feels.Services {
                     break;
             }
 
+            //MakeItRain();
 
-            return topScene;
+            void MakeItRain()
+            {
+                for (int i = 0; i < 20; i++) {
+                    var line = CreateRandomLine();
+                    animationsScene.Children.Add(line);
+                    CreateRandomLineAnimation(line);
+                }
+            }
+
+            void MakeStars()
+            {
+                for (int i = 0; i < 20; i++) {
+                    var star = CreateRandomStar(i);
+                    animationsScene.Children.Add(star);
+                    AnimateStar(star);
+                }
+            }
+
+            void MakeClouds(int cloudsNumber = 3)
+            {
+                for (int i = 0; i < cloudsNumber; i++) {
+                    var duration = rand.Next(10, 20);
+                    var endX = rand.Next(-400, 400);
+                    var marginTop = rand.Next(50, 300);
+                    var cloud = CreateCloud(duration, endX, marginTop);
+                    animationsScene.Children.Add(cloud);
+                }
+                
+            }
+
+            void MakeLotOfCloudds()
+            {
+                MakeClouds(6);             
+            }
+
+            scene.Children.Add(animationsScene);
+            return scene;
         }
+
+        static Ellipse CreateRandomStar(int index) {
+            var rand = new Random();
+            //var x = rand.Next(0, (int)_size.Width);
+            //var y = rand.Next(0, (int)_size.Height);
+            var x = rand.Next(0, 300);
+            var y = rand.Next(0, 400);
+
+            var height = rand.Next(5, 10);
+            var width = height;
+
+            var star = new Ellipse() {
+                Fill = new SolidColorBrush(Colors.White),
+                Height = height,
+                Width = width,
+                //Opacity = .5,
+                Name = string.Format("star{0}", index),
+                Margin = new Thickness(x,y,0,0)
+            };
+
+            
+            return star;
+        }
+
+        static void AnimateStar(Ellipse star) {
+            var visual = ElementCompositionPreview.GetElementVisual(star);
+            var compositor = visual.Compositor;
+            var containerVisual = compositor.CreateContainerVisual();
+            var spriteVisual = compositor.CreateSpriteVisual();
+            var animation = compositor.CreateColorKeyFrameAnimation();
+
+            // Create the KeyFrames using Windows.UI.Color objects
+            animation.InsertKeyFrame(0.5f, Colors.Purple);
+            animation.InsertKeyFrame(1.0f, Colors.Cyan);
+
+            // Set the interpolation to go through the HSL space
+            animation.InterpolationColorSpace = CompositionColorSpace.Hsl;
+            animation.Duration = TimeSpan.FromSeconds(3);
+
+            // Apply the cubic-bezier to a KeyFrame
+            var brush = compositor.CreateColorBrush(Colors.White);
+            spriteVisual.Brush = brush;
+            spriteVisual.Brush.StartAnimation("Color", animation);
+
+            containerVisual.Children.InsertAtTop(spriteVisual);
+            
+        }
+
+        static Line CreateRandomLine() {
+            var rand = new Random();
+            var x = rand.Next(0, (int)_size.Width);
+            var y = -70;
+            //var y = rand.Next(0, 400);
+            //var line = new Line() {
+            //    X1 = (x + 90),
+            //    Y1 = y,
+            //    X2 = x,
+            //    Y2 = (y + 70),
+            //    Opacity = .5,
+            //    Stroke = new SolidColorBrush(Colors.White),
+            //    StrokeThickness = 5
+            //};
+            var line = new Line() {
+                X1 = x,
+                Y1 = y,
+                X2 = x,
+                Y2 = (y + 70),
+                Opacity = .5,
+                Stroke = new SolidColorBrush(Colors.White),
+                StrokeThickness = 5
+            };
+
+            return line;
+        }
+
+        static void CreateRandomLineAnimation(Line line) {
+            var rand = new Random();
+            //var coord = rand.Next((int)size.Height, 900);
+
+            var _visual = ElementCompositionPreview.GetElementVisual(line);
+            var _compositor = _visual.Compositor;
+            var _animation = _compositor.CreateVector2KeyFrameAnimation();
+
+            //_animation.InsertKeyFrame(1f, new System.Numerics.Vector2(-coord, coord));
+            _animation.InsertKeyFrame(1f, new System.Numerics.Vector2(0, (float)_size.Height));
+            _animation.Duration = TimeSpan.FromSeconds(rand.Next(2,4));
+            _animation.DelayTime = TimeSpan.FromSeconds(rand.Next(0, 10));
+            _animation.IterationBehavior = AnimationIterationBehavior.Forever;
+
+            _visual.StartAnimation("Offset.xy", _animation);
+        }
+        
     }
 }

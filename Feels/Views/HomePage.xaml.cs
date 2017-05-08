@@ -1,5 +1,4 @@
 ﻿using Feels.Data;
-using Feels.Models;
 using Feels.Services;
 using Microsoft.Toolkit.Uwp.UI.Animations;
 using System;
@@ -10,6 +9,7 @@ using Windows.Devices.Geolocation;
 using Windows.System;
 using Windows.UI;
 using Windows.UI.Core;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -26,17 +26,20 @@ namespace Feels.Views {
             InitializeComponent();
             InitializeTitleBar();
 
-            Window.Current.Activated += Current_Activated;
-
             PageDataSource = App.DataSource;
-
             _UIDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
-
             InitializePageData();
         }
 
         #region titlebar
-        void InitializeTitleBar() {
+        async void InitializeTitleBar() {
+            if (Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Mobile") {
+                var statusBar = StatusBar.GetForCurrentView();
+                await statusBar.HideAsync();
+                return;
+            }
+
+            Window.Current.Activated += Current_Activated;
             CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
 
@@ -138,7 +141,7 @@ namespace Feels.Views {
             void FillInData()
             {
                 Status.Text = currentWeather.Summary;
-                City.Text = PageDataSource.Forecast.TimeZone;
+                SetCity();
                 FeelsLike.Text = string.Format("{0} {1}", "Feels more like ", currentWeather.ApparentTemperature);
                 PrecipValue.Text = string.Format("{0}%", currentWeather.PrecipitationProbability * 100);
                 //SunriseBlock.Text = currentWeather.Sunrise;
@@ -154,6 +157,13 @@ namespace Feels.Views {
                 MaxTempValue.Text = maxTemp.ToString();
                 MinTempValue.Text = minTemp.ToString();
             }
+
+            void SetCity()
+            {
+                var timeZone = PageDataSource.Forecast.TimeZone;
+                var index = timeZone.IndexOf("/");
+                City.Text = timeZone.Substring(index + 1);
+            }
         }
 
         async void DrawScene() {
@@ -161,12 +171,10 @@ namespace Feels.Views {
             Theater.Children.Add(scene);
 
             await scene.Fade(0, 0).Offset(0, 200, 0).StartAsync();
-
             Theater.Fade(1, 1000).Start();
-
             scene.Fade(1, 1000).Offset(0, 0, 1000).Start();
         }
-
+        
         async void ShowLoadingView() {
             SplashView.Visibility = Visibility.Collapsed;
             WeatherView.Visibility = Visibility.Collapsed;
@@ -229,6 +237,7 @@ namespace Feels.Views {
             AnimateSlideUP(LocationDisabledMessage);
         }
 
+        #region buttons
         private async void LocationSettingsButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
             bool result = await Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-location"));
         }
@@ -248,6 +257,14 @@ namespace Feels.Views {
         private void HourlyToCurrentButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
             PagePivot.SelectedIndex = 0;
         }
+        private void HourlySummary_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
+            HourlyList.ScrollToIndex(0);
+        }
+
+        private void DailySummary_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
+            DailyList.ScrollToIndex(0);
+        }
+        #endregion buttons
 
         private async void HourForecast_Loaded(object sender, RoutedEventArgs e) {
             var HourForecast = (Grid)sender;
@@ -260,14 +277,6 @@ namespace Feels.Views {
                                 .StartAsync();
         }
         
-        private void HourlySummary_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
-            HourlyList.ScrollToIndex(0);
-        }
-
-        private void DailySummary_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
-            DailyList.ScrollToIndex(0);
-        }
-
         #region appbar
         private void AppBar_Closed(object sender, object e) {
             AppBar.Background = new SolidColorBrush(Colors.Transparent);
@@ -281,5 +290,6 @@ namespace Feels.Views {
             Frame.Navigate(typeof(SettingsPage_Desktop));
         }
         #endregion appbar
+
     }
 }
