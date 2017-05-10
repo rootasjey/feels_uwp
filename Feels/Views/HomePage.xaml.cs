@@ -37,7 +37,8 @@ namespace Feels.Views {
 
         #region titlebar
         async void InitializeTitleBar() {
-            if (Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Mobile") {
+            App.DeviceType = Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily;
+            if (App.DeviceType == "Windows.Mobile") {
                 var statusBar = StatusBar.GetForCurrentView();
                 await statusBar.HideAsync();
                 return;
@@ -155,6 +156,8 @@ namespace Feels.Views {
             AnimateTemperature();
             FillInData();
             DrawScene();
+
+            UpdateMainTile();
 
             async void AnimateTemperature()
             {
@@ -339,13 +342,22 @@ namespace Feels.Views {
         }
 
         private void GoToSettings_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
+            if (App.DeviceType == "Windows.Mobile") {
+                Frame.Navigate(typeof(SettingsPage_Mobile));
+                return;
+            }
+
             Frame.Navigate(typeof(SettingsPage_Desktop));
         }
-        #endregion appbar
 
         private void CmdRefresh_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
             Theater.Children.Clear();
             InitializePageData();
+        }
+        #endregion appbar
+
+        void UpdateMainTile() {
+            TileDesigner.UpdatePrimary();
         }
     }
 }

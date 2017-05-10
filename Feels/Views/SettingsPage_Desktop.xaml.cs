@@ -1,4 +1,5 @@
-﻿using Feels.Services;
+﻿using Feels.Models;
+using Feels.Services;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,15 +9,19 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Feels.Views {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class SettingsPage_Desktop : Page {
+        private List<Unit> Units;
+
         public SettingsPage_Desktop() {
             InitializeComponent();
+
+            InitializeUnits();
+        }
+
+        void InitializeUnits() {
+            Units.Add(new Unit() { Name="SI", Value="SI" });
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
@@ -179,5 +184,8 @@ namespace Feels.Views {
             UpdateSelectedLanguage(FlyoutItems);
         }
 
+        private void UnitsCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+        }
     }
 }

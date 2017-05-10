@@ -14,7 +14,7 @@ namespace Feels.Converters {
             var path = "";
             switch (icon) {
                 case "clear-day":
-                    path = "ms-appx:///Assets/Icons/clair.png";
+                    path = "ms-appx:///Assets/Icons/sun.png";
                     break;
                 case "clear-night":
                     path = "ms-appx:///Assets/Icons/moon.png";
@@ -29,7 +29,7 @@ namespace Feels.Converters {
                     path = "ms-appx:///Assets/Icons/cloudy.png";
                     break;
                 case "rain":
-                    path = "ms-appx:///Assets/Icons/cloudrain.png";
+                    path = "ms-appx:///Assets/Icons/rain.png";
                     break;
                 case "sleet": // neige fondu
                     path = "ms-appx:///Assets/Icons/sleet.png";
@@ -44,7 +44,7 @@ namespace Feels.Converters {
                     path = "ms-appx:///Assets/Icons/fog.png";
                     break;
                 default:
-                    path = "ms-appx:///Assets/Icons/clair.png";
+                    path = "ms-appx:///Assets/Icons/sun.png";
                     break;
             }
 

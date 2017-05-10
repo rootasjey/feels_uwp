@@ -1,5 +1,6 @@
 ﻿using Feels.Services;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Windows.ApplicationModel.Email;
 using Windows.UI.Core;
@@ -9,9 +10,16 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Feels.Views {
     public sealed partial class SettingsPage_Mobile : Page {
+        private List<string> Units;
+
         public SettingsPage_Mobile() {
             InitializeComponent();
             UpdateSelectedLanguage();
+            InitializeUnits();
+        }
+
+        void InitializeUnits() {
+            Units.Add("SI");
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
@@ -155,6 +163,10 @@ namespace Feels.Views {
 
         private void ThemeSwitch_Loaded(object sender, RoutedEventArgs e) {
             //UpdateThemeSwitcher();
+        }
+
+        private void UnitsCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
         }
     }
 }

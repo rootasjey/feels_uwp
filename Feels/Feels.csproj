@@ -108,12 +108,14 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\Unit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BackgroundTasks.cs" />
     <Compile Include="Services\DataTransfer.cs" />
     <Compile Include="Services\Events.cs" />
     <Compile Include="Services\Scene.cs" />
     <Compile Include="Services\Settings.cs" />
+    <Compile Include="Services\TileDesigner.cs" />
     <Compile Include="Services\UI.cs" />
     <Compile Include="Services\VisualTreeExtensions.cs" />
     <Compile Include="Services\Wallpaper.cs" />
@@ -146,19 +148,17 @@
     <Content Include="Assets\BadgeLogo.scale-200.png" />
     <Content Include="Assets\BadgeLogo.scale-400.png" />
     <Content Include="Assets\icon.png" />
-    <Content Include="Assets\Icons\clair.png" />
-    <Content Include="Assets\Icons\cloudrain.png" />
     <Content Include="Assets\Icons\cloudy.png" />
     <Content Include="Assets\Icons\fog.png" />
     <Content Include="Assets\Icons\moon.png" />
-    <Content Include="Assets\Icons\moonstars.png" />
     <Content Include="Assets\Icons\partycloudy_day.png" />
     <Content Include="Assets\Icons\partycloudy_night.png" />
+    <Content Include="Assets\Icons\rain.png" />
     <Content Include="Assets\Icons\sleet.png" />
     <Content Include="Assets\Icons\snow.png" />
     <Content Include="Assets\Icons\sun.png" />
-    <Content Include="Assets\Icons\thermoter_max.png" />
-    <Content Include="Assets\Icons\thermoter_min.png" />
+    <Content Include="Assets\Icons\thermo_down.png" />
+    <Content Include="Assets\Icons\thermo_up.png" />
     <Content Include="Assets\Icons\wind.png" />
     <Content Include="Assets\LargeTile.scale-100.png" />
     <Content Include="Assets\LargeTile.scale-125.png" />
@@ -196,6 +196,7 @@
     <Content Include="Assets\StoreLogo.scale-150.png" />
     <Content Include="Assets\StoreLogo.scale-200.png" />
     <Content Include="Assets\StoreLogo.scale-400.png" />
+    <Content Include="Assets\TileIcons\moon.png" />
     <Content Include="Assets\Wide310x150Logo.scale-100.png" />
     <Content Include="Assets\Wide310x150Logo.scale-125.png" />
     <Content Include="Assets\Wide310x150Logo.scale-150.png" />
@@ -262,6 +263,7 @@
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

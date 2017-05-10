@@ -55,6 +55,13 @@
                                     </MenuFlyout>
                                 </Button.Flyout>
                             </Button>
+
+                            <!--<ComboBox x:Name="UnitsCombo" 
+                                      Header="Units" 
+                                      Width="120"
+                                      Margin="0,20"
+                                      ItemsSource="{x:Bind Units}"
+                                      SelectionChanged="UnitsCombo_SelectionChanged"/>-->
                         </StackPanel>
                     </StackPanel>
                 </ScrollViewer>

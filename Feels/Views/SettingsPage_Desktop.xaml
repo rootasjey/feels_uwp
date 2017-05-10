@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:Feels.Models"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -68,6 +69,19 @@
                                                 </MenuFlyout>
                                             </Button.Flyout>
                                         </Button>
+
+                                        <!--<ComboBox x:Name="UnitsCombo" 
+                                                  Header="Units" 
+                                                  Width="120"
+                                                  Margin="0,20"
+                                                  ItemsSource="{x:Bind Units}"
+                                                  SelectionChanged="UnitsCombo_SelectionChanged">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate x:DataType="models:Unit">
+                                                    <TextBlock Text="{x:Bind Value}"/>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>-->
                                     </StackPanel>
                                 </StackPanel>
                             </ScrollViewer>
