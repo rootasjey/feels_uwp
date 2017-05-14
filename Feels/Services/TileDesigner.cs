@@ -241,7 +241,7 @@ namespace Feels.Services {
                                                 HintStyle = AdaptiveTextStyle.Title
                                             },
                                             new AdaptiveText() {
-                                                Text = forecast.Currently.Time.ToString("htt", CultureInfo.InvariantCulture),
+                                                Text = time,
                                                 HintStyle = AdaptiveTextStyle.CaptionSubtle
                                             }
                                         }
@@ -295,7 +295,7 @@ namespace Feels.Services {
                                                 HintStyle = AdaptiveTextStyle.Title
                                             },
                                             new AdaptiveText() {
-                                                Text = forecast.Currently.Time.ToString("htt", CultureInfo.InvariantCulture),
+                                                Text = time,
                                                 HintStyle = AdaptiveTextStyle.CaptionSubtle
                                             }
                                         }
