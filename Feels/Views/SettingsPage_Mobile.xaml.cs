@@ -1,4 +1,5 @@
-﻿using Feels.Services;
+﻿using Feels.Models;
+using Feels.Services;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -10,7 +11,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Feels.Views {
     public sealed partial class SettingsPage_Mobile : Page {
-        private List<string> Units;
+        private List<Unit> Units;
 
         public SettingsPage_Mobile() {
             InitializeComponent();
@@ -19,7 +20,11 @@ namespace Feels.Views {
         }
 
         void InitializeUnits() {
-            Units.Add("SI");
+            Units = new List<Unit> {
+                new Unit() { Name = "si", Value = "si" },
+                new Unit() { Name = "us", Value = "us" }
+            };
+
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
@@ -38,8 +43,8 @@ namespace Feels.Views {
             }
         }
 
-        private void UpdateQuoteTaskSwitcher() {
-            QuotesTaskSwitch.IsOn = BackgroundTasks.IsQuoteTaskActivated();
+        private void UpdateWeatherTaskSwitcher() {
+            WeatherTaskSwitch.IsOn = BackgroundTasks.IsWeatherTaskActivated();
         }
 
         private void UpdateWallTaskSwitcher() {
@@ -55,10 +60,10 @@ namespace Feels.Views {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void QuotesTaskSwitch_Toggled(object sender, RoutedEventArgs e) {
+        private void WeatherTaskSwitch_Toggled(object sender, RoutedEventArgs e) {
             var toggle = (ToggleSwitch)sender;
 
-            if (toggle.IsOn) BackgroundTasks.RegisterQuoteTask();
+            if (toggle.IsOn) BackgroundTasks.RegisterWeatherTask();
             else BackgroundTasks.UnregisterQuoteTask();
         }
 
@@ -71,8 +76,8 @@ namespace Feels.Views {
 
         private void FeedbackButton_Click(object sender, RoutedEventArgs e) {
             EmailMessage email = new EmailMessage() {
-                Subject = "[Citations 365] Feedback",
-                Body = "send this email to metrodevapp@outlook.com"
+                Subject = "[Feels] Feedback",
+                Body = "send this email to jeremiecorpinot@outlook.com"
             };
 
             // TODO : add app infos
@@ -153,8 +158,8 @@ namespace Feels.Views {
             selectedItem.IsChecked = true;
         }
 
-        private void QuotesTaskSwitch_Loaded(object sender, RoutedEventArgs e) {
-            //UpdateQuoteTaskSwitcher();
+        private void WeatherTaskSwitch_Loaded(object sender, RoutedEventArgs e) {
+            UpdateWeatherTaskSwitcher();
         }
 
         private void LockTaskSwitch_Loaded(object sender, RoutedEventArgs e) {
@@ -166,7 +171,31 @@ namespace Feels.Views {
         }
 
         private void UnitsCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            var selectedUnit = (Unit)e.AddedItems[0];
 
+            var unit = Settings.GetUnit();
+
+            if (selectedUnit.Value == unit) return;
+
+            Settings.SaveUnit(selectedUnit.Value);
+        }
+
+        private void UnitsCombo_Loaded(object sender, RoutedEventArgs e) {
+            var unit = Settings.GetUnit();
+            
+            if (string.IsNullOrEmpty(unit)) {
+                if (UnitsCombo.Items.Count > 0) { UnitsCombo.SelectedIndex = 0; }
+                return;
+            }
+
+            for (int i = 0; i < UnitsCombo.Items.Count; i++) {
+                var currentUnit = (Unit)UnitsCombo.Items[i];
+
+                if (currentUnit.Value == unit) {
+                    UnitsCombo.SelectedIndex = i;
+                    break;
+                }
+            }
         }
     }
 }

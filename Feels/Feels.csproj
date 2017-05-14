@@ -125,9 +125,6 @@
     <Compile Include="Views\LocalizationPage.xaml.cs">
       <DependentUpon>LocalizationPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SettingsPage_Desktop.xaml.cs">
-      <DependentUpon>SettingsPage_Desktop.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\SettingsPage_Mobile.xaml.cs">
       <DependentUpon>SettingsPage_Mobile.xaml</DependentUpon>
     </Compile>
@@ -160,6 +157,7 @@
     <Content Include="Assets\Icons\thermo_down.png" />
     <Content Include="Assets\Icons\thermo_up.png" />
     <Content Include="Assets\Icons\wind.png" />
+    <Content Include="Assets\Icons\wind0.png" />
     <Content Include="Assets\LargeTile.scale-100.png" />
     <Content Include="Assets\LargeTile.scale-125.png" />
     <Content Include="Assets\LargeTile.scale-150.png" />
@@ -196,7 +194,17 @@
     <Content Include="Assets\StoreLogo.scale-150.png" />
     <Content Include="Assets\StoreLogo.scale-200.png" />
     <Content Include="Assets\StoreLogo.scale-400.png" />
+    <Content Include="Assets\TileIcons\fog.png" />
+    <Content Include="Assets\TileIcons\cloudy.png" />
     <Content Include="Assets\TileIcons\moon.png" />
+    <Content Include="Assets\TileIcons\partycloudy_day.png" />
+    <Content Include="Assets\TileIcons\partycloudy_night.png" />
+    <Content Include="Assets\TileIcons\rain.png" />
+    <Content Include="Assets\TileIcons\sleet.png" />
+    <Content Include="Assets\TileIcons\snow.png" />
+    <Content Include="Assets\TileIcons\sun.png" />
+    <Content Include="Assets\TileIcons\wind.png" />
+    <Content Include="Assets\TileIcons\wind0.png" />
     <Content Include="Assets\Wide310x150Logo.scale-100.png" />
     <Content Include="Assets\Wide310x150Logo.scale-125.png" />
     <Content Include="Assets\Wide310x150Logo.scale-150.png" />
@@ -223,10 +231,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LocalizationPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\SettingsPage_Desktop.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -263,7 +267,12 @@
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Tasks\Tasks.csproj">
+      <Project>{ca176302-7eb3-413f-af83-2bf41a1e2f73}</Project>
+      <Name>Tasks</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

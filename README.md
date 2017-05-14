@@ -6,11 +6,15 @@ Minimalistic weather app
 
 <img src="./hourly.png"  height="400" alt="hourly weather" style="display: inline-block;" />
 
+<img src="./feels_tile.gif" height="200" />
+
 ## features
 
 * Current weather based on geolocalization
 * Hourly forecast
 * Daily forecast
+* Live tile
+* Lockscreen text status
 
 ## setup
 Steps to build and run this project:
@@ -48,10 +52,7 @@ You can contribute to improve this project by:
 
 ## todo
 
-* Live tile
-* Lockscreen text status
 * Lockscreen background
-* Polish UI
 * Add weather animations
 * Add city manually
 

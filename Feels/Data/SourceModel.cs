@@ -13,6 +13,7 @@ namespace Feels.Data {
         private const string _APIKey = "57281e87e833689d3150c587198f04c6";
 
         public async Task FetchCurrentWeather(double lat, double lon) {
+            if (!NetworkInterface.GetIsNetworkAvailable()) { return; }
             if (Client == null) Client = new DarkSkyService(_APIKey);
             Forecast = await Client.GetWeatherDataAsync(lat, lon, Unit.SI);
 

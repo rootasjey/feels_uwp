@@ -9,6 +9,7 @@ using Windows.Devices.Geolocation;
 using Windows.System;
 using Windows.UI;
 using Windows.UI.Core;
+using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -93,6 +94,7 @@ namespace Feels.Views {
 
         async void InitializePageData() {
             if (!await MustRefreshData()) {
+                HideSplashView();
                 HideLoadingView();
                 PopulateView();
                 return;
@@ -112,17 +114,58 @@ namespace Feels.Views {
             PopulateFirstPage();
             BindHourlyListData();
             BindDailyListData();
+
+            ShowBetaMessageAsync();
+        }
+
+        async Task ShowBetaMessageAsync() {
+            if (!Settings.IsFirstLaunch()) return;
+
+            var resourceLoader = new Windows.ApplicationModel.Resources.ResourceLoader();
+            var message = resourceLoader.GetString("BetaMessage");
+
+            //DataTransfer.ShowLocalToast(message);
+            var dialog = new MessageDialog(message);
+            await dialog.ShowAsync();
+            Settings.SaveFirstLaunchPassed();
         }
 
         async Task FetchCurrentLocation() {
-            var geo = new Geolocator();
-            var position = await geo.GetGeopositionAsync();
+            var position = await GetPosition();
+            if (position == null) { SafeExit(); return; }
+
             var coord = position.Coordinate.Point.Position;
             await PageDataSource.FetchCurrentWeather(coord.Latitude, coord.Longitude);
+
+            if (PageDataSource.Forecast == null) {
+                SafeExit();
+                return;
+            }
+
             NowPivot.DataContext = PageDataSource.Forecast.Currently;
 
             _LastFetchedTime = DateTime.Now;
             _LastPosition = coord;
+        }
+
+        async Task<Geoposition> GetPosition() {
+            var geo = new Geolocator();
+
+            try {
+                var position = await geo.GetGeopositionAsync();
+                return position;
+            } catch {
+                return null;
+            }
+        }
+
+        void SafeExit() {
+            ShowEmptyView();
+        }
+
+        void ShowEmptyView() {
+            //SplashView.Visibility = Visibility.Visible;
+            ShowNoAccessView();
         }
 
         async Task<bool> MustRefreshData() {
@@ -150,6 +193,10 @@ namespace Feels.Views {
         }
         
         async void PopulateFirstPage() {
+            if (PageDataSource.Forecast == null) return;
+
+            WeatherView.Visibility = Visibility.Visible;
+
             var currentWeather = PageDataSource.Forecast.Currently;
 
             await AnimateSlideIn(WeatherViewContent);
@@ -219,7 +266,7 @@ namespace Feels.Views {
             scene.Fade(1, 1000).Offset(0, 0, 1000).Start();
         }
         
-        async void ShowLoadingView() {
+        void ShowLoadingView() {
             SplashView.Visibility = Visibility.Collapsed;
             WeatherView.Visibility = Visibility.Collapsed;
             LocationDisabledMessage.Visibility = Visibility.Collapsed;
@@ -228,19 +275,22 @@ namespace Feels.Views {
         }
 
         void HideLoadingView() {
-            SplashView.Visibility = Visibility.Collapsed;
             LoadingView.Visibility = Visibility.Collapsed;
-            LocationDisabledMessage.Visibility = Visibility.Collapsed;
-            WeatherView.Visibility = Visibility.Visible;
             ResetOpacity(LoadingView);
         }
 
+        void HideSplashView() {
+            SplashView.Visibility = Visibility.Collapsed;
+        }
+
         void BindHourlyListData() {
+            if (PageDataSource.Forecast == null) return;
             HourlyList.ItemsSource = PageDataSource.Forecast.Hourly.Hours;
             HourlySummary.Text = PageDataSource.Forecast.Hourly.Summary;
         }
 
         void BindDailyListData() {
+            if (PageDataSource.Forecast == null) return;
             DailyList.ItemsSource = PageDataSource.Forecast.Daily.Days;
             DailySummary.Text = PageDataSource.Forecast.Daily.Summary;
         }
@@ -286,8 +336,8 @@ namespace Feels.Views {
         }
 
         async void ShowNoAccessView() {
-            SplashView.Visibility = Visibility.Collapsed;
-            WeatherView.Visibility = Visibility.Collapsed;
+            //SplashView.Visibility = Visibility.Collapsed;
+            //WeatherView.Visibility = Visibility.Collapsed;
 
             AnimateSlideIn(LocationDisabledMessage);
         }
@@ -342,12 +392,7 @@ namespace Feels.Views {
         }
 
         private void GoToSettings_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
-            if (App.DeviceType == "Windows.Mobile") {
-                Frame.Navigate(typeof(SettingsPage_Mobile));
-                return;
-            }
-
-            Frame.Navigate(typeof(SettingsPage_Desktop));
+            Frame.Navigate(typeof(SettingsPage_Mobile));
         }
 
         private void CmdRefresh_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {

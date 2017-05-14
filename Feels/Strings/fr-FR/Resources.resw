@@ -123,6 +123,9 @@
   <data name="BackgroundsTasksHeader.Text" xml:space="preserve">
     <value>tâches en arrière-plan</value>
   </data>
+  <data name="BetaMessage" xml:space="preserve">
+    <value>Cette application est en beta et peut donc contenir des bugs, des textes non-traduits ainsi que des fonctionnalités manquantes. Merci de repporter (par mail ou github) tout comportement anormal. Merci</value>
+  </data>
   <data name="ContributeFifthLine.Text" xml:space="preserve">
     <value>Visitez le lien suivant pour plus d'information</value>
   </data>

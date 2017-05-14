@@ -54,8 +54,8 @@ namespace Feels.Services {
                     lastStop.Color = Color.FromArgb(255, 249, 105, 14);
                     break;
                 case "clear-night":
-                    firstStop.Color = Color.FromArgb(255, 249, 191, 59);
-                    lastStop.Color = Color.FromArgb(255, 249, 105, 14);
+                    firstStop.Color = Color.FromArgb(255, 51, 110, 123);
+                    lastStop.Color = Color.FromArgb(255, 31, 58, 147);
                     break;
                 case "partly-cloudy-day":
                     firstStop.Color = Color.FromArgb(255, 58, 83, 155);
@@ -545,7 +545,6 @@ namespace Feels.Services {
 
             return grid;
         }
-
 
         static void AnimateStar(Ellipse star) {
             var visual = ElementCompositionPreview.GetElementVisual(star);

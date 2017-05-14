@@ -248,7 +248,7 @@
                                       Foreground="{ThemeResource SystemControlHighlightAccentBrush}"/>
                             <TextBlock x:Name="LocFailedText"
                                        TextAlignment="Center"
-                                       Text="Seems like you aren't on Earth. Please check your location settings"
+                                       Text="Seems like you aren't on Earth. Please check your location settings or your internet connection"
                                        FontSize="24" 
                                        Opacity=".7"
                                        TextWrapping="Wrap"/>

@@ -3,8 +3,8 @@ using Windows.ApplicationModel.Background;
 
 namespace Feels.Services {
     public static class BackgroundTasks {
-        static string _taskName = "WeatherTask";
-        static string _entryPoint = "Tasks.WeatherTask";
+        static string _taskName = "UpdateWeather";
+        static string _entryPoint = "Tasks.UpdateWeather";
 
         static string _backgroundTaskName = "LockScreenUpdater";
         static string _backgroundEntryPoint = "OptimizedTasks.LockScreenUpdater";
@@ -18,12 +18,12 @@ namespace Feels.Services {
             return false;
         }
 
-        public static void RegisterQuoteTask() {
-            RegisterBackgroundTask(GetTaskQuoteName(), GetTaskQuoteEntryPoint());
+        public static void RegisterWeatherTask() {
+            RegisterBackgroundTask(GetWeatherTaskName(), GetWeatherTaskEntryPoint());
         }
 
         public static void UnregisterQuoteTask() {
-            UnregisterBackgroundTask(GetTaskQuoteName());
+            UnregisterBackgroundTask(GetWeatherTaskName());
         }
 
         public static void RegisterLockscreenTask() {
@@ -34,9 +34,9 @@ namespace Feels.Services {
             UnregisterBackgroundTask(GetTaskBackgroundName());
         }
 
-        public static bool IsQuoteTaskActivated() {
+        public static bool IsWeatherTaskActivated() {
             foreach (var task in BackgroundTaskRegistration.AllTasks) {
-                if (task.Value.Name == GetTaskQuoteName()) {
+                if (task.Value.Name == GetWeatherTaskName()) {
                     return true;
                 }
             }
@@ -74,11 +74,11 @@ namespace Feels.Services {
             }
         }
 
-        public static string GetTaskQuoteName() {
+        public static string GetWeatherTaskName() {
             return _taskName;
         }
 
-        public static string GetTaskQuoteEntryPoint() {
+        public static string GetWeatherTaskEntryPoint() {
             return _entryPoint;
         }
 

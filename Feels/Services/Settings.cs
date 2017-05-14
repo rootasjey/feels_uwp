@@ -1,8 +1,4 @@
-﻿using System;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
-using Windows.Storage;
-using System.Collections.ObjectModel;
+﻿using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.System.UserProfile;
 
@@ -21,6 +17,18 @@ namespace Feels.Services {
             }
         }
 
+        private static string UnitKey {
+            get {
+                return "Unit";
+            }
+        }
+
+        private static string FirstLaunchKey {
+            get {
+                return "FirstLaunch";
+            }
+        }
+
         public static void SaveLanguage(string language) {
             var settingsValues = ApplicationData.Current.LocalSettings.Values;
             settingsValues[LangKey] = language;
@@ -31,6 +39,16 @@ namespace Feels.Services {
 
             var settingsValues = ApplicationData.Current.LocalSettings.Values;
             return settingsValues.ContainsKey(LangKey) ? (string)settingsValues[LangKey] : defaultLanguage;
+        }
+
+        public static void SaveUnit(string unit) {
+            var settingsValues = ApplicationData.Current.LocalSettings.Values;
+            settingsValues[UnitKey] = unit;
+        }
+
+        public static string GetUnit() {
+            var settingsValues = ApplicationData.Current.LocalSettings.Values;
+            return settingsValues.ContainsKey(UnitKey) ? (string)settingsValues[UnitKey] : null;
         }
 
         public static bool IsApplicationThemeLight() {
@@ -47,6 +65,16 @@ namespace Feels.Services {
 
             localSettings.Values[ThemeKey] = theme.ToString();
             App.UpdateAppTheme();
+        }
+
+        public static void SaveFirstLaunchPassed() {
+            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+            localSettings.Values[FirstLaunchKey] = false;
+        }
+
+        public static bool IsFirstLaunch() {
+            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+            return localSettings.Values.ContainsKey(FirstLaunchKey) ? false : true;
         }
 
         //public static async Task SaveFavoritesAsync(ObservableKeyedCollection favorites, string source) {

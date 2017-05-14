@@ -4,20 +4,20 @@ using System;
 using System.Globalization;
 using Windows.UI.Notifications;
 
-namespace Feels.Services {
-    public class TileDesigner {
-        public static void UpdatePrimary() {
-            var data = App.DataSource;
-            if (data == null) return;
+namespace Tasks.Services {
+    public sealed class TileDesigner {
+        public static void UpdatePrimary(object rawForecast) {
+            if (rawForecast == null) return;
+            var forecast = (Forecast)rawForecast;
 
             var tileUpdater = TileUpdateManager.CreateTileUpdaterForApplication();
             tileUpdater.Clear();
             tileUpdater.EnableNotificationQueue(true);
 
-            tileUpdater.Update(CreateTileCurrent(data.Forecast));       // current
-            tileUpdater.Update(CreateTileCurrentDetails(data.Forecast));// detailed infos current
-            tileUpdater.Update(CreateTileHourly(data.Forecast.Hourly)); // hourly
-            tileUpdater.Update(CreateTileDaily(data.Forecast.Daily));   // daily
+            tileUpdater.Update(CreateTileCurrent(forecast));       // current
+            tileUpdater.Update(CreateTileCurrentDetails(forecast));// detailed infos current
+            tileUpdater.Update(CreateTileHourly(forecast.Hourly)); // hourly
+            tileUpdater.Update(CreateTileDaily(forecast.Daily));   // daily
         }
 
         // ------------------
@@ -139,7 +139,7 @@ namespace Feels.Services {
 
             string GetDetailedStatus()
             {
-                string formatedText = string.Format("{0} {1} {2} ({3}/{4})", 
+                string formatedText = string.Format("{0} {1} {2} ({3}/{4})",
                     location, currentTemperature, forecast.Currently.Summary, maxTemperature, minTemperature);
                 return formatedText;
             }
@@ -205,7 +205,7 @@ namespace Feels.Services {
                                                 HintStyle = AdaptiveTextStyle.CaptionSubtle
                                            }
                                         }
-                                    }                                    
+                                    }
                                 }
                             }
                         }
@@ -398,7 +398,8 @@ namespace Feels.Services {
                 };
             }
 
-            TileBinding GetMediumVisual() {
+            TileBinding GetMediumVisual()
+            {
                 //var precipIconPath = GetIcon(forecast.Currently.Icon);
                 //var precipProba = (forecast.Currently.PrecipitationProbability * 100).ToString();
                 var maxTemp = ((int)forecast.Daily.Days[0].MaxTemperature).ToString() + "°";

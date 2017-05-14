@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:Feels.Models"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -21,14 +22,16 @@
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Pivot x:Name="PivotSettings">
+        <Pivot x:Name="PivotSettings"
+               Margin="0,20,0,0">
             <PivotItem x:Name="PersonalizationPivot">
                 <PivotItem.Header>
                     <TextBlock x:Uid="PersonalizationHeader"
                                Text="personalisation"/>
                 </PivotItem.Header>
 
-                <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                <ScrollViewer VerticalScrollBarVisibility="Hidden"
+                              Margin="0,20,0,0">
                     <StackPanel>
                         <StackPanel Margin="0,0,0,40" Visibility="Collapsed">
                             <TextBlock x:Uid="Theme" Text="thème" Style="{StaticResource SettingsTitle}"/>
@@ -56,12 +59,19 @@
                                 </Button.Flyout>
                             </Button>
 
-                            <!--<ComboBox x:Name="UnitsCombo" 
+                            <ComboBox x:Name="UnitsCombo" 
                                       Header="Units" 
                                       Width="120"
                                       Margin="0,20"
                                       ItemsSource="{x:Bind Units}"
-                                      SelectionChanged="UnitsCombo_SelectionChanged"/>-->
+                                      Loaded="UnitsCombo_Loaded"
+                                      SelectionChanged="UnitsCombo_SelectionChanged">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate x:DataType="models:Unit">
+                                        <TextBlock x:Name="UnitValue" Text="{x:Bind Value}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
                         </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
@@ -74,7 +84,7 @@
                 </PivotItem.Header>
 
                 <ScrollViewer Margin="0,20,0,0"
-                                    VerticalScrollBarVisibility="Hidden">
+                              VerticalScrollBarVisibility="Hidden">
                     <StackPanel>
                         <StackPanel Margin="0,0,0,40">
                             <TextBlock x:Uid="DynamicTileTitle" 
@@ -83,12 +93,12 @@
                                        Text="Mettre à jour la tuile de l'application périodiquement" 
                                             Opacity=".5"
                                             TextWrapping="Wrap"/>
-                            <ToggleSwitch x:Name="QuotesTaskSwitch"
-                                          Loaded="QuotesTaskSwitch_Loaded"
-                                          Toggled="QuotesTaskSwitch_Toggled"/>
+                            <ToggleSwitch x:Name="WeatherTaskSwitch"
+                                          Loaded="WeatherTaskSwitch_Loaded"
+                                          Toggled="WeatherTaskSwitch_Toggled"/>
                         </StackPanel>
 
-                        <StackPanel Margin="0,0,0,40">
+                        <StackPanel Margin="0,0,0,40" Visibility="Collapsed">
                             <TextBlock x:Uid="LockscreenTitle" 
                                        Text="écran de verrouillage" 
                                        Style="{StaticResource SettingsTitle}"/>
@@ -168,9 +178,13 @@
                                        Opacity=".5"
                                        Margin="0,0,0,40">
                             <Paragraph>
-                                <Run x:Uid="DataContent1" Text="Les données du site"/>
-                                <Hyperlink NavigateUri="http://evene.lefigaro.fr/">Evene</Hyperlink>
+                                <Run x:Uid="DataContent1" Text="Les données météo viennent du site"/>
+                                <Hyperlink NavigateUri="http://evene.lefigaro.fr/">Darksky</Hyperlink>
                                 <Run x:Uid="DataContent2" Text="et cette application n'est aucunement liée au site."/>
+                                <LineBreak/>
+                                <Hyperlink NavigateUri="https://darksky.net/poweredby/">
+                                    <Run Text="Powered by Dark Sky"/>
+                                </Hyperlink>
                             </Paragraph>
                         </RichTextBlock>
 
@@ -181,7 +195,7 @@
                                        Margin="0,0,0,40">
                             <Paragraph>
                                 <Run x:Uid="ImagesSourceContent" Text="Les images proviennent de"/>
-                                <Hyperlink NavigateUri="https://unsplash.com/">Unsplash</Hyperlink>
+                                <Hyperlink NavigateUri="https://iconmonstr.com/">iconmonstr</Hyperlink>
                             </Paragraph>
                         </RichTextBlock>
                     </StackPanel>

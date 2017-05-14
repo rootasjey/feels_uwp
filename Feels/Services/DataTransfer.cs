@@ -46,7 +46,7 @@ namespace Feels.Services {
         //}
 
         public static void ShowShareCompleted() {
-            ShowLocalToast("Citation copiée!");
+            ShowLocalToast("Data copied!");
         }
 
         public static void ShowLocalToast(string message) {
@@ -55,7 +55,7 @@ namespace Feels.Services {
                     BindingGeneric = new ToastBindingGeneric() {
                         Children = {
                             new AdaptiveText() {
-                                Text = "Citations 365"
+                                Text = "Feels"
                             },
                             new AdaptiveText() {
                                 Text = message
