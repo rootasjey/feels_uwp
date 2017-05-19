@@ -388,6 +388,7 @@ namespace Tasks.Services {
             var content = new TileContent() {
                 Visual = new TileVisual() {
                     TileMedium = GetMediumVisual()
+                    //TileWide = GetWideVisual()
                 }
             };
 
@@ -470,6 +471,14 @@ namespace Tasks.Services {
                             }
                         }
                     }
+                };
+            }
+
+            // TODO: Complete
+            TileBinding GetWideVisual()
+            {
+                return new TileBinding() {
+
                 };
             }
 

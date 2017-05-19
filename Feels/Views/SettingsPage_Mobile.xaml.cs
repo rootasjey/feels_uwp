@@ -197,5 +197,19 @@ namespace Feels.Views {
                 }
             }
         }
+
+        private void Email_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
+            FeedbackButton_Click(sender, e);
+        }
+
+        private async void Twitter_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
+            var uriTwitter = new Uri("https://twitter.com/jeremiecorpinot");
+            var success = await Windows.System.Launcher.LaunchUriAsync(uriTwitter);
+        }
+
+        private async void PrivacyPolicyGitHub_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
+            var uriGitHub = new Uri("https://github.com/rootasjey/Feels");
+            var success = await Windows.System.Launcher.LaunchUriAsync(uriGitHub);
+        }
     }
 }

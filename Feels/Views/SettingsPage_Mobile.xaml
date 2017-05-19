@@ -201,6 +201,71 @@
                     </StackPanel>
                 </ScrollViewer>
             </PivotItem>
+
+            <PivotItem x:Name="PrivacyPivot">
+                <PivotItem.Header>
+                    <TextBlock Text="privacy policy"/>
+                </PivotItem.Header>
+
+                <ScrollViewer Margin="0,20,0,0" 
+                              VerticalScrollBarVisibility="Hidden">
+                    <StackPanel>
+                        <RichTextBlock>
+                            <Paragraph>
+                                <Run Text="Your privacy is important to us and we respect it."/>
+                                <LineBreak/>
+
+                                <LineBreak/>
+                                <Run Text="-We don't share your personal information with anyone" />
+                                <LineBreak/>
+                                <Run Text="-We don't store your personal information at all" />
+                            </Paragraph>
+
+                            <Paragraph Margin="0,20,0,0">
+                                <Run Text="Location Information" FontSize="24"/>
+                                <LineBreak/>
+                                <Span>
+                                    <Run Text="Your location information is only used by the " />
+                                    <Hyperlink NavigateUri="https://DarkSky.net">DarkSky API.</Hyperlink>
+                                </Span>
+
+                                <LineBreak/>
+                                <Run Text="Your location data is only used to define automatically the city where you are in order to show you relevant weather information."/>
+                                <LineBreak/>
+                                <LineBreak/>
+                                <Run Text="We don't collect or save data for later use."/>
+
+                                <LineBreak/>
+                                <LineBreak/>
+                                <Run Text="We don't send your data to any other third-party entity, firm, service." />
+
+                                <LineBreak/>
+                                <LineBreak/>
+                                <Span>
+                                    <Run Text="You can verify what we do with your data by visiting the "/>
+                                    <Hyperlink NavigateUri="https://github.com/rootasjey/Feels">source code.</Hyperlink>
+                                </Span>
+                            </Paragraph>
+
+                            <Paragraph Margin="0,20,0,0">
+                                <Run Text="contact" FontSize="24"/>
+
+                                <LineBreak/>
+                                <Span>
+                                    <Run Text="You can contact us by email at this address: "/>
+                                </Span>
+                            </Paragraph>
+                        </RichTextBlock>
+
+                        <Button Content="jeremiecorpinot@outlook.com" Tapped="Email_Tapped"/>
+
+                        <TextBlock Text="You can also contact us on twitter @jeremiecorpinot" Margin="0,20,0,0"/>
+                        <Button Content="@jeremiecorpinot" Tapped="Twitter_Tapped"/>
+
+                        <Button Content="privacy policy GitHub version" Tapped="PrivacyPolicyGitHub_Tapped"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </PivotItem>
         </Pivot>
     </Grid>
 

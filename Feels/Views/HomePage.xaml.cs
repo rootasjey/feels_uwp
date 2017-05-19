@@ -131,10 +131,21 @@ namespace Feels.Views {
         }
 
         async Task FetchCurrentLocation() {
+            BasicGeoposition coord;
             var position = await GetPosition();
-            if (position == null) { SafeExit(); return; }
 
-            var coord = position.Coordinate.Point.Position;
+            if (position == null) {
+                coord = Settings.GetLastSavedPosition();
+
+                if (coord.Latitude == 0) {
+                    SafeExit(); return;
+                }
+
+            } else {
+                coord = position.Coordinate.Point.Position;
+                Settings.SavePosition(coord);
+            }
+            
             await PageDataSource.FetchCurrentWeather(coord.Latitude, coord.Longitude);
 
             if (PageDataSource.Forecast == null) {
@@ -152,12 +163,17 @@ namespace Feels.Views {
             var geo = new Geolocator();
 
             try {
-                var position = await geo.GetGeopositionAsync();
+                // NOTE: sometimes GetPositionAsync() is stuck in a loop
+                // set a timeout and try a different way (e.g. cached location)
+                var position = await geo.GetGeopositionAsync(
+                    TimeSpan.FromMinutes(5), TimeSpan.FromSeconds(10));
+                
                 return position;
             } catch {
                 return null;
             }
         }
+
 
         void SafeExit() {
             ShowEmptyView();

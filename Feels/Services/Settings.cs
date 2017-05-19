@@ -1,6 +1,7 @@
 ﻿using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.System.UserProfile;
+using Windows.Devices.Geolocation;
 
 namespace Feels.Services {
     public class Settings {
@@ -27,6 +28,36 @@ namespace Feels.Services {
             get {
                 return "FirstLaunch";
             }
+        }
+
+        private static string LastPositionKey {
+            get {
+                return "LastPosition";
+            }
+        }
+
+        public static void SavePosition(BasicGeoposition position) {
+            var settingsValues = ApplicationData.Current.LocalSettings.Values;
+            var composite = new ApplicationDataCompositeValue {
+                ["lat"] = position.Latitude,
+                ["lon"] = position.Longitude
+            };
+
+            settingsValues[LastPositionKey] = composite;
+        }
+
+        public static BasicGeoposition GetLastSavedPosition() {
+            var settingsValues = ApplicationData.Current.LocalSettings.Values;
+            if (!settingsValues.ContainsKey(LastPositionKey)) return new BasicGeoposition();
+
+            var lastPos = (ApplicationDataCompositeValue)settingsValues[LastPositionKey];
+
+            var coord = new BasicGeoposition() {
+                Latitude = (double)lastPos["lat"],
+                Longitude = (double)lastPos["lon"]
+            };
+
+            return coord;
         }
 
         public static void SaveLanguage(string language) {
