@@ -405,14 +405,16 @@ namespace Feels.Services {
                     break;
             }
 
-            //MakeItRain();
-
             void MakeItRain()
             {
                 for (int i = 0; i < 20; i++) {
-                    var line = CreateRandomLine();
+                    var x = rand.Next(0, (int)_size.Width);
+                    var duration = rand.Next(1, 6);
+                    var delay = rand.Next(0, 10);
+                    //var keyframe = rand.NextDouble();
+
+                    var line = CreateRandomLine(x, duration, delay, 1);
                     animationsScene.Children.Add(line);
-                    CreateRandomLineAnimation(line);
                 }
             }
 
@@ -570,9 +572,7 @@ namespace Feels.Services {
             
         }
 
-        static Line CreateRandomLine() {
-            var rand = new Random();
-            var x = rand.Next(0, (int)_size.Width);
+        static Line CreateRandomLine(int x, int duration, int delay, double keyframe) {
             var y = -70;
             //var y = rand.Next(0, 400);
             //var line = new Line() {
@@ -594,24 +594,20 @@ namespace Feels.Services {
                 StrokeThickness = 5
             };
 
-            return line;
-        }
-
-        static void CreateRandomLineAnimation(Line line) {
-            var rand = new Random();
-            //var coord = rand.Next((int)size.Height, 900);
-
+            // ANIMATION
             var _visual = ElementCompositionPreview.GetElementVisual(line);
             var _compositor = _visual.Compositor;
             var _animation = _compositor.CreateVector2KeyFrameAnimation();
 
             //_animation.InsertKeyFrame(1f, new System.Numerics.Vector2(-coord, coord));
-            _animation.InsertKeyFrame(1f, new System.Numerics.Vector2(0, (float)_size.Height));
-            _animation.Duration = TimeSpan.FromSeconds(rand.Next(2,4));
-            _animation.DelayTime = TimeSpan.FromSeconds(rand.Next(0, 10));
+            _animation.InsertKeyFrame((float)keyframe, new System.Numerics.Vector2(0, (float)_size.Height));
+            _animation.Duration = TimeSpan.FromSeconds(duration);
+            _animation.DelayTime = TimeSpan.FromSeconds(delay);
             _animation.IterationBehavior = AnimationIterationBehavior.Forever;
 
             _visual.StartAnimation("Offset.xy", _animation);
+
+            return line;
         }
         
     }

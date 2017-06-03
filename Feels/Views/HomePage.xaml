@@ -1,11 +1,14 @@
 ﻿<Page
-    x:Class="Feels.Views.HomePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:forecast="using:DarkSkyApi.Models"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:behaviors="using:Microsoft.Toolkit.Uwp.UI.Animations.Behaviors"
+    x:Class="Feels.Views.HomePage"
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -13,6 +16,28 @@
             <RowDefinition x:Name="TitleBarRow" Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="WindowsStates">
+                <VisualState x:Name="MobileState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="TitleBar.Visibility" Value="Collapsed"/>
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState x:Name="DesktopState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="500"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="TitleBar.Visibility" Value="Visible"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
 
         <Grid x:Name="TitleBar" 
               Background="Transparent" 
@@ -27,15 +52,13 @@
             <Grid x:Name="BackButtonGrid" VerticalAlignment="Top"
                   Visibility="Collapsed">
                 <Button x:Name="BackButton" Background="Transparent">
-                    <Button.Content>
-                        <FontIcon Glyph="&#xE096;" Foreground="White"/>
-                    </Button.Content>
+                    <FontIcon Glyph="&#xE096;" Foreground="White"/>
                 </Button>
             </Grid>
             <Grid Grid.Column="1" x:Name="MainTitleBar" Background="Transparent">
                 <TextBlock Text="Feels" VerticalAlignment="Top"
                            Visibility="Visible"
-                            FontSize="12" FontFamily="Segoe UI" FontWeight="Normal" Margin="10,0"></TextBlock>
+                            FontSize="12" FontFamily="Segoe UI" FontWeight="Normal" Margin="10,0"/>
             </Grid>
             <Grid Grid.Column="3" x:Name="RightMask" Background="Transparent"/>
         </Grid>
@@ -45,7 +68,15 @@
 
                 <ScrollViewer x:Name="PivotContent">
                     <Grid>
-                        <Grid x:Name="Theater" Opacity="0"></Grid>
+                        <Grid x:Name="Theater" Opacity="0">
+                            <interactivity:Interaction.Behaviors>
+                                <behaviors:Blur x:Name="BlurBehavior"
+                                                Value="5"
+                                                Duration="3000"
+                                                Delay="2000"
+                                                AutomaticallyStart="True"/>
+                            </interactivity:Interaction.Behaviors>
+                        </Grid>
 
                         <StackPanel x:Name="SplashView"
                                     Visibility="Visible"
@@ -74,7 +105,7 @@
                                             TextAlignment="Center"
                                             TextWrapping="Wrap"
                                             FontSize="32"/>
-                                
+
                                 <TextBlock x:Name="City" Text="paris"
                                                Typography.Capitals="AllSmallCaps"
                                                FontWeight="Light"
@@ -84,12 +115,14 @@
 
                                 <StackPanel Orientation="Horizontal"
                                                 HorizontalAlignment="Center">
+                                    
                                     <TextBlock x:Name="Temperature"
                                                    Text="42°"
                                                    Margin="12,40,0,0"
                                                    FontWeight="Bold" 
                                                    FontSize="90"/>
                                 </StackPanel>
+                                
                                 <TextBlock x:Name="TempUnit" 
                                                Text="celcius"
                                                FontSize="22"
@@ -98,15 +131,18 @@
                                                Opacity=".5"
                                                TextAlignment="Center"/>
 
-                                <TextBlock x:Name="FeelsLike" Text="Feels more like "
-                                               HorizontalAlignment="Center"/>
-                                
+                                <TextBlock x:Name="FeelsLike" 
+                                           Text="Feels more like "
+                                           FontWeight="Bold"
+                                           Opacity=".6"
+                                           HorizontalAlignment="Center"/>
+
 
                                 <StackPanel x:Name="MinMaxTemp"
-                                                HorizontalAlignment="Center"
-                                                Orientation="Horizontal"
-                                                Opacity="1"
-                                                Margin="0,50,0,0">
+                                            HorizontalAlignment="Center"
+                                            Orientation="Horizontal"
+                                            Opacity=".5"
+                                            Margin="0,50,0,0">
                                     <Grid x:Name="MaxTemp" 
                                                 Margin="0,0,0,0"
                                                 HorizontalAlignment="Center">
@@ -114,12 +150,11 @@
                                             <ColumnDefinition Width="30"/>
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
-                                        <BitmapIcon UriSource="/Assets/Icons/thermo_up.png"
-                                                        Height="30"
-                                                        Width="30"/>
+                                        <FontIcon Glyph="&#xE11C;" FontSize="18"/>
                                         <TextBlock x:Name="MaxTempValue" 
                                                         Text="40" 
-                                                        FontSize="30" Grid.Column="1"/>
+                                                        FontSize="20" 
+                                                   Grid.Column="1"/>
                                     </Grid>
 
                                     <Grid x:Name="MinTemp" 
@@ -129,17 +164,17 @@
                                             <ColumnDefinition Width="30"/>
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
-                                        <BitmapIcon UriSource="/Assets/Icons/thermo_down.png"
-                                                            Height="30"
-                                                            Width="30"/>
+                                        <FontIcon Glyph="&#xE118;"
+                                                  FontSize="18"/>
                                         <TextBlock x:Name="MinTempValue" 
-                                                           Text="30" 
-                                                           FontSize="30" 
-                                                           Grid.Column="1"/>
+                                                    Text="30" 
+                                                    FontSize="20"
+                                                    Grid.Column="1"/>
                                     </Grid>
                                 </StackPanel>
 
                                 <Grid x:Name="Precip" 
+                                      Opacity=".7"
                                           Margin="0,20,0,0"
                                           HorizontalAlignment="Center">
                                     <Grid.ColumnDefinitions>
@@ -148,8 +183,11 @@
                                     </Grid.ColumnDefinitions>
                                     <FontIcon FontFamily="Segoe MDL2 Assets" 
                                                   Glyph="&#xEB42;"
-                                                  FontSize="30"/>
-                                    <TextBlock x:Name="PrecipValue" Text="40" FontSize="28" Grid.Column="1"/>
+                                                  FontSize="18"/>
+                                    <TextBlock x:Name="PrecipValue" 
+                                               Text="40" 
+                                               FontSize="20" 
+                                               Grid.Column="1"/>
                                 </Grid>
 
                                 <Button x:Name="WeatherDetailButton" 
@@ -193,26 +231,22 @@
 
                                 <StackPanel Margin="0,50,0,0">
                                     <Button Margin="0,0,0,0">
-                                        <Button.Content>
-                                            <TextBlock x:Name="CurrentToHourlyButton" 
+                                        <TextBlock x:Name="CurrentToHourlyButton" 
                                                        Text="swype right to see hourly forecast"
                                                         TextWrapping="Wrap"
                                                         Typography.Capitals="SmallCaps"
                                                         FontWeight="Bold"
                                                        Tapped="CurrentToHourlyButton_Tapped"/>
-                                        </Button.Content>
                                     </Button>
 
                                     <Button Margin="0,5,0,0"
                                                 HorizontalAlignment="Center">
-                                        <Button.Content>
-                                            <TextBlock x:Name="CurrentToDailyButton" 
+                                        <TextBlock x:Name="CurrentToDailyButton" 
                                                        Text="swype left to see daily forecast"
                                                         TextWrapping="Wrap"
                                                         Typography.Capitals="SmallCaps"
                                                         FontWeight="Bold"
                                                        Tapped="CurrentToDailyButton_Tapped"/>
-                                        </Button.Content>
                                     </Button>
                                 </StackPanel>
                             </StackPanel>
@@ -266,6 +300,15 @@
                                     Tapped="TryAgainButton_Tapped"
                                     HorizontalAlignment="Center"/>
                         </StackPanel>
+
+
+                        <Maps:MapControl x:Name="PageMapControl" 
+                                         HorizontalAlignment="Left"
+                                         MapServiceToken="AEKtGCjDSo2UnEvMVxOh~iS-cB5ZHhjZiIJ9RgGtVgw~AkzS_JYlIhjskoO8ziK63GAJmtcF7U_t4Gni6nBb-MncX6-iw8ldj_NgnmUIzMPY"
+                                         Visibility="Collapsed"
+                                         VerticalAlignment="Top"/>
+
+
                     </Grid>
                 </ScrollViewer>
             </PivotItem>
@@ -292,38 +335,7 @@
 
                                 <UserControl>
                                     <StackPanel Padding="30,42,30,0" 
-                                                Background="{ThemeResource SystemControlHighlightAccentBrush}">                                
-                                        <StackPanel x:Name="PanelHourlyNavigation"
-                                                    Orientation="Horizontal"
-                                                    HorizontalAlignment="Left">
-                                            <Button>
-                                                <Button.Content>
-                                                    <TextBlock x:Name="HourlyToCurrentButton" 
-                                                    Text="current forecast"
-                                                    Typography.Capitals="SmallCaps"
-                                                    FontWeight="Bold"
-                                                    Tapped="HourlyToCurrentButton_Tapped"/>
-                                                </Button.Content>
-                                            </Button>
-
-                                            <Button Margin="10,0,0,0"
-                                                        HorizontalAlignment="Center">
-                                                <Button.Content>
-                                                    <TextBlock x:Name="HourlyToDailyButton" 
-                                                    Text="daily forecast"
-                                                    Typography.Capitals="SmallCaps"
-                                                    FontWeight="Bold"
-                                                    Tapped="CurrentToDailyButton_Tapped"/>
-                                                </Button.Content>
-                                            </Button>
-                                        </StackPanel>
-
-                                        <TextBlock x:Name="HourlySummary" 
-                                                   Text="Summary"
-                                                   Padding="0,20"
-                                                   Foreground="White"
-                                                   TextWrapping="Wrap"
-                                                    Tapped="HourlySummary_Tapped"/>
+                                                Background="{ThemeResource SystemControlHighlightAccentBrush}">
 
                                         <VisualStateManager.VisualStateGroups>
                                             <VisualStateGroup x:Name="HourlyHeaderStates">
@@ -348,6 +360,34 @@
                                                 </VisualState>
                                             </VisualStateGroup>
                                         </VisualStateManager.VisualStateGroups>
+                                        <StackPanel x:Name="PanelHourlyNavigation"
+                                                    Orientation="Horizontal"
+                                                    HorizontalAlignment="Left">
+                                            <Button>
+                                                <TextBlock x:Name="HourlyToCurrentButton" 
+                                                    Text="current forecast"
+                                                    Typography.Capitals="SmallCaps"
+                                                    FontWeight="Bold"
+                                                    Tapped="HourlyToCurrentButton_Tapped"/>
+                                            </Button>
+
+                                            <Button Margin="10,0,0,0"
+                                                        HorizontalAlignment="Center">
+                                                <TextBlock x:Name="HourlyToDailyButton" 
+                                                    Text="daily forecast"
+                                                    Typography.Capitals="SmallCaps"
+                                                    FontWeight="Bold"
+                                                    Tapped="CurrentToDailyButton_Tapped"/>
+                                            </Button>
+                                        </StackPanel>
+
+                                        <TextBlock x:Name="HourlySummary" 
+                                                   Text="Summary"
+                                                   Padding="0,20"
+                                                   Foreground="White"
+                                                   TextWrapping="Wrap"
+                                                    Tapped="HourlySummary_Tapped"/>
+
                                     </StackPanel>
                                 </UserControl>
                             </controls:ScrollHeader>
@@ -367,6 +407,32 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="50"/>
                                         </Grid.ColumnDefinitions>
+
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="WindowsStates">
+                                                <VisualState x:Name="Mobile">
+                                                    <VisualState.StateTriggers>
+                                                        <AdaptiveTrigger MinWindowWidth="0"/>
+                                                    </VisualState.StateTriggers>
+                                                    <VisualState.Setters>
+                                                        <Setter Target="Summary.Width" Value="100"/>
+                                                        <Setter Target="HourColumn.Width" Value="60"/>
+                                                        <Setter Target="HourForecast.HorizontalAlignment" Value="Left"/>
+                                                    </VisualState.Setters>
+                                                </VisualState>
+
+                                                <VisualState x:Name="Desktop">
+                                                    <VisualState.StateTriggers>
+                                                        <AdaptiveTrigger MinWindowWidth="500"/>
+                                                    </VisualState.StateTriggers>
+                                                    <VisualState.Setters>
+                                                        <Setter Target="Summary.Width" Value="180"/>
+                                                        <Setter Target="HourColumn.Width" Value="90"/>
+                                                        <Setter Target="HourForecast.HorizontalAlignment" Value="Center"/>
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
 
                                         <TextBlock Text="{x:Bind Time, Converter={StaticResource TimeParser}}"
                                                    VerticalAlignment="Center"
@@ -403,32 +469,6 @@
                                                    HorizontalAlignment="Right"
                                                    Text="{x:Bind Temperature, Converter={StaticResource SimpleTemperature}}"/>
 
-                                        <VisualStateManager.VisualStateGroups>
-                                            <VisualStateGroup x:Name="WindowsStates">
-                                                <VisualState x:Name="Mobile">
-                                                    <VisualState.StateTriggers>
-                                                        <AdaptiveTrigger MinWindowWidth="0"/>
-                                                    </VisualState.StateTriggers>
-                                                    <VisualState.Setters>
-                                                        <Setter Target="Summary.Width" Value="100"/>
-                                                        <Setter Target="HourColumn.Width" Value="60"/>
-                                                        <Setter Target="HourForecast.HorizontalAlignment" Value="Left"/>
-                                                    </VisualState.Setters>
-                                                </VisualState>
-
-                                                <VisualState x:Name="Desktop">
-                                                    <VisualState.StateTriggers>
-                                                        <AdaptiveTrigger MinWindowWidth="500"/>
-                                                    </VisualState.StateTriggers>
-                                                    <VisualState.Setters>
-                                                        <Setter Target="Summary.Width" Value="180"/>
-                                                        <Setter Target="HourColumn.Width" Value="90"/>
-                                                        <Setter Target="HourForecast.HorizontalAlignment" Value="Center"/>
-                                                    </VisualState.Setters>
-                                                </VisualState>
-                                            </VisualStateGroup>
-                                        </VisualStateManager.VisualStateGroups>
-
                                     </Grid>
                                 </UserControl>
                             </DataTemplate>
@@ -460,40 +500,6 @@
                                 <UserControl>
                                     <StackPanel Padding="30,42,20,0"
                                             Background="{ThemeResource SystemControlHighlightAccentBrush}">
-                                        <StackPanel x:Name="PanelDailyNavigation" 
-                                                    Margin="0,0,0,0"
-                                                    Grid.Row="0"
-                                                    Padding="0,0,0,0"
-                                                    Orientation="Horizontal"
-                                                    HorizontalAlignment="Left">
-                                            <Button Margin="0,0,0,0">
-                                                <Button.Content>
-                                                    <TextBlock
-                                                    Text="hourly forecast"
-                                                    Typography.Capitals="SmallCaps"
-                                                    FontWeight="Bold"
-                                                    Tapped="CurrentToHourlyButton_Tapped"/>
-                                                </Button.Content>
-                                            </Button>
-
-                                            <Button Margin="10,0,0,0"
-                                                        HorizontalAlignment="Center">
-                                                <Button.Content>
-                                                    <TextBlock
-                                                        Text="current forecast"
-                                                        Typography.Capitals="SmallCaps"
-                                                        FontWeight="Bold"
-                                                        Tapped="HourlyToCurrentButton_Tapped"/>
-                                                </Button.Content>
-                                            </Button>
-                                        </StackPanel>
-
-                                        <TextBlock x:Name="DailySummary" 
-                                                   Text="Summary" Grid.Row="1" 
-                                                   Padding="0,20"
-                                                   Foreground="White"
-                                                   TextWrapping="Wrap"
-                                                   Tapped="DailySummary_Tapped"/>
 
                                         <VisualStateManager.VisualStateGroups>
                                             <VisualStateGroup x:Name="DailyHeaderStates">
@@ -518,6 +524,37 @@
                                                 </VisualState>
                                             </VisualStateGroup>
                                         </VisualStateManager.VisualStateGroups>
+                                        <StackPanel x:Name="PanelDailyNavigation" 
+                                                    Margin="0,0,0,0"
+                                                    Grid.Row="0"
+                                                    Padding="0,0,0,0"
+                                                    Orientation="Horizontal"
+                                                    HorizontalAlignment="Left">
+                                            <Button Margin="0,0,0,0">
+                                                <TextBlock
+                                                    Text="hourly forecast"
+                                                    Typography.Capitals="SmallCaps"
+                                                    FontWeight="Bold"
+                                                    Tapped="CurrentToHourlyButton_Tapped"/>
+                                            </Button>
+
+                                            <Button Margin="10,0,0,0"
+                                                        HorizontalAlignment="Center">
+                                                <TextBlock
+                                                        Text="current forecast"
+                                                        Typography.Capitals="SmallCaps"
+                                                        FontWeight="Bold"
+                                                        Tapped="HourlyToCurrentButton_Tapped"/>
+                                            </Button>
+                                        </StackPanel>
+
+                                        <TextBlock x:Name="DailySummary" 
+                                                   Text="Summary" Grid.Row="1" 
+                                                   Padding="0,20"
+                                                   Foreground="White"
+                                                   TextWrapping="Wrap"
+                                                   Tapped="DailySummary_Tapped"/>
+
                                     </StackPanel>
                                 </UserControl>
                             </controls:ScrollHeader>
@@ -532,6 +569,36 @@
                                               Opacity="0"
                                               Loaded="HourForecast_Loaded">
 
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="DailyForecastStates">
+                                                <VisualState x:Name="MobileState">
+                                                    <VisualState.StateTriggers>
+                                                        <AdaptiveTrigger MinWindowWidth="0"/>
+                                                    </VisualState.StateTriggers>
+                                                    <VisualState.Setters>
+                                                        <Setter Target="ForcastDesktop.Visibility" Value="Collapsed"/>
+                                                        <Setter Target="ForecastMobile.Visibility" Value="Visible"/>
+                                                        <Setter Target="DailyForecast.Height" Value="Auto"/>
+                                                        <Setter Target="DailyForecast.HorizontalAlignment" Value="Left"/>
+                                                        <!--<Setter Target="PanelDailyNavigation.Visibility" Value="Collapsed"/>-->
+                                                    </VisualState.Setters>
+                                                </VisualState>
+
+                                                <VisualState x:Name="DesktopState">
+                                                    <VisualState.StateTriggers>
+                                                        <AdaptiveTrigger MinWindowWidth="500"/>
+                                                    </VisualState.StateTriggers>
+                                                    <VisualState.Setters>
+                                                        <Setter Target="ForcastDesktop.Visibility" Value="Visible"/>
+                                                        <Setter Target="ForecastMobile.Visibility" Value="Collapsed"/>
+                                                        <Setter Target="DailyForecast.Height" Value="200"/>
+                                                        <Setter Target="DailyForecast.HorizontalAlignment" Value="Center"/>
+                                                        <!--<Setter Target="PanelDailyNavigation.Visibility" Value="Visible"/>-->
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+
                                         <Grid x:Name="ForcastDesktop">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition x:Name="DayColunm" Width="130"/>
@@ -539,7 +606,7 @@
                                                 <ColumnDefinition x:Name="SummaryColumn" Width="200"/>
                                                 <ColumnDefinition x:Name="TempColumn" Width="40"/>
                                             </Grid.ColumnDefinitions>
-                                            
+
                                             <TextBlock x:Name="Day" 
                                                    Text="{x:Bind Time.LocalDateTime.DayOfWeek}"
                                                    VerticalAlignment="Center"
@@ -586,7 +653,7 @@
                                             </StackPanel>
 
                                         </Grid>
-                                        
+
                                         <Grid x:Name="ForecastMobile">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="40"/>
@@ -615,7 +682,7 @@
                                                     Foreground="White"
                                                     Grid.Column="0"
                                                     />
-                                                
+
                                                 <StackPanel Grid.Column="1"
                                                             Orientation="Horizontal"
                                                             VerticalAlignment="Center">
@@ -634,7 +701,7 @@
                                                         />
                                                 </StackPanel>
                                             </Grid>
-                                            
+
 
                                             <TextBlock
                                                    Text="{x:Bind Summary}"
@@ -647,36 +714,7 @@
                                                    FontWeight="Light"/>
 
                                         </Grid>
-                                        
-                                        <VisualStateManager.VisualStateGroups>
-                                            <VisualStateGroup x:Name="DailyForecastStates">
-                                                <VisualState x:Name="MobileState">
-                                                    <VisualState.StateTriggers>
-                                                        <AdaptiveTrigger MinWindowWidth="0"/>
-                                                    </VisualState.StateTriggers>
-                                                    <VisualState.Setters>
-                                                        <Setter Target="ForcastDesktop.Visibility" Value="Collapsed"/>
-                                                        <Setter Target="ForecastMobile.Visibility" Value="Visible"/>
-                                                        <Setter Target="DailyForecast.Height" Value="Auto"/>
-                                                        <Setter Target="DailyForecast.HorizontalAlignment" Value="Left"/>
-                                                        <!--<Setter Target="PanelDailyNavigation.Visibility" Value="Collapsed"/>-->
-                                                    </VisualState.Setters>
-                                                </VisualState>
-                                                
-                                                <VisualState x:Name="DesktopState">
-                                                    <VisualState.StateTriggers>
-                                                        <AdaptiveTrigger MinWindowWidth="500"/>
-                                                    </VisualState.StateTriggers>
-                                                    <VisualState.Setters>
-                                                        <Setter Target="ForcastDesktop.Visibility" Value="Visible"/>
-                                                        <Setter Target="ForecastMobile.Visibility" Value="Collapsed"/>
-                                                        <Setter Target="DailyForecast.Height" Value="200"/>
-                                                        <Setter Target="DailyForecast.HorizontalAlignment" Value="Center"/>
-                                                        <!--<Setter Target="PanelDailyNavigation.Visibility" Value="Visible"/>-->
-                                                    </VisualState.Setters>
-                                                </VisualState>
-                                            </VisualStateGroup>
-                                        </VisualStateManager.VisualStateGroups>
+
                                     </Grid>
                                 </UserControl>
                             </DataTemplate>
@@ -693,32 +731,11 @@
                     Opening="AppBar_Opening"
                     Closed="AppBar_Closed"
                     ClosedDisplayMode="Minimal">
-            <AppBarButton x:Name="CmdRefresh" Label="refresh" Icon="Refresh" Tapped="CmdRefresh_Tapped"/>
             <CommandBar.SecondaryCommands>
                 <AppBarButton Label="settings" Tapped="GoToSettings_Tapped" />
             </CommandBar.SecondaryCommands>
+            <AppBarButton x:Name="CmdRefresh" Label="refresh" Icon="Refresh" Tapped="CmdRefresh_Tapped"/>
         </CommandBar>
 
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="WindowsStates">
-                <VisualState x:Name="MobileState">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="0"/>
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="TitleBar.Visibility" Value="Collapsed"/>
-                    </VisualState.Setters>
-                </VisualState>
-
-                <VisualState x:Name="DesktopState">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="500"/>
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="TitleBar.Visibility" Value="Visible"/>
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
     </Grid>
 </Page>

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Devices.Geolocation;
+using Windows.Services.Maps;
 using Windows.System;
 using Windows.UI;
 using Windows.UI.Core;
@@ -93,21 +94,35 @@ namespace Feels.Views {
         }
 
         async void InitializePageData() {
-            if (!await MustRefreshData()) {
+            if (PageDataSource.Forecast != null) {
                 HideSplashView();
                 HideLoadingView();
+                GetCurrentCity(_LastPosition);
                 PopulateView();
+            }
+
+            if (!await MustRefreshData()) {
                 return;
             }
 
-            var granted = await GetLocationPermission();
-            if (!granted) { ShowNoAccessView(); return; }
+            FetchNewData();
 
-            ShowLoadingView();
-            await FetchCurrentLocation();
-            HideLoadingView();
+            async void FetchNewData()
+            {
+                var granted = await GetLocationPermission();
+                if (!granted) { ShowNoAccessView(); return; }
 
-            PopulateView();            
+                ShowLoadingView();
+
+                var position = await GetPosition();
+                GetCurrentCity(position);
+
+                await FetchCurrentLocation(position);
+
+                HideLoadingView();
+
+                PopulateView();
+            }
         }
 
         void PopulateView() {
@@ -116,6 +131,21 @@ namespace Feels.Views {
             BindDailyListData();
 
             ShowBetaMessageAsync();
+        }
+
+        async void GetCurrentCity(BasicGeoposition position) {
+            Geopoint pointToReverseGeocode = new Geopoint(position);
+
+            // Reverse geocode the specified geographic location.
+            MapLocationFinderResult result =
+                await MapLocationFinder.FindLocationsAtAsync(pointToReverseGeocode);
+
+            // If the query returns results, display the name of the town
+            // contained in the address of the first result.
+            if (result.Status == MapLocationFinderStatus.Success) {
+                if (result.Locations.Count == 0) return;
+                City.Text = result.Locations[0].Address.Town;
+            }
         }
 
         async Task ShowBetaMessageAsync() {
@@ -130,47 +160,41 @@ namespace Feels.Views {
             Settings.SaveFirstLaunchPassed();
         }
 
-        async Task FetchCurrentLocation() {
-            BasicGeoposition coord;
-            var position = await GetPosition();
-
-            if (position == null) {
-                coord = Settings.GetLastSavedPosition();
-
-                if (coord.Latitude == 0) {
-                    SafeExit(); return;
-                }
-
-            } else {
-                coord = position.Coordinate.Point.Position;
-                Settings.SavePosition(coord);
-            }
-            
-            await PageDataSource.FetchCurrentWeather(coord.Latitude, coord.Longitude);
+        async Task FetchCurrentLocation(BasicGeoposition basicPosition) {
+            await PageDataSource.FetchCurrentWeather(basicPosition.Latitude, basicPosition.Longitude);
 
             if (PageDataSource.Forecast == null) {
                 SafeExit();
                 return;
             }
 
-            NowPivot.DataContext = PageDataSource.Forecast.Currently;
-
-            _LastFetchedTime = DateTime.Now;
-            _LastPosition = coord;
+            NowPivot.DataContext = PageDataSource.Forecast.Currently;            
         }
 
-        async Task<Geoposition> GetPosition() {
-            var geo = new Geolocator();
+        async Task<BasicGeoposition> GetPosition() {
+            var locator = new Geolocator();
+            var positionToReturn = new BasicGeoposition();
 
             try {
                 // NOTE: sometimes GetPositionAsync() is stuck in a loop
                 // set a timeout and try a different way (e.g. cached location)
-                var position = await geo.GetGeopositionAsync(
+                var position = await locator.GetGeopositionAsync(
                     TimeSpan.FromMinutes(5), TimeSpan.FromSeconds(10));
-                
-                return position;
+
+                if (position == null) {
+                    positionToReturn = Settings.GetLastSavedPosition();
+                } else {
+                    positionToReturn = position.Coordinate.Point.Position;
+                    Settings.SavePosition(positionToReturn);
+                }
+
+                _LastFetchedTime = DateTime.Now;
+                _LastPosition = positionToReturn;
+
+                return positionToReturn;
+
             } catch {
-                return null;
+                return positionToReturn;
             }
         }
 
@@ -217,6 +241,7 @@ namespace Feels.Views {
 
             await AnimateSlideIn(WeatherViewContent);
             AnimateTemperature();
+
             FillInData();
             DrawScene();
 
@@ -248,7 +273,7 @@ namespace Feels.Views {
             void FillInData()
             {
                 Status.Text = currentWeather.Summary;
-                SetCity();
+                //SetCity();
                 FeelsLike.Text = string.Format("{0} {1}", "Feels more like ", currentWeather.ApparentTemperature);
                 PrecipValue.Text = string.Format("{0}%", currentWeather.PrecipitationProbability * 100);
                 //SunriseBlock.Text = currentWeather.Sunrise;

@@ -391,14 +391,7 @@ namespace Tasks.Services {
                     //TileWide = GetWideVisual()
                 }
             };
-
-            TileBinding GetSmallVisual()
-            {
-                return new TileBinding() {
-
-                };
-            }
-
+            
             TileBinding GetMediumVisual()
             {
                 //var precipIconPath = GetIcon(forecast.Currently.Icon);
@@ -475,12 +468,12 @@ namespace Tasks.Services {
             }
 
             // TODO: Complete
-            TileBinding GetWideVisual()
-            {
-                return new TileBinding() {
+            //TileBinding GetWideVisual()
+            //{
+            //    return new TileBinding() {
 
-                };
-            }
+            //    };
+            //}
 
             return new TileNotification(content.GetXml());
         }
