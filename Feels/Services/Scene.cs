@@ -74,10 +74,18 @@ namespace Feels.Services {
             var coordinates = transform.TransformPoint(new Point(0, 0));
             var x = (float)(coordinates.X + element.ActualHeight / 2);
             var y = (float)(coordinates.Y + element.ActualWidth / 2);
+
             float z = 15;
+            Color color = Colors.White;
 
             if (options != null) {
                 z = options.ContainsKey("z") ? (float)options["z"] : z;
+
+                var condition = options.ContainsKey("condition") ? (string)options["condition"] : "day";
+                if (condition.Contains("night")) {
+                    color = Color.FromArgb(255, 247, 202, 24);
+                    z = 30;
+                }
             }
 
             var sceneVisual = ElementCompositionPreview.GetElementVisual(scene);
@@ -85,7 +93,7 @@ namespace Feels.Services {
 
             var light = sceneCompositor.CreatePointLight();
             light.CoordinateSpace = sceneVisual;
-            light.Color = Colors.White;
+            light.Color = color;
             light.Offset = new Vector3(x, y, z);
             light.Targets.Add(sceneVisual);
             LightsList.Add(light);
@@ -600,13 +608,13 @@ namespace Feels.Services {
                 }
             }
 
-            void MakeStars(int starsNumber = 15)
+            void MakeStars(int starsNumber = 35)
             {
                 var x = (int)_size.Width;
                 for (int i = 0; i < starsNumber; i++) {
                     var coord = new Vector2(rand.Next(-x, x), rand.Next(0, 400));
                     var duration = rand.Next(10, 20);
-                    var radius = rand.Next(5, 10);
+                    var radius = rand.Next(1, 7);
 
                     var star = CreateStar(duration, coord, radius);
                     animationsScene.Children.Add(star);

@@ -307,7 +307,12 @@ namespace Feels.Views {
         void AddLightingEffects(Grid scene) {
             Scene.AddAmbiantLight(scene);
 
-            Scene.AddPointLight(scene, (Grid)scene.FindName("ConditionIcon"));
+            Scene.AddPointLight(
+                scene, 
+                (Grid)scene.FindName("ConditionIcon"),
+                new Dictionary<string, object>() {
+                    {"condition", PageDataSource.Forecast.Currently.Icon }
+                });
             //Scene.AddSpotLight(scene, conditionIcon);
             
         }
