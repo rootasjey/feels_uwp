@@ -42,7 +42,7 @@ namespace Tasks {
             var coord = position.Coordinate.Point.Position;
 
             var forecast = await FetchCurrentWeather(coord.Latitude, coord.Longitude);
-            TileDesigner.UpdatePrimary(forecast);
+            TileDesigner.UpdatePrimary(forecast, coord);
 
             EndTask();
         }

@@ -16,18 +16,28 @@ using System.Numerics;
 
 namespace Feels.Services {
     public class Scene {
-        static Rect _bounds;
-        static double _scaleFactor;
-        static Size _size;
+        #region variables
+        static Rect _bounds { get; set; }
+        static double _scaleFactor { get; set; }
+        static Size _size { get; set; }
+
+        static List<CompositionLight> LightsList { get; set; }
+
+        //static Dictionary<object,object> PositionTrackingList { get; set; }
+
+        #endregion variables
 
         public static Grid CreateNew(CurrentDataPoint current, DayDataPoint day) {
             CalculateDeviceSize();
 
+            LightsList = new List<CompositionLight>();
+
             var scene = new Grid();
             scene = PaintBackground(scene, current, day);
             scene = AnimateBackgroundColor(scene, current.Icon);
-            scene = CreateSunOrMoon(scene, current);
             scene = AddAnimations(scene, current.Icon);
+            scene = CreatePrimaryCondition(scene, current);
+
             return scene;
         }
 
@@ -35,6 +45,98 @@ namespace Feels.Services {
             _bounds = ApplicationView.GetForCurrentView().VisibleBounds;
             _scaleFactor = DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
             _size = new Size(_bounds.Width * _scaleFactor, _bounds.Height * _scaleFactor);
+        }
+        
+
+        /// <summary>
+        /// Add ambiant light to the scene
+        /// </summary>
+        /// <param name="scene"></param>
+        public static void AddAmbiantLight(Grid scene) {
+            var sceneVisual = ElementCompositionPreview.GetElementVisual(scene);
+            var sceneCompositor = sceneVisual.Compositor;
+
+            var ambiantLight = sceneCompositor.CreateAmbientLight();
+            ambiantLight.Color = Colors.White;
+            ambiantLight.Targets.Add(sceneVisual);
+            LightsList.Add(ambiantLight);
+        }
+
+        /// <summary>
+        /// Add point light to the scene at the element coordinates
+        /// Use options dictionnary to specify custom properties like light intensity
+        /// </summary>
+        /// <param name="scene">The Grid to add the light to</param>
+        /// <param name="element">Use the element's coordinates to place the light</param>
+        /// <param name="options"></param>
+        public static void AddPointLight(Grid scene, Grid element, Dictionary<string,object> options = null) {
+            var transform = element.TransformToVisual(scene);
+            var coordinates = transform.TransformPoint(new Point(0, 0));
+            var x = (float)(coordinates.X + element.ActualHeight / 2);
+            var y = (float)(coordinates.Y + element.ActualWidth / 2);
+            float z = 15;
+
+            if (options != null) {
+                z = options.ContainsKey("z") ? (float)options["z"] : z;
+            }
+
+            var sceneVisual = ElementCompositionPreview.GetElementVisual(scene);
+            var sceneCompositor = sceneVisual.Compositor;
+
+            var light = sceneCompositor.CreatePointLight();
+            light.CoordinateSpace = sceneVisual;
+            light.Color = Colors.White;
+            light.Offset = new Vector3(x, y, z);
+            light.Targets.Add(sceneVisual);
+            LightsList.Add(light);
+
+            TrackUIElement();
+
+            void TrackUIElement()
+            {
+                Window.Current.SizeChanged += (s, e) => {
+                    var updatedTransform = element.TransformToVisual(scene);
+                    var updatedCoordinates = updatedTransform.TransformPoint(new Point(0, 0));
+                    var updatedX = (float)(updatedCoordinates.X + element.ActualHeight / 2);
+                    var updatedY = (float)(updatedCoordinates.Y + element.ActualWidth / 2);
+                    light.Offset = new Vector3(updatedX, updatedY, z);
+                };
+            }
+        }
+
+        public static void AddDistantLight(Grid scene) {
+            var sceneVisual = ElementCompositionPreview.GetElementVisual(scene);
+            var sceneCompositor = sceneVisual.Compositor;
+
+            var light = sceneCompositor.CreateDistantLight();
+            light.CoordinateSpace = sceneVisual;
+            light.Color = Colors.White;
+            light.Direction = new Vector3(0,0,0) - new Vector3(0, 200f, 100f);
+            light.Targets.Add(sceneVisual);
+            LightsList.Add(light);
+        }
+
+        public static void AddSpotLight(Grid scene, Grid element) {
+            var sceneVisual = ElementCompositionPreview.GetElementVisual(scene);
+            var sceneCompositor = sceneVisual.Compositor;
+
+            var transform = element.TransformToVisual(scene);
+            var coordinates = transform.TransformPoint(new Point(0, 0));
+            var x = (float)(coordinates.X + element.ActualHeight / 2);
+            var y = (float)(coordinates.Y + element.ActualWidth / 2);
+            float z = 30;
+
+            var light = sceneCompositor.CreateSpotLight();
+            light.CoordinateSpace = sceneVisual;
+            light.InnerConeAngleInDegrees = 20;
+            light.InnerConeColor = Colors.White;
+            light.OuterConeAngleInDegrees = 45;
+            light.OuterConeColor = Colors.Yellow;
+            //light.Direction = new Vector3(0, 0, -100);
+            light.Offset = new Vector3(x, y, z);
+
+            light.Targets.Add(sceneVisual);
+            LightsList.Add(light);
         }
 
         static Grid PaintBackground(Grid scene, CurrentDataPoint current, DayDataPoint day) {
@@ -134,10 +236,11 @@ namespace Feels.Services {
             colorAnimation.IterationBehavior = AnimationIterationBehavior.Forever;
             visual.Brush.StartAnimation("Color", colorAnimation);
 
-            //var light = compositor.CreateAmbientLight();
-            //light.Color = Colors.White;
-            ////light.CoordinateSpace = container;
+            //var light = compositor.CreatePointLight();
+            //light.Color = Colors.Red;
+            //light.CoordinateSpace = container;
             //light.Targets.Add(visual);
+            //light.Offset = new Vector3(5, 5, 5);
 
             ElementCompositionPreview.SetElementChildVisual(animatedBackground, container);
             scene.Children.Add(animatedBackground);
@@ -202,12 +305,14 @@ namespace Feels.Services {
             return colors;
         }
 
-        static Grid CreateSunOrMoon(Grid scene, CurrentDataPoint current) {
+        static Grid CreatePrimaryCondition(Grid scene, CurrentDataPoint current) {
             var topScene = new Grid() {
+                Name = "PrimaryConditionScene",
                 VerticalAlignment = VerticalAlignment.Top,
                 HorizontalAlignment = HorizontalAlignment.Center,
-                Margin = new Thickness(0, 30, 0, 0)
+                //Margin = new Thickness(0, 30, 0, 0)
             };
+
 
             var condition = current.Icon;
 
@@ -228,6 +333,7 @@ namespace Feels.Services {
                     MakeItShine("low");
                     break;
                 case "rain":
+                    MakeCloud();
                     break;
                 case "sleet": // neige fondu
                     break;
@@ -251,6 +357,12 @@ namespace Feels.Services {
             {
                 var moon = CreateMoon(_condition);
                 topScene.Children.Add(moon);
+            }
+
+            void MakeCloud()
+            {
+                var cloud = CreatePrimaryCloud();
+                topScene.Children.Add(cloud);
             }
 
             scene.Children.Add(topScene);
@@ -283,24 +395,26 @@ namespace Feels.Services {
             var width = height;
 
             var grid = new Grid() {
+                Name = "ConditionIcon",
                 Height = height,
                 Width = width,
                 Margin = new Thickness(0, 20, 0, 0),
                 VerticalAlignment = VerticalAlignment.Top
             };
 
-            var compositor = ElementCompositionPreview.GetElementVisual(grid).Compositor;
+            var gridVisual = ElementCompositionPreview.GetElementVisual(grid);
+            var compositor = gridVisual.Compositor;
             var container = compositor.CreateContainerVisual();
-            container.Size = new System.Numerics.Vector2(height, width);
+            container.Size = new Vector2(height, width);
 
             if (ImageLoader.Instance == null)
                 ImageLoader.Initialize(compositor);
 
             ManagedSurface surface = ImageLoader.Instance.LoadFromUri(new Uri("ms-appx:///Assets/Icons/sun.png"));
-
+            
             var visual = compositor.CreateSpriteVisual();
             visual.Brush = compositor.CreateSurfaceBrush(surface.Surface);
-            visual.Size = new System.Numerics.Vector2(70, 70);
+            visual.Size = new Vector2(70, 70);
             container.Children.InsertAtTop(visual);
             container.Opacity = 1f;
 
@@ -317,8 +431,8 @@ namespace Feels.Services {
             animation.IterationBehavior = AnimationIterationBehavior.Forever;
             animation.Direction = AnimationDirection.Alternate;
 
-            visual.RotationAxis = new System.Numerics.Vector3(0, 0, 1);
-            visual.CenterPoint = new System.Numerics.Vector3(height / 2, width / 2, 0);
+            visual.RotationAxis = new Vector3(0, 0, 1);
+            visual.CenterPoint = new Vector3(height / 2, width / 2, 0);
             visual.StartAnimation("RotationAngle", animation);
 
             return grid;
@@ -329,6 +443,7 @@ namespace Feels.Services {
             var width = height;
 
             var grid = new Grid() {
+                Name = "ConditionIcon",
                 Height = height,
                 Width = width,
                 Margin = new Thickness(0, 20, 0, 0),
@@ -337,35 +452,103 @@ namespace Feels.Services {
 
             var compositor = ElementCompositionPreview.GetElementVisual(grid).Compositor;
             var container = compositor.CreateContainerVisual();
-            container.Size = new System.Numerics.Vector2(height, width);
+            container.Size = new Vector2(height, width);
+
+            SpriteVisual visual;
 
             if (ImageLoader.Instance == null)
                 ImageLoader.Initialize(compositor);
 
-            ManagedSurface surface = ImageLoader.Instance.LoadFromUri(new Uri("ms-appx:///Assets/Icons/moon.png"));
+            LoadImage();
+            AddRotateAnimation();
+            AddLight();
+            
+            return grid;
+
+            void LoadImage()
+            {
+                ManagedSurface surface = ImageLoader.Instance.LoadFromUri(new Uri("ms-appx:///Assets/Icons/moon.png"));
+
+                visual = compositor.CreateSpriteVisual();
+                visual.Brush = compositor.CreateSurfaceBrush(surface.Surface);
+                visual.Size = new Vector2(70, 70);
+                container.Children.InsertAtTop(visual);
+                container.Opacity = 1f;
+
+                ElementCompositionPreview.SetElementChildVisual(grid, container);
+            }
+
+            void AddRotateAnimation()
+            {
+                var animation = compositor.CreateScalarKeyFrameAnimation();
+                animation.InsertKeyFrame(0f, 0f);
+                animation.InsertKeyFrame(1f, -3f);
+                animation.Duration = TimeSpan.FromSeconds(20);
+                animation.DelayTime = TimeSpan.FromSeconds(5);
+                animation.IterationBehavior = AnimationIterationBehavior.Forever;
+                animation.Direction = AnimationDirection.Alternate;
+
+                visual.RotationAxis = new Vector3(0, 0, 1);
+                visual.CenterPoint = new Vector3(height / 2, width / 2, 0);
+                visual.StartAnimation("RotationAngle", animation);
+            }
+
+            void AddLight()
+            {
+                var pointLight1 = compositor.CreatePointLight();
+                pointLight1.CoordinateSpace = container;
+                //pointLight1.ConstantAttenuation = 20;
+                pointLight1.Color = Color.FromArgb(255, 247, 202, 24);
+                //pointLight1.Offset = new Vector3(
+                //    (float)grid.ActualWidth / 2,
+                //    (float)grid.ActualHeight / 2,
+                //    50);
+                pointLight1.Targets.Add(container);
+
+                LightsList.Add(pointLight1);
+            }
+        }
+
+        static Grid CreatePrimaryCloud() {
+            var height = 70;
+            var width = height;
+
+            var grid = new Grid() {
+                Name = "ConditionIcon",
+                Height = height,
+                Width = width,
+                Margin = new Thickness(0, 20, 0, 0),
+                VerticalAlignment = VerticalAlignment.Top
+            };
+
+            var compositor = ElementCompositionPreview.GetElementVisual(grid).Compositor;
+            var container = compositor.CreateContainerVisual();
+            container.Size = new Vector2(height, width);
+
+            if (ImageLoader.Instance == null)
+                ImageLoader.Initialize(compositor);
+
+            ManagedSurface surface = ImageLoader.Instance.LoadFromUri(new Uri("ms-appx:///Assets/Icons/cloudy.png"));
 
             var visual = compositor.CreateSpriteVisual();
             visual.Brush = compositor.CreateSurfaceBrush(surface.Surface);
-            visual.Size = new System.Numerics.Vector2(70, 70);
+            visual.Size = new Vector2(70, 70);
             container.Children.InsertAtTop(visual);
             container.Opacity = 1f;
 
             ElementCompositionPreview.SetElementChildVisual(grid, container);
 
-            // -----------
-            // ANIMATION |
-            // -----------
+            // ------------
+            // ANIMATION //
+            // ------------
             var animation = compositor.CreateScalarKeyFrameAnimation();
-            animation.InsertKeyFrame(0f, 0f);
-            animation.InsertKeyFrame(1f, -3f);
-            animation.Duration = TimeSpan.FromSeconds(20);
+            animation.InsertKeyFrame(0f, -5f);
+            animation.InsertKeyFrame(1f, 5f);
+            animation.Duration = TimeSpan.FromSeconds(5);
             animation.DelayTime = TimeSpan.FromSeconds(5);
             animation.IterationBehavior = AnimationIterationBehavior.Forever;
             animation.Direction = AnimationDirection.Alternate;
-
-            visual.RotationAxis = new System.Numerics.Vector3(0, 0, 1);
-            visual.CenterPoint = new System.Numerics.Vector3(height / 2, width / 2, 0);
-            visual.StartAnimation("RotationAngle", animation);
+            visual.StartAnimation("Offset.x", animation);
 
             return grid;
         }
@@ -407,13 +590,12 @@ namespace Feels.Services {
 
             void MakeItRain()
             {
-                for (int i = 0; i < 20; i++) {
+                for (int i = 0; i < 25; i++) {
                     var x = rand.Next(0, (int)_size.Width);
-                    var duration = rand.Next(1, 6);
+                    var duration = rand.Next(2, 10);
                     var delay = rand.Next(0, 10);
-                    //var keyframe = rand.NextDouble();
 
-                    var line = CreateRandomLine(x, duration, delay, 1);
+                    var line = CreateRandomLine(x, duration, delay);
                     animationsScene.Children.Add(line);
                 }
             }
@@ -449,7 +631,7 @@ namespace Feels.Services {
             {
                 MakeClouds(6);             
             }
-
+            
             scene.Children.Add(animationsScene);
             return scene;
         }
@@ -572,7 +754,7 @@ namespace Feels.Services {
             
         }
 
-        static Line CreateRandomLine(int x, int duration, int delay, double keyframe) {
+        static Line CreateRandomLine(int x, int duration, int delay) {
             var y = -70;
             //var y = rand.Next(0, 400);
             //var line = new Line() {
@@ -591,7 +773,7 @@ namespace Feels.Services {
                 Y2 = (y + 70),
                 Opacity = .5,
                 Stroke = new SolidColorBrush(Colors.White),
-                StrokeThickness = 5
+                StrokeThickness = 2
             };
 
             // ANIMATION
@@ -600,7 +782,7 @@ namespace Feels.Services {
             var _animation = _compositor.CreateVector2KeyFrameAnimation();
 
             //_animation.InsertKeyFrame(1f, new System.Numerics.Vector2(-coord, coord));
-            _animation.InsertKeyFrame((float)keyframe, new System.Numerics.Vector2(0, (float)_size.Height));
+            _animation.InsertKeyFrame(1f, new System.Numerics.Vector2(0, (float)_size.Height));
             _animation.Duration = TimeSpan.FromSeconds(duration);
             _animation.DelayTime = TimeSpan.FromSeconds(delay);
             _animation.IterationBehavior = AnimationIterationBehavior.Forever;

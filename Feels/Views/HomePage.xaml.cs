@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Devices.Geolocation;
+using Windows.Foundation;
 using Windows.Services.Maps;
 using Windows.System;
 using Windows.UI;
@@ -18,22 +19,24 @@ using Windows.UI.Xaml.Media;
 
 namespace Feels.Views {
     public sealed partial class HomePage : Page {
+        #region variables
         private SourceModel PageDataSource { get; set; }
 
-        CoreDispatcher _UIDispatcher { get; set; }
+        CoreDispatcher UIDispatcher { get; set; }
 
-        private int _HourForcastAnimDelay { get; set; }
+        private int HourForcastAnimDelay { get; set; }
 
-        static DateTime _LastFetchedTime { get; set; }
+        static DateTime LastFetchedTime { get; set; }
 
-        static BasicGeoposition _LastPosition { get; set; }
+        static BasicGeoposition LastPosition { get; set; }
+        #endregion variables
 
         public HomePage() {
             InitializeComponent();
-            InitializeTitleBar();
+            //InitializeTitleBar();
 
             PageDataSource = App.DataSource;
-            _UIDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
+            UIDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
             InitializePageData();            
         }
 
@@ -97,7 +100,7 @@ namespace Feels.Views {
             if (PageDataSource.Forecast != null) {
                 HideSplashView();
                 HideLoadingView();
-                GetCurrentCity(_LastPosition);
+                GetCurrentCity(LastPosition);
                 PopulateView();
             }
 
@@ -188,8 +191,8 @@ namespace Feels.Views {
                     Settings.SavePosition(positionToReturn);
                 }
 
-                _LastFetchedTime = DateTime.Now;
-                _LastPosition = positionToReturn;
+                LastFetchedTime = DateTime.Now;
+                LastPosition = positionToReturn;
 
                 return positionToReturn;
 
@@ -211,7 +214,7 @@ namespace Feels.Views {
         async Task<bool> MustRefreshData() {
             if (PageDataSource.Forecast == null) return true;
 
-            if (DateTime.Now.Hour - _LastFetchedTime.Hour > 0) {
+            if (DateTime.Now.Hour - LastFetchedTime.Hour > 0) {
                 return true;
             }
 
@@ -222,8 +225,8 @@ namespace Feels.Views {
             var currLat = (int)coord.Latitude;
             var currLon = (int)coord.Longitude;
 
-            var prevLat = (int)_LastPosition.Latitude;
-            var prevLon = (int)_LastPosition.Longitude;
+            var prevLat = (int)LastPosition.Latitude;
+            var prevLon = (int)LastPosition.Longitude;
 
             if (currLat != prevLat || currLon != prevLon) {
                 return true;
@@ -263,7 +266,7 @@ namespace Feels.Views {
                         div = Math.Abs(max - curr) == 0 ? 1 : Math.Abs(max - curr);
                         delay = 1000 / div;
 
-                        await _UIDispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                        await UIDispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
                             Temperature.Text = string.Format("{0}°", curr);
                         });
                     });
@@ -273,7 +276,6 @@ namespace Feels.Views {
             void FillInData()
             {
                 Status.Text = currentWeather.Summary;
-                //SetCity();
                 FeelsLike.Text = string.Format("{0} {1}", "Feels more like ", currentWeather.ApparentTemperature);
                 PrecipValue.Text = string.Format("{0}%", currentWeather.PrecipitationProbability * 100);
                 //SunriseBlock.Text = currentWeather.Sunrise;
@@ -289,13 +291,6 @@ namespace Feels.Views {
                 MaxTempValue.Text = maxTemp.ToString();
                 MinTempValue.Text = minTemp.ToString();
             }
-
-            void SetCity()
-            {
-                var timeZone = PageDataSource.Forecast.TimeZone;
-                var index = timeZone.IndexOf("/");
-                City.Text = timeZone.Substring(index + 1);
-            }
         }
 
         async void DrawScene() {
@@ -305,8 +300,18 @@ namespace Feels.Views {
             await scene.Fade(0, 0).Offset(0, 200, 0).StartAsync();
             Theater.Fade(1, 1000).Start();
             scene.Fade(1, 1000).Offset(0, 0, 1000).Start();
+
+            AddLightingEffects(scene);
         }
-        
+
+        void AddLightingEffects(Grid scene) {
+            Scene.AddAmbiantLight(scene);
+
+            Scene.AddPointLight(scene, (Grid)scene.FindName("ConditionIcon"));
+            //Scene.AddSpotLight(scene, conditionIcon);
+            
+        }
+
         void ShowLoadingView() {
             SplashView.Visibility = Visibility.Collapsed;
             WeatherView.Visibility = Visibility.Collapsed;
@@ -415,11 +420,11 @@ namespace Feels.Views {
         private async void HourForecast_Loaded(object sender, RoutedEventArgs e) {
             var HourForecast = (Grid)sender;
 
-            _HourForcastAnimDelay += 100;
+            HourForcastAnimDelay += 100;
             await HourForecast.Offset(0, 50,0)
                                 .Then()
-                                .Fade(1, 500, _HourForcastAnimDelay)
-                                .Offset(0, 0, 500, _HourForcastAnimDelay)
+                                .Fade(1, 500, HourForcastAnimDelay)
+                                .Offset(0, 0, 500, HourForcastAnimDelay)
                                 .StartAsync();
         }
         
@@ -443,7 +448,7 @@ namespace Feels.Views {
         #endregion appbar
 
         void UpdateMainTile() {
-            TileDesigner.UpdatePrimary();
+            TileDesigner.UpdatePrimary(LastPosition);
         }
     }
 }

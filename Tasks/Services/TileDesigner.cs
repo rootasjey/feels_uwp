@@ -2,19 +2,23 @@
 using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.Globalization;
+using System.Threading.Tasks;
+using Windows.Devices.Geolocation;
+using Windows.Services.Maps;
 using Windows.UI.Notifications;
 
 namespace Tasks.Services {
     public sealed class TileDesigner {
-        public static void UpdatePrimary(object rawForecast) {
+        public static async void UpdatePrimary(object rawForecast, object rawPosition) {
             if (rawForecast == null) return;
             var forecast = (Forecast)rawForecast;
+            var position = (BasicGeoposition)rawPosition;
 
             var tileUpdater = TileUpdateManager.CreateTileUpdaterForApplication();
             tileUpdater.Clear();
             tileUpdater.EnableNotificationQueue(true);
 
-            tileUpdater.Update(CreateTileCurrent(forecast));       // current
+            tileUpdater.Update(await CreateTileCurrent(forecast, position));       // current
             tileUpdater.Update(CreateTileCurrentDetails(forecast));// detailed infos current
             tileUpdater.Update(CreateTileHourly(forecast.Hourly)); // hourly
             tileUpdater.Update(CreateTileDaily(forecast.Daily));   // daily
@@ -23,10 +27,20 @@ namespace Tasks.Services {
         // ------------------
         // EXTRACTION METHODS
         // ------------------
-        static string GetLocation(Forecast forecast) {
-            var timeZone = forecast.TimeZone;
-            var index = timeZone.IndexOf("/");
-            return timeZone.Substring(index + 1);
+        static async Task<string> GetLocation(BasicGeoposition position) {
+            Geopoint pointToReverseGeocode = new Geopoint(position);
+
+            // Reverse geocode the specified geographic location.
+            MapLocationFinderResult result =
+                await MapLocationFinder.FindLocationsAtAsync(pointToReverseGeocode);
+
+            // If the query returns results, display the name of the town
+            // contained in the address of the first result.
+            if (result.Status == MapLocationFinderStatus.Success && result.Locations.Count != 0) {
+                return result.Locations[0].Address.Town;
+            }
+
+            return "";
         }
 
         static string GetTemperature(float temperature) {
@@ -116,10 +130,10 @@ namespace Tasks.Services {
         // ---------------
         // TILES CREATIONS
         // ---------------
-        static TileNotification CreateTileCurrent(Forecast forecast) {
+        static async Task<TileNotification> CreateTileCurrent(Forecast forecast, BasicGeoposition position) {
             var currentWeather = forecast.Currently;
             var condition = currentWeather.Icon;
-            var location = GetLocation(forecast);
+            var location = await GetLocation(position);
             var currentTemperature = GetTemperature(forecast.Currently.ApparentTemperature);
             var maxTemperature = GetTemperature(forecast.Daily.Days[0].ApparentMaxTemperature);
             var minTemperature = GetTemperature(forecast.Daily.Days[0].ApparentMinTemperature);
@@ -587,11 +601,11 @@ namespace Tasks.Services {
                         Children = {
                             new AdaptiveGroup() {
                                 Children = {
-                                    CreateDailySubGroup(dailyForecast.Days[0]),
                                     CreateDailySubGroup(dailyForecast.Days[1]),
                                     CreateDailySubGroup(dailyForecast.Days[2]),
                                     CreateDailySubGroup(dailyForecast.Days[3]),
-                                    CreateDailySubGroup(dailyForecast.Days[4])
+                                    CreateDailySubGroup(dailyForecast.Days[4]),
+                                    CreateDailySubGroup(dailyForecast.Days[5])
                                 }
                             }
                         }
@@ -606,7 +620,6 @@ namespace Tasks.Services {
                         Children = {
                             new AdaptiveGroup() {
                                 Children = {
-                                    CreateDailySubGroup(dailyForecast.Days[0]),
                                     CreateDailySubGroup(dailyForecast.Days[1]),
                                     CreateDailySubGroup(dailyForecast.Days[2]),
                                     CreateDailySubGroup(dailyForecast.Days[3])
