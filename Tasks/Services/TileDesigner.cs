@@ -4,21 +4,22 @@ using System;
 using System.Globalization;
 using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
-using Windows.Services.Maps;
 using Windows.UI.Notifications;
 
 namespace Tasks.Services {
     public sealed class TileDesigner {
-        public static async void UpdatePrimary(object rawForecast, object rawPosition) {
+        private static string BingMapsKey = "AEKtGCjDSo2UnEvMVxOh~iS-cB5ZHhjZiIJ9RgGtVgw~AkzS_JYlIhjskoO8ziK63GAJmtcF7U_t4Gni6nBb-MncX6-iw8ldj_NgnmUIzMPY";
+
+        public static void UpdatePrimary(object rawForecast, object city) {
             if (rawForecast == null) return;
             var forecast = (Forecast)rawForecast;
-            var position = (BasicGeoposition)rawPosition;
+            var location = (string)city;
 
             var tileUpdater = TileUpdateManager.CreateTileUpdaterForApplication();
             tileUpdater.Clear();
             tileUpdater.EnableNotificationQueue(true);
 
-            tileUpdater.Update(await CreateTileCurrent(forecast, position));       // current
+            tileUpdater.Update(CreateTileCurrent(forecast, location));       // current
             tileUpdater.Update(CreateTileCurrentDetails(forecast));// detailed infos current
             tileUpdater.Update(CreateTileHourly(forecast.Hourly)); // hourly
             tileUpdater.Update(CreateTileDaily(forecast.Daily));   // daily
@@ -28,17 +29,28 @@ namespace Tasks.Services {
         // EXTRACTION METHODS
         // ------------------
         static async Task<string> GetLocation(BasicGeoposition position) {
-            Geopoint pointToReverseGeocode = new Geopoint(position);
+            //MapService.ServiceToken = "AEKtGCjDSo2UnEvMVxOh~iS-cB5ZHhjZiIJ9RgGtVgw~AkzS_JYlIhjskoO8ziK63GAJmtcF7U_t4Gni6nBb-MncX6-iw8ldj_NgnmUIzMPY";
+
+            //Geopoint pointToReverseGeocode = new Geopoint(position);
 
             // Reverse geocode the specified geographic location.
-            MapLocationFinderResult result =
-                await MapLocationFinder.FindLocationsAtAsync(pointToReverseGeocode);
+            //MapLocationFinderResult result =
+            //    await MapLocationFinder.FindLocationsAtAsync(pointToReverseGeocode);
 
-            // If the query returns results, display the name of the town
-            // contained in the address of the first result.
-            if (result.Status == MapLocationFinderStatus.Success && result.Locations.Count != 0) {
-                return result.Locations[0].Address.Town;
-            }
+            //// If the query returns results, display the name of the town
+            //// contained in the address of the first result.
+            //if (result.Status == MapLocationFinderStatus.Success && result.Locations.Count != 0) {
+            //    return result.Locations[0].Address.Town;
+            //}
+
+            //var r = new ReverseGeocodeRequest() {
+            //    BingMapsKey = BingMapsKey,
+            //    Point = new Coordinate(position.Latitude, position.Longitude),
+            //    IncludeNeighborhood = true
+            //};
+
+            //var response = await ServiceManager.GetResponseAsync(r);
+            
 
             return "";
         }
@@ -130,10 +142,9 @@ namespace Tasks.Services {
         // ---------------
         // TILES CREATIONS
         // ---------------
-        static async Task<TileNotification> CreateTileCurrent(Forecast forecast, BasicGeoposition position) {
+        static TileNotification CreateTileCurrent(Forecast forecast, string location) {
             var currentWeather = forecast.Currently;
             var condition = currentWeather.Icon;
-            var location = await GetLocation(position);
             var currentTemperature = GetTemperature(forecast.Currently.ApparentTemperature);
             var maxTemperature = GetTemperature(forecast.Daily.Days[0].ApparentMaxTemperature);
             var minTemperature = GetTemperature(forecast.Daily.Days[0].ApparentMinTemperature);

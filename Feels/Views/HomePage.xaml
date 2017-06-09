@@ -69,13 +69,6 @@
                 <ScrollViewer x:Name="PivotContent">
                     <Grid>
                         <Grid x:Name="Theater" Opacity="0">
-                            <!--<interactivity:Interaction.Behaviors>
-                                <behaviors:Blur x:Name="BlurBehavior"
-                                                Value="5"
-                                                Duration="3000"
-                                                Delay="2000"
-                                                AutomaticallyStart="True"/>
-                            </interactivity:Interaction.Behaviors>-->
                         </Grid>
 
                         <StackPanel x:Name="SplashView"

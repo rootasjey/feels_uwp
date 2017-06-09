@@ -33,7 +33,7 @@ namespace Feels.Views {
 
         public HomePage() {
             InitializeComponent();
-            //InitializeTitleBar();
+            InitializeTitleBar();
 
             PageDataSource = App.DataSource;
             UIDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;

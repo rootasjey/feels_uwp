@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Tasks.Services;
 using Windows.ApplicationModel.Background;
 using Windows.Devices.Geolocation;
+using Windows.Services.Maps;
 
 namespace Tasks {
     public sealed class UpdateWeather : IBackgroundTask {
@@ -40,9 +41,10 @@ namespace Tasks {
             if (position == null) { EndTask(); return; }
 
             var coord = position.Coordinate.Point.Position;
+            var city = await GetCityName(coord);
 
             var forecast = await FetchCurrentWeather(coord.Latitude, coord.Longitude);
-            TileDesigner.UpdatePrimary(forecast, coord);
+            TileDesigner.UpdatePrimary(forecast, city);
 
             EndTask();
         }
@@ -64,6 +66,24 @@ namespace Tasks {
             } catch {
                 return null;
             }
+        }
+
+        private async Task<string> GetCityName(BasicGeoposition position) {
+            MapService.ServiceToken = "AEKtGCjDSo2UnEvMVxOh~iS-cB5ZHhjZiIJ9RgGtVgw~AkzS_JYlIhjskoO8ziK63GAJmtcF7U_t4Gni6nBb-MncX6-iw8ldj_NgnmUIzMPY";
+
+            Geopoint pointToReverseGeocode = new Geopoint(position);
+
+            //Reverse geocode the specified geographic location.
+            MapLocationFinderResult result =
+                await MapLocationFinder.FindLocationsAtAsync(pointToReverseGeocode);
+
+            // If the query returns results, display the name of the town
+            // contained in the address of the first result.
+            if (result.Status == MapLocationFinderStatus.Success && result.Locations.Count != 0) {
+                return result.Locations[0].Address.Town;
+            }
+
+            return "";
         }
     }
 }
