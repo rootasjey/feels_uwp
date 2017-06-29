@@ -126,6 +126,21 @@
   <data name="BetaMessage" xml:space="preserve">
     <value>Cette application est en beta et peut donc contenir des bugs, des textes non-traduits ainsi que des fonctionnalités manquantes. Merci de repporter (par mail ou github) tout comportement anormal. Merci</value>
   </data>
+  <data name="clear-day" xml:space="preserve">
+    <value>ciel dégagé</value>
+  </data>
+  <data name="clear-night" xml:space="preserve">
+    <value>nuit dégagée</value>
+  </data>
+  <data name="cloudy" xml:space="preserve">
+    <value>nuageux</value>
+  </data>
+  <data name="CmdRefresh.Label" xml:space="preserve">
+    <value>rafraîchir</value>
+  </data>
+  <data name="CmdSettings.Label" xml:space="preserve">
+    <value>paramètres</value>
+  </data>
   <data name="ContributeFifthLine.Text" xml:space="preserve">
     <value>Visitez le lien suivant pour plus d'information</value>
   </data>
@@ -147,6 +162,12 @@
   <data name="ContributeTitle.Text" xml:space="preserve">
     <value>Contribuer</value>
   </data>
+  <data name="CurrentForecastButton.Text" xml:space="preserve">
+    <value>météo actuelle</value>
+  </data>
+  <data name="DailyForecastButton.Text" xml:space="preserve">
+    <value>météo journalière</value>
+  </data>
   <data name="Dark.Text" xml:space="preserve">
     <value>Sombre</value>
   </data>
@@ -165,6 +186,12 @@
   <data name="DynamicTileTitle.Text" xml:space="preserve">
     <value>Tuile dynamique</value>
   </data>
+  <data name="EmptyDailyForecast.Text" xml:space="preserve">
+    <value>Il n'y a aucune donnée pour la météo journalière pour l'instant :(</value>
+  </data>
+  <data name="EmptyHourlyForecast.Text" xml:space="preserve">
+    <value>Il n'y a aucune donnée pour la météo horaire pour l'instant :(</value>
+  </data>
   <data name="FeedbackButton.Content" xml:space="preserve">
     <value>Envoyer un avis</value>
   </data>
@@ -174,8 +201,26 @@
   <data name="FeedbackTitle.Text" xml:space="preserve">
     <value>Mon avis</value>
   </data>
+  <data name="FeelsLikeText.Text" xml:space="preserve">
+    <value>Température ressentie </value>
+  </data>
+  <data name="FindLocationManually.Text" xml:space="preserve">
+    <value>Trouvez votre ville manuelement</value>
+  </data>
+  <data name="FindMe.Text" xml:space="preserve">
+    <value>localisez-moi</value>
+  </data>
+  <data name="fog" xml:space="preserve">
+    <value>brouillard</value>
+  </data>
   <data name="GithubRepository.Text" xml:space="preserve">
     <value>répertoire GitHub</value>
+  </data>
+  <data name="hail" xml:space="preserve">
+    <value>grèle</value>
+  </data>
+  <data name="HourlyForecastButton.Text" xml:space="preserve">
+    <value>météo journalière</value>
   </data>
   <data name="ImagesSourceContent.Text" xml:space="preserve">
     <value>Les images proviennent de</value>
@@ -189,8 +234,20 @@
   <data name="Loading.Text" xml:space="preserve">
     <value>Chargement...</value>
   </data>
+  <data name="LocationAutoDetect.Text" xml:space="preserve">
+    <value>Votre position actuelle sera automatiquement déterminée</value>
+  </data>
+  <data name="partly-cloudy-day" xml:space="preserve">
+    <value>partiellement couvert</value>
+  </data>
+  <data name="partly-cloudy-night" xml:space="preserve">
+    <value>nuit partiellement couverte</value>
+  </data>
   <data name="PersonalizationHeader.Text" xml:space="preserve">
     <value>personalisation</value>
+  </data>
+  <data name="rain" xml:space="preserve">
+    <value>pluie</value>
   </data>
   <data name="RatingButton.Content" xml:space="preserve">
     <value>Noter l'app</value>
@@ -200,6 +257,21 @@
   </data>
   <data name="RatingTitle.Text" xml:space="preserve">
     <value>Notation</value>
+  </data>
+  <data name="SearchText.Text" xml:space="preserve">
+    <value>search</value>
+  </data>
+  <data name="sleet" xml:space="preserve">
+    <value>neige fondue</value>
+  </data>
+  <data name="snow" xml:space="preserve">
+    <value>neige</value>
+  </data>
+  <data name="SwypeLeftToHourly.Text" xml:space="preserve">
+    <value>Balayer l'écran d'un doigt vers la gauche pour accéder à la météo journalière</value>
+  </data>
+  <data name="SwypeRightToHourly.Text" xml:space="preserve">
+    <value>Balayer l'écran d'un doigt vers la droite pour accéder à la météo horaire</value>
   </data>
   <data name="Tasks.Text" xml:space="preserve">
     <value>Tâches</value>
@@ -212,5 +284,14 @@
   </data>
   <data name="ThemeSwitch.OnContent" xml:space="preserve">
     <value>Thème Clair</value>
+  </data>
+  <data name="thunderstorm" xml:space="preserve">
+    <value>orage</value>
+  </data>
+  <data name="tornado" xml:space="preserve">
+    <value>tornade</value>
+  </data>
+  <data name="wind" xml:space="preserve">
+    <value>vent</value>
   </data>
 </root>

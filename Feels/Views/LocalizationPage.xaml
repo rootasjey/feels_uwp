@@ -11,12 +11,13 @@
         <Pivot x:Name="PagePivot">
             <PivotItem x:Name="GeolocPivot">
                 <PivotItem.Header>
-                    <TextBlock Text="find me"/>
+                    <TextBlock x:Uid="FindMe" Text="find me"/>
                 </PivotItem.Header>
 
                 <ScrollViewer>
                     <StackPanel>
-                        <TextBlock Text="Your current location will be determined automatically"
+                        <TextBlock x:Uid="LocationAutoDetect" 
+                                   Text="Your current location will be determined automatically"
                                    TextWrapping="Wrap" FontSize="24"/>
                     </StackPanel>
                 </ScrollViewer>
@@ -24,11 +25,12 @@
 
             <PivotItem x:Name="SearchCityPivot">
                 <PivotItem.Header>
-                    <TextBlock Text="search"/>
+                    <TextBlock x:Uid="SearchText" Text="search"/>
                 </PivotItem.Header>
 
                 <Grid>
-                    <TextBlock Text="Search manually for your city" 
+                    <TextBlock x:Uid="FindLocationManually" 
+                               Text="Search manually for your city" 
                                FontSize="24"/>
                 </Grid>
             </PivotItem>

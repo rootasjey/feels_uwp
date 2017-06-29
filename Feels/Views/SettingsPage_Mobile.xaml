@@ -131,6 +131,7 @@
                                    Opacity=".5"
                                    FontSize="18"
                                    TextWrapping="Wrap"/>
+                        
                         <Button x:Uid="FeedbackButton"
                                 x:Name="FeedbackButton" 
                                 Content="envoyer un avis" 
@@ -138,10 +139,12 @@
                                 Click="FeedbackButton_Click"/>
 
                         <TextBlock x:Uid="RatingTitle" Text="notation" FontSize="24"/>
+                        
                         <TextBlock x:Uid="RatingLabel" Text="Noter l'application sur le Store"
                                    Opacity=".5"
                                    FontSize="18"
                                    TextWrapping="Wrap"/>
+                        
                         <Button x:Uid="RatingButton" 
                                 x:Name="NoteButton" 
                                 Content="noter l'app" 
@@ -179,7 +182,7 @@
                                        Margin="0,0,0,40">
                             <Paragraph>
                                 <Run x:Uid="DataContent1" Text="Les données météo viennent du site"/>
-                                <Hyperlink NavigateUri="http://evene.lefigaro.fr/">Darksky</Hyperlink>
+                                <Hyperlink NavigateUri="https://darksky.net/">Darksky</Hyperlink>
                                 <Run x:Uid="DataContent2" Text="et cette application n'est aucunement liée au site."/>
                                 <LineBreak/>
                                 <Hyperlink NavigateUri="https://darksky.net/poweredby/">

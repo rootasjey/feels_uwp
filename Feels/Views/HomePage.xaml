@@ -125,6 +125,7 @@
                                                TextAlignment="Center"/>
 
                                 <TextBlock x:Name="FeelsLike" 
+                                           x:Uid="FeelsLikeText"
                                            Text="Feels more like "
                                            FontWeight="Bold"
                                            Opacity=".6"
@@ -225,21 +226,23 @@
                                 <StackPanel Margin="0,50,0,0">
                                     <Button Margin="0,0,0,0">
                                         <TextBlock x:Name="CurrentToHourlyButton" 
-                                                       Text="swype right to see hourly forecast"
-                                                        TextWrapping="Wrap"
-                                                        Typography.Capitals="SmallCaps"
-                                                        FontWeight="Bold"
-                                                       Tapped="CurrentToHourlyButton_Tapped"/>
+                                                   x:Uid="SwypeRightToHourly"
+                                                   Text="swype right to see hourly forecast"
+                                                   TextWrapping="Wrap"
+                                                   Typography.Capitals="SmallCaps"
+                                                   FontWeight="Bold"
+                                                   Tapped="CurrentToHourlyButton_Tapped"/>
                                     </Button>
 
                                     <Button Margin="0,5,0,0"
                                                 HorizontalAlignment="Center">
-                                        <TextBlock x:Name="CurrentToDailyButton" 
-                                                       Text="swype left to see daily forecast"
-                                                        TextWrapping="Wrap"
-                                                        Typography.Capitals="SmallCaps"
-                                                        FontWeight="Bold"
-                                                       Tapped="CurrentToDailyButton_Tapped"/>
+                                        <TextBlock x:Name="CurrentToDailyButton"
+                                                   x:Uid="SwypeLeftToHourly"
+                                                   Text="swype left to see daily forecast"
+                                                   TextWrapping="Wrap"
+                                                   Typography.Capitals="SmallCaps"
+                                                   FontWeight="Bold"
+                                                   Tapped="CurrentToDailyButton_Tapped"/>
                                     </Button>
                                 </StackPanel>
                             </StackPanel>
@@ -314,7 +317,9 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Margin="24,0,24,0">
-                        <TextBlock Text="Hourly Forecast no data to show :("
+                        
+                        <TextBlock x:Uid="EmptyHourlyForecast" 
+                                   Text="Hourly Forecast no data to show :("
                                    FontSize="26"
                                    TextWrapping="Wrap"/>
                     </StackPanel>
@@ -353,24 +358,27 @@
                                                 </VisualState>
                                             </VisualStateGroup>
                                         </VisualStateManager.VisualStateGroups>
+                                        
                                         <StackPanel x:Name="PanelHourlyNavigation"
                                                     Orientation="Horizontal"
                                                     HorizontalAlignment="Left">
                                             <Button>
-                                                <TextBlock x:Name="HourlyToCurrentButton" 
-                                                    Text="current forecast"
-                                                    Typography.Capitals="SmallCaps"
-                                                    FontWeight="Bold"
-                                                    Tapped="HourlyToCurrentButton_Tapped"/>
+                                                <TextBlock x:Name="HourlyToCurrentButton"
+                                                           x:Uid="CurrentForecastButton"
+                                                           Text="current forecast"
+                                                           Typography.Capitals="SmallCaps"
+                                                           FontWeight="Bold"
+                                                           Tapped="HourlyToCurrentButton_Tapped"/>
                                             </Button>
 
                                             <Button Margin="10,0,0,0"
                                                         HorizontalAlignment="Center">
-                                                <TextBlock x:Name="HourlyToDailyButton" 
-                                                    Text="daily forecast"
-                                                    Typography.Capitals="SmallCaps"
-                                                    FontWeight="Bold"
-                                                    Tapped="CurrentToDailyButton_Tapped"/>
+                                                <TextBlock x:Name="DailyForecastButton"
+                                                           x:Uid="HourlyToDailyButton"
+                                                           Text="daily forecast"
+                                                           Typography.Capitals="SmallCaps"
+                                                           FontWeight="Bold"
+                                                           Tapped="CurrentToDailyButton_Tapped"/>
                                             </Button>
                                         </StackPanel>
 
@@ -478,7 +486,9 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Margin="24,0,24,0">
-                        <TextBlock Text="Daily Forecast no data to show :("
+
+                        <TextBlock x:Uid="EmptyDailyForecast" 
+                                   Text="There is no data for daily forecast at the moment :("
                                    FontSize="26"
                                    TextWrapping="Wrap"/>
                     </StackPanel>
@@ -517,6 +527,7 @@
                                                 </VisualState>
                                             </VisualStateGroup>
                                         </VisualStateManager.VisualStateGroups>
+                                        
                                         <StackPanel x:Name="PanelDailyNavigation" 
                                                     Margin="0,0,0,0"
                                                     Grid.Row="0"
@@ -525,6 +536,7 @@
                                                     HorizontalAlignment="Left">
                                             <Button Margin="0,0,0,0">
                                                 <TextBlock
+                                                    x:Uid="HourlyForecastButton"
                                                     Text="hourly forecast"
                                                     Typography.Capitals="SmallCaps"
                                                     FontWeight="Bold"
@@ -534,6 +546,7 @@
                                             <Button Margin="10,0,0,0"
                                                         HorizontalAlignment="Center">
                                                 <TextBlock
+                                                        x:Uid="CurrentForecastButton"
                                                         Text="current forecast"
                                                         Typography.Capitals="SmallCaps"
                                                         FontWeight="Bold"
@@ -725,9 +738,11 @@
                     Closed="AppBar_Closed"
                     ClosedDisplayMode="Minimal">
             <CommandBar.SecondaryCommands>
-                <AppBarButton Label="settings" Tapped="GoToSettings_Tapped" />
+                <AppBarButton Label="settings" x:Uid="CmdSettings" Tapped="GoToSettings_Tapped" />
             </CommandBar.SecondaryCommands>
-            <AppBarButton x:Name="CmdRefresh" Label="refresh" Icon="Refresh" Tapped="CmdRefresh_Tapped"/>
+            <AppBarButton x:Name="CmdRefresh" x:Uid="CmdRefresh"
+                          Label="refresh" Icon="Refresh" 
+                          Tapped="CmdRefresh_Tapped"/>
         </CommandBar>
 
     </Grid>
