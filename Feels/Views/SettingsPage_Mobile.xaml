@@ -24,51 +24,42 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Pivot x:Name="PivotSettings"
                Margin="0,20,0,0">
-            <PivotItem x:Name="PersonalizationPivot">
-                <PivotItem.Header>
-                    <TextBlock x:Uid="PersonalizationHeader"
-                               Text="personalisation"/>
-                </PivotItem.Header>
-
+            <PivotItem x:Name="PersonalizationPivot" 
+                       Header="personalization" 
+                       x:Uid="PersonalizationHeader">
                 <ScrollViewer VerticalScrollBarVisibility="Hidden"
                               Margin="0,20,0,0">
-                    <StackPanel>
-                        <StackPanel Margin="0,0,0,40" Visibility="Collapsed">
-                            <TextBlock x:Uid="Theme" Text="thème" Style="{StaticResource SettingsTitle}"/>
-                            <ToggleSwitch x:Name="ThemeSwitch"
-                                          x:Uid="ThemeSwitch"
-                                          Loaded="ThemeSwitch_Loaded"
-                                          OnContent="Thème Clair"
-                                          OffContent="Thème Sombre"
-                                          Toggled="ThemeSwitch_Toggled"/>
+                    <StackPanel x:Name="PersonalizationContentPanel">
+                        <StackPanel x:Name="LanguagePanel">
+                            <TextBlock Text="language" x:Uid="LanguageLabel" FontSize="24"/>
+                            
+                            <TextBlock Text="choose displayed language"
+                                       x:Uid="LanguageSubLabel"
+                                       Opacity=".6"/>
+                            
+                            <ComboBox x:Name="LanguageSelection"
+                                      Loaded="LanguageSelection_Loaded"
+                                      SelectionChanged="LanguageSelection_SelectionChanged">
+                                <ComboBoxItem Content="English" Tag="EN"/>
+                                <ComboBoxItem Content="Français" Tag="FR"/>
+                            </ComboBox>
                         </StackPanel>
 
-                        <StackPanel>
-                            <Button x:Name="LanguageButton" x:Uid="LanguageButton"  Content="Langage">
-                                <Button.Flyout>
-                                    <MenuFlyout x:Name="LanguageFlyout">
-                                        <ToggleMenuFlyoutItem x:Name="EnglishLanguageItem" 
-                                                              Text="English" 
-                                                              Tag="EN"
-                                                              Tapped="EnglishLanguage_Tapped"/>
-                                        <ToggleMenuFlyoutItem x:Name="FrenchLanguageItem" 
-                                                              Text="Français"
-                                                              Tag="FR"
-                                                              Tapped="FrenchLanguage_Tapped"/>
-                                    </MenuFlyout>
-                                </Button.Flyout>
-                            </Button>
-
-                            <ComboBox x:Name="UnitsCombo" 
-                                      Header="Units" 
+                        <StackPanel Margin="0,20">
+                            <TextBlock Text="units" x:Uid="UnitsText" FontSize="24"/>
+                            <TextBlock Text="choose temperature units"
+                                       x:Uid="UnitsSubLabel"
+                                       Opacity=".6"/>
+                            
+                            <ComboBox x:Name="UnitsCombo"
                                       Width="120"
                                       Margin="0,20"
                                       ItemsSource="{x:Bind Units}"
                                       Loaded="UnitsCombo_Loaded"
                                       SelectionChanged="UnitsCombo_SelectionChanged">
                                 <ComboBox.ItemTemplate>
-                                    <DataTemplate x:DataType="models:Unit">
-                                        <TextBlock x:Name="UnitValue" Text="{x:Bind Value}"/>
+                                    <DataTemplate x:DataType="models:WeatherUnit">
+                                        <TextBlock x:Name="UnitValue" Text="{x:Bind Name}"/>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
@@ -89,13 +80,61 @@
                         <StackPanel Margin="0,0,0,40">
                             <TextBlock x:Uid="DynamicTileTitle" 
                                        Text="tuile dynamique" Style="{StaticResource SettingsTitle}"/>
+                            
                             <TextBlock x:Uid="DynamicTileLabel" 
-                                       Text="Mettre à jour la tuile de l'application périodiquement" 
+                                       Text="mettre à jour la tuile de l'application périodiquement" 
                                             Opacity=".5"
                                             TextWrapping="Wrap"/>
-                            <ToggleSwitch x:Name="WeatherTaskSwitch"
-                                          Loaded="WeatherTaskSwitch_Loaded"
-                                          Toggled="WeatherTaskSwitch_Toggled"/>
+                            
+                            <ToggleSwitch x:Name="TileTaskSwitch"
+                                          Loaded="TileTaskSwitch_Loaded"
+                                          Toggled="TileTaskSwitch_Toggled"/>
+
+                            <StackPanel x:Name="TileTaskInfosPanel"
+                                        Visibility="Collapsed">
+                                
+                                <TextBlock x:Uid="DynamicTileActivity" 
+                                           Text="activité de la tuile dynamique"
+                                           FontSize="22"
+                                           TextWrapping="Wrap"
+                                           Opacity=".5"/>
+                                
+                                <ComboBox x:Name="TileIntervalUpdate"
+                                          x:Uid="TileIntervalUpdate"
+                                          Header="period"
+                                          Margin="0, 20"
+                                          SelectedIndex="2"
+                                          Loaded="TileIntervalUpdate_Loaded"
+                                          SelectionChanged="TileIntervalUpdate_SelectionChanged">
+                                
+                                    <ComboBoxItem Content="15 min" x:Uid="ItemFifteenMinutes" Tag="15"/>
+                                    <ComboBoxItem Content="half an hour" x:Uid="ItemHalfHour" Tag="30"/>
+                                    <ComboBoxItem Content="every hour" x:Uid="ItemHour" Tag="60"/>
+                                    <ComboBoxItem Content="every 3 hours" x:Uid="ItemThreeHours" Tag="180"/>
+                                    <ComboBoxItem Content="once a day" x:Uid="ItemDay" Tag="1380"/>
+                                </ComboBox>
+
+                                <StackPanel x:Name="TileTaskActivity" Margin="0,10">
+                                    <TextBlock x:Name="LastUpdatedTask" x:Uid="LastUpdatedTask" 
+                                               Text="Never run" Opacity=".6"/>
+
+                                    <TextBlock x:Name="LastTileTaskError" 
+                                               x:Uid="LastTileTaskError"
+                                               Text="No error" Opacity=".6"/>
+
+                                    <StackPanel Margin="0,20,0,20">
+                                        <TextBlock Text="If the task doesn't work properly, restart it"
+                                                   x:Uid="TaskNotWorkingText"
+                                                   TextWrapping="Wrap"
+                                                   Opacity=".6"/>
+                                    
+                                        <Button Content="restart" 
+                                                x:Uid="ButtonRestart"
+                                                Margin="0,10,0,0" 
+                                                Tapped="RestartTileTask_Tapped"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
                         </StackPanel>
 
                         <StackPanel Margin="0,0,0,40" Visibility="Collapsed">
@@ -103,7 +142,7 @@
                                        Text="écran de verrouillage" 
                                        Style="{StaticResource SettingsTitle}"/>
                             <TextBlock x:Uid="LockscreenLabel" 
-                                       Text="Mettre à jour l'image de l'écran de verrouillage du téléphone périodiquement" 
+                                       Text="mettre à jour l'image de l'écran de verrouillage du téléphone périodiquement" 
                                        Opacity=".5"
                                        TextWrapping="Wrap"/>
                             <ToggleSwitch x:Name="LockTaskSwitch"
@@ -127,7 +166,7 @@
                     <StackPanel>
                         <TextBlock x:Uid="FeedbackTitle" Text="mon avis" FontSize="24"/>
                         <TextBlock x:Uid="FeedbackLabel" 
-                                   Text="Suggérer une amélioration ou signaler un problème"
+                                   Text="suggérer une amélioration ou signaler un problème"
                                    Opacity=".5"
                                    FontSize="18"
                                    TextWrapping="Wrap"/>
@@ -140,7 +179,7 @@
 
                         <TextBlock x:Uid="RatingTitle" Text="notation" FontSize="24"/>
                         
-                        <TextBlock x:Uid="RatingLabel" Text="Noter l'application sur le Store"
+                        <TextBlock x:Uid="RatingLabel" Text="noter l'application sur le Store"
                                    Opacity=".5"
                                    FontSize="18"
                                    TextWrapping="Wrap"/>
@@ -213,7 +252,7 @@
                 <ScrollViewer Margin="0,20,0,0" 
                               VerticalScrollBarVisibility="Hidden">
                     <StackPanel>
-                        <RichTextBlock>
+                        <RichTextBlock Opacity=".6" FontSize="18" Margin="0,0,0,20">
                             <Paragraph>
                                 <Run Text="Your privacy is important to us and we respect it."/>
                                 <LineBreak/>
@@ -223,9 +262,11 @@
                                 <LineBreak/>
                                 <Run Text="-We don't store your personal information at all" />
                             </Paragraph>
+                        </RichTextBlock>
 
-                            <Paragraph Margin="0,20,0,0">
-                                <Run Text="Location Information" FontSize="24"/>
+                        <TextBlock Text="Location Information" FontSize="24"/>
+                        <RichTextBlock Opacity=".6" FontSize="18">
+                            <Paragraph>
                                 <LineBreak/>
                                 <Span>
                                     <Run Text="Your location information is only used by the " />
@@ -249,21 +290,20 @@
                                     <Hyperlink NavigateUri="https://github.com/rootasjey/Feels">source code.</Hyperlink>
                                 </Span>
                             </Paragraph>
-
-                            <Paragraph Margin="0,20,0,0">
-                                <Run Text="contact" FontSize="24"/>
-
-                                <LineBreak/>
-                                <Span>
-                                    <Run Text="You can contact us by email at this address: "/>
-                                </Span>
-                            </Paragraph>
                         </RichTextBlock>
 
-                        <Button Content="jeremiecorpinot@outlook.com" Tapped="Email_Tapped"/>
+                        <TextBlock Text="You can contact me by email at this address: " 
+                                   TextWrapping="Wrap"
+                                   FontSize="18"
+                                   Opacity=".6"/>
 
-                        <TextBlock Text="You can also contact us on twitter @jeremiecorpinot" Margin="0,20,0,0"/>
-                        <Button Content="@jeremiecorpinot" Tapped="Twitter_Tapped"/>
+                        <Button Content="jeremiecorpinot@outlook.com" Margin="0,10" Tapped="Email_Tapped"/>
+
+                        <TextBlock Text="You can also contact me on twitter @jeremiecorpinot" 
+                                   TextWrapping="Wrap"
+                                   Margin="0,20,0,0"/>
+                        
+                        <Button Content="@jeremiecorpinot" Margin="0,10" Tapped="Twitter_Tapped"/>
 
                         <Button Content="privacy policy GitHub version" Tapped="PrivacyPolicyGitHub_Tapped"/>
                     </StackPanel>

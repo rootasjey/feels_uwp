@@ -1,5 +1,6 @@
 ﻿using DarkSkyApi;
 using DarkSkyApi.Models;
+using Feels.Services;
 using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
@@ -15,7 +16,8 @@ namespace Feels.Data {
         public async Task FetchCurrentWeather(double lat, double lon) {
             if (!NetworkInterface.GetIsNetworkAvailable()) { return; }
             if (Client == null) Client = new DarkSkyService(_APIKey);
-            Forecast = await Client.GetWeatherDataAsync(lat, lon, Unit.SI);
+
+            Forecast = await Client.GetWeatherDataAsync(lat, lon, Settings.GetUnit());
 
         }
 

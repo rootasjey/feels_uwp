@@ -142,10 +142,10 @@
     <value>settings</value>
   </data>
   <data name="ContributeFifthLine.Text" xml:space="preserve">
-    <value>Visit this link for more information</value>
+    <value>visit this link for more information</value>
   </data>
   <data name="ContributeFirstLine.Text" xml:space="preserve">
-    <value>This project is open source and you can contribute in many ways</value>
+    <value>this project is open source and you can contribute in many ways</value>
   </data>
   <data name="ContributeFourthLine.Text" xml:space="preserve">
     <value>- edit app's code source</value>
@@ -160,7 +160,7 @@
     <value>- suggest a feature</value>
   </data>
   <data name="ContributeTitle.Text" xml:space="preserve">
-    <value>Contribute</value>
+    <value>contribute</value>
   </data>
   <data name="CurrentForecastButton.Text" xml:space="preserve">
     <value>current forecast</value>
@@ -169,22 +169,22 @@
     <value>daily forecast</value>
   </data>
   <data name="Dark.Text" xml:space="preserve">
-    <value>Dark</value>
+    <value>dark</value>
   </data>
   <data name="DataContent1.Text" xml:space="preserve">
-    <value>Data come from these sources</value>
+    <value>data come from these sources</value>
   </data>
   <data name="DataContent2.Text" xml:space="preserve">
     <value>and this app has no link with these entities</value>
   </data>
   <data name="DataTitle.Text" xml:space="preserve">
-    <value>Data</value>
+    <value>data</value>
   </data>
   <data name="DynamicTileLabel.Text" xml:space="preserve">
-    <value>Update live tile periodically</value>
+    <value>update live tile periodically</value>
   </data>
   <data name="DynamicTileTitle.Text" xml:space="preserve">
-    <value>Dynamic Tile</value>
+    <value>dynamic tile</value>
   </data>
   <data name="EmptyDailyForecast.Text" xml:space="preserve">
     <value>There is no data for daily forecast at the moment :(</value>
@@ -193,16 +193,16 @@
     <value>There is no data for hourly forecast at the moment :(</value>
   </data>
   <data name="FeedbackButton.Content" xml:space="preserve">
-    <value>Send a request</value>
+    <value>send a request</value>
   </data>
   <data name="FeedbackLabel.Text" xml:space="preserve">
-    <value>Suggest an improvement or signal a bug</value>
+    <value>suggest an improvement or signal a bug</value>
   </data>
   <data name="FeedbackTitle.Text" xml:space="preserve">
-    <value>My request</value>
+    <value>my request</value>
   </data>
   <data name="FeelsLikeText.Text" xml:space="preserve">
-    <value>Feels more like</value>
+    <value>feels more like</value>
   </data>
   <data name="FindLocationManually.Text" xml:space="preserve">
     <value>Search for your city manually</value>
@@ -223,13 +223,13 @@
     <value>hourly forecast</value>
   </data>
   <data name="ImagesSourceContent.Text" xml:space="preserve">
-    <value>Pictures are from</value>
+    <value>pictures are from</value>
   </data>
   <data name="ImagesSourceTitle.Text" xml:space="preserve">
-    <value>Pictures</value>
+    <value>pictures</value>
   </data>
   <data name="LanguageButton.Content" xml:space="preserve">
-    <value>Language</value>
+    <value>language</value>
   </data>
   <data name="Loading.Text" xml:space="preserve">
     <value>Loading...</value>
@@ -243,20 +243,20 @@
   <data name="partly-cloudy-night" xml:space="preserve">
     <value>party cloudy night</value>
   </data>
-  <data name="PersonalizationHeader.Text" xml:space="preserve">
+  <data name="PersonalizationPivot.Header" xml:space="preserve">
     <value>personalization</value>
   </data>
   <data name="rain" xml:space="preserve">
     <value>rain</value>
   </data>
   <data name="RatingButton.Content" xml:space="preserve">
-    <value>Note the app</value>
+    <value>note the app</value>
   </data>
   <data name="RatingLabel.Text" xml:space="preserve">
-    <value>Note the app in the Store</value>
+    <value>note the app in the Store</value>
   </data>
   <data name="RatingTitle.Text" xml:space="preserve">
-    <value>Notation</value>
+    <value>notation</value>
   </data>
   <data name="SearchText.Text" xml:space="preserve">
     <value>rechercher</value>
@@ -280,10 +280,10 @@
     <value>Theme</value>
   </data>
   <data name="ThemeSwitch.OffContent" xml:space="preserve">
-    <value>Dark theme</value>
+    <value>dark theme</value>
   </data>
   <data name="ThemeSwitch.OnContent" xml:space="preserve">
-    <value>White theme</value>
+    <value>white theme</value>
   </data>
   <data name="thunderstorm" xml:space="preserve">
     <value>thunderstorm</value>
@@ -293,5 +293,56 @@
   </data>
   <data name="wind" xml:space="preserve">
     <value>wind</value>
+  </data>
+  <data name="ButtonRestart.Content" xml:space="preserve">
+    <value>restart</value>
+  </data>
+  <data name="ItemDay.Content" xml:space="preserve">
+    <value>once a day</value>
+  </data>
+  <data name="ItemFifteenMinutes.Content" xml:space="preserve">
+    <value>15 min</value>
+  </data>
+  <data name="ItemHalfHour.Content" xml:space="preserve">
+    <value>half an hour</value>
+  </data>
+  <data name="ItemHour.Content" xml:space="preserve">
+    <value>every hour</value>
+  </data>
+  <data name="ItemThreeHours.Content" xml:space="preserve">
+    <value>every 3 hours</value>
+  </data>
+  <data name="LastTileTaskError.Text" xml:space="preserve">
+    <value>no error</value>
+  </data>
+  <data name="LastUpdatedTask.Text" xml:space="preserve">
+    <value>never run</value>
+  </data>
+  <data name="TaskNotWorkingText.Text" xml:space="preserve">
+    <value>if the task doesn't work properly, restart it</value>
+  </data>
+  <data name="TileIntervalUpdate.Header" xml:space="preserve">
+    <value>recurrence</value>
+  </data>
+  <data name="DynamicTileActivity.Text" xml:space="preserve">
+    <value>dynamic tile activity</value>
+  </data>
+  <data name="TileLastRun" xml:space="preserve">
+    <value>tile task last run on:</value>
+  </data>
+  <data name="UnitsText.Text" xml:space="preserve">
+    <value>units</value>
+  </data>
+  <data name="LanguageSelected" xml:space="preserve">
+    <value>language selected</value>
+  </data>
+  <data name="LanguageLabel.Text" xml:space="preserve">
+    <value>language</value>
+  </data>
+  <data name="LanguageSubLabel.Text" xml:space="preserve">
+    <value>choose displayed language</value>
+  </data>
+  <data name="UnitsSubLabel.Text" xml:space="preserve">
+    <value>choose temperature units</value>
   </data>
 </root>

@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Devices.Geolocation;
-using Windows.Foundation;
 using Windows.Services.Maps;
 using Windows.System;
 using Windows.UI;
@@ -15,6 +14,7 @@ using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 
 namespace Feels.Views {
@@ -24,20 +24,24 @@ namespace Feels.Views {
 
         CoreDispatcher UIDispatcher { get; set; }
 
-        private int HourForcastAnimDelay { get; set; }
+        private int _AnimationDelayHourForcast { get; set; }
+
+        private int _AnimationDelayDailyForecast { get; set; } 
 
         static DateTime LastFetchedTime { get; set; }
 
         static BasicGeoposition LastPosition { get; set; }
+
+        public static bool _ForceDataRefresh { get; set; }
         #endregion variables
 
         public HomePage() {
             InitializeComponent();
             InitializeTitleBar();
+            InitializeVariables();
+            InitializePageData();
 
-            PageDataSource = App.DataSource;
-            UIDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
-            InitializePageData();            
+            //ShowUpdateChangelogIfIsNewLaunch();
         }
 
         #region titlebar
@@ -81,6 +85,7 @@ namespace Feels.Views {
 
         #endregion titlebar
 
+        #region data
         async Task<bool> GetLocationPermission() {
             var accessStatus = await Geolocator.RequestAccessAsync();
 
@@ -96,8 +101,13 @@ namespace Feels.Views {
             }
         }
 
+        private void InitializeVariables() {
+            PageDataSource = App.DataSource;
+            UIDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
+        }
+
         async void InitializePageData() {
-            if (PageDataSource.Forecast != null) {
+            if (PageDataSource.Forecast != null && _ForceDataRefresh == false) {
                 HideSplashView();
                 HideLoadingView();
                 GetCurrentCity(LastPosition);
@@ -107,6 +117,8 @@ namespace Feels.Views {
             if (!await MustRefreshData()) {
                 return;
             }
+
+            CleanTheater();
 
             FetchNewData();
 
@@ -128,6 +140,7 @@ namespace Feels.Views {
             }
         }
 
+        
         void PopulateView() {
             PopulateFirstPage();
             BindHourlyListData();
@@ -149,18 +162,6 @@ namespace Feels.Views {
                 if (result.Locations.Count == 0) return;
                 City.Text = result.Locations[0].Address.Town;
             }
-        }
-
-        async Task ShowBetaMessageAsync() {
-            if (!Settings.IsFirstLaunch()) return;
-
-            var resourceLoader = new Windows.ApplicationModel.Resources.ResourceLoader();
-            var message = resourceLoader.GetString("BetaMessage");
-
-            //DataTransfer.ShowLocalToast(message);
-            var dialog = new MessageDialog(message);
-            await dialog.ShowAsync();
-            Settings.SaveFirstLaunchPassed();
         }
 
         async Task FetchCurrentLocation(BasicGeoposition basicPosition) {
@@ -201,7 +202,6 @@ namespace Feels.Views {
             }
         }
 
-
         void SafeExit() {
             ShowEmptyView();
         }
@@ -213,6 +213,11 @@ namespace Feels.Views {
 
         async Task<bool> MustRefreshData() {
             if (PageDataSource.Forecast == null) return true;
+
+            if (_ForceDataRefresh) {
+                _ForceDataRefresh = false;
+                return true;
+            }
 
             if (DateTime.Now.Hour - LastFetchedTime.Hour > 0) {
                 return true;
@@ -293,30 +298,6 @@ namespace Feels.Views {
             }
         }
 
-        async void DrawScene() {
-            var scene = Scene.CreateNew(PageDataSource.Forecast.Currently, PageDataSource.Forecast.Daily.Days[0]);
-            Theater.Children.Add(scene);
-
-            await scene.Fade(0, 0).Offset(0, 200, 0).StartAsync();
-            Theater.Fade(1, 1000).Start();
-            scene.Fade(1, 1000).Offset(0, 0, 1000).Start();
-
-            AddLightingEffects(scene);
-        }
-
-        void AddLightingEffects(Grid scene) {
-            Scene.AddAmbiantLight(scene);
-
-            Scene.AddPointLight(
-                scene, 
-                (Grid)scene.FindName("ConditionIcon"),
-                new Dictionary<string, object>() {
-                    {"condition", PageDataSource.Forecast.Currently.Icon }
-                });
-            //Scene.AddSpotLight(scene, conditionIcon);
-            
-        }
-
         void ShowLoadingView() {
             SplashView.Visibility = Visibility.Collapsed;
             WeatherView.Visibility = Visibility.Collapsed;
@@ -344,6 +325,45 @@ namespace Feels.Views {
             if (PageDataSource.Forecast == null) return;
             DailyList.ItemsSource = PageDataSource.Forecast.Daily.Days;
             DailySummary.Text = PageDataSource.Forecast.Daily.Summary;
+        }
+
+        void ResetOpacity(Panel view) {
+            view.Opacity = 0;
+            var children = view.Children;
+
+            foreach (var child in children) {
+                child.Opacity = 0;
+            }
+        }
+
+        void ShowNoAccessView() {
+            AnimateSlideIn(LocationDisabledMessage);
+        }
+        #endregion data
+
+        #region scene theater
+        async void DrawScene() {
+            var scene = Scene.CreateNew(PageDataSource.Forecast.Currently, PageDataSource.Forecast.Daily.Days[0]);
+            Theater.Children.Add(scene);
+
+            await scene.Fade(0, 0).Offset(0, 200, 0).StartAsync();
+            Theater.Fade(1, 1000).Start();
+            scene.Fade(1, 1000).Offset(0, 0, 1000).Start();
+
+            AddLightingEffects(scene);
+        }
+
+        void AddLightingEffects(Grid scene) {
+            Scene.AddAmbiantLight(scene);
+
+            Scene.AddPointLight(
+                scene, 
+                (Grid)scene.FindName("ConditionIcon"),
+                new Dictionary<string, object>() {
+                    {"condition", PageDataSource.Forecast.Currently.Icon }
+                });
+            //Scene.AddSpotLight(scene, conditionIcon);
+            
         }
 
         async Task AnimateSlideIn(Panel view) {
@@ -377,21 +397,10 @@ namespace Feels.Views {
             }
         }
 
-        void ResetOpacity(Panel view) {
-            view.Opacity = 0;
-            var children = view.Children;
-
-            foreach (var child in children) {
-                child.Opacity = 0;
-            }
+        void CleanTheater() {
+            Theater.Children.Clear();
         }
-
-        async void ShowNoAccessView() {
-            //SplashView.Visibility = Visibility.Collapsed;
-            //WeatherView.Visibility = Visibility.Collapsed;
-
-            AnimateSlideIn(LocationDisabledMessage);
-        }
+        #endregion scene theater
 
         #region buttons
         private async void LocationSettingsButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
@@ -422,17 +431,32 @@ namespace Feels.Views {
         }
         #endregion buttons
 
+        #region events
         private async void HourForecast_Loaded(object sender, RoutedEventArgs e) {
-            var HourForecast = (Grid)sender;
+            var panel = (Grid)sender;
 
-            HourForcastAnimDelay += 100;
-            await HourForecast.Offset(0, 50,0)
-                                .Then()
-                                .Fade(1, 500, HourForcastAnimDelay)
-                                .Offset(0, 0, 500, HourForcastAnimDelay)
-                                .StartAsync();
+            _AnimationDelayHourForcast += 100;
+
+            await panel.Offset(0, 50,0)
+                        .Then()
+                        .Fade(1, 500, _AnimationDelayHourForcast)
+                        .Offset(0, 0, 500, _AnimationDelayHourForcast)
+                        .StartAsync();
         }
-        
+
+        private async void DailyForecast_Loaded(object sender, RoutedEventArgs e) {
+            var panel = (Grid)sender;
+
+            _AnimationDelayDailyForecast += 100;
+
+            await panel.Offset(0, 50, 0)
+                        .Then()
+                        .Fade(1, 500, _AnimationDelayDailyForecast)
+                        .Offset(0, 0, 500, _AnimationDelayDailyForecast)
+                        .StartAsync();
+        }
+        #endregion events
+
         #region appbar
         private void AppBar_Closed(object sender, object e) {
             AppBar.Background = new SolidColorBrush(Colors.Transparent);
@@ -447,13 +471,59 @@ namespace Feels.Views {
         }
 
         private void CmdRefresh_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
-            Theater.Children.Clear();
+            _ForceDataRefresh = true;
+            CleanTheater();
             InitializePageData();
         }
         #endregion appbar
 
+        #region others
         void UpdateMainTile() {
             TileDesigner.UpdatePrimary(LastPosition);
         }
+
+        async Task ShowBetaMessageAsync() {
+            if (!Settings.IsFirstLaunch()) return;
+
+            var resourceLoader = new Windows.ApplicationModel.Resources.ResourceLoader();
+            var message = resourceLoader.GetString("BetaMessage");
+
+            //DataTransfer.ShowLocalToast(message);
+            var dialog = new MessageDialog(message);
+            await dialog.ShowAsync();
+            Settings.SaveFirstLaunchPassed();
+        }
+        #endregion others
+
+        #region update changelog
+        private void ShowUpdateChangelogIfIsNewLaunch() {
+            if (Settings.IsNewUpdatedLaunch()) {
+                ShowLastUpdateChangelog();
+            }
+        }
+
+        private async void ShowLastUpdateChangelog() {
+            PagePivot.IsEnabled = false;
+            await UpdateChangeLogFlyout.Scale(.9f, .9f, 0, 0, 0).Fade(0).StartAsync();
+            UpdateChangeLogFlyout.Visibility = Visibility.Visible;
+
+            var x = (float)UpdateChangeLogFlyout.ActualWidth / 2;
+            var y = (float)UpdateChangeLogFlyout.ActualHeight / 2;
+
+            await UpdateChangeLogFlyout.Scale(1f, 1f, x, y).Fade(1).StartAsync();
+            PagePivot.Blur(10, 500, 500).Start();
+        }
+
+        private async void ChangelogDismissButton_Tapped(object sender, TappedRoutedEventArgs e) {
+            var x = (float)UpdateChangeLogFlyout.ActualWidth / 2;
+            var y = (float)UpdateChangeLogFlyout.ActualHeight / 2;
+
+            await UpdateChangeLogFlyout.Scale(.9f, .9f, x, y).Fade(0).StartAsync();
+            UpdateChangeLogFlyout.Visibility = Visibility.Collapsed;
+            PagePivot.Blur(0).Start();
+            PagePivot.IsEnabled = true;
+        }
+
+        #endregion update changelog
     }
 }

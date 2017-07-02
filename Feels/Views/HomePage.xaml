@@ -6,8 +6,6 @@
     xmlns:forecast="using:DarkSkyApi.Models"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
-    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
-    xmlns:behaviors="using:Microsoft.Toolkit.Uwp.UI.Animations.Behaviors"
     x:Class="Feels.Views.HomePage"
     mc:Ignorable="d">
 
@@ -63,9 +61,44 @@
             <Grid Grid.Column="3" x:Name="RightMask" Background="Transparent"/>
         </Grid>
 
+        <FlyoutPresenter x:Name="UpdateChangeLogFlyout"
+                         Visibility="Collapsed"
+                         VerticalAlignment="Center"
+                         Grid.Row="1"
+                         Canvas.ZIndex="2">
+
+            <StackPanel ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                        Padding="0,20">
+                <TextBlock Text="Update 1.1.0" FontSize="24"
+                               Typography.Capitals="SmallCaps"/>
+
+                <TextBlock Text="30 June 2017" Opacity=".5"/>
+
+                <RichTextBlock TextWrapping="Wrap" Margin="0,20,0,0">
+                    <Paragraph>
+                        <Span>-Fix temperature unit chooser</Span>
+                        <LineBreak/>
+                        <Span>-Add city on live tile</Span>
+                        <LineBreak/>
+                        <Span>-You can choose live tile recurrency</Span>
+                        <LineBreak/>
+                        <Span>-Support French and English languages</Span>
+                        <LineBreak/>
+                        <Span>-Add animations on SettingsPage</Span>
+                        <LineBreak/>
+                        <Span>-Fix reload command</Span>
+                    </Paragraph>
+                </RichTextBlock>
+
+                <Button x:Name="ChangelogDismissButton" 
+                            Content="okay" 
+                            HorizontalAlignment="Center"
+                            Tapped="ChangelogDismissButton_Tapped"/>
+            </StackPanel>
+        </FlyoutPresenter>
+
         <Pivot x:Name="PagePivot" Grid.Row="1">
             <PivotItem x:Name="NowPivot" Margin="0,-51,0,0">
-
                 <ScrollViewer x:Name="PivotContent">
                     <Grid>
                         <Grid x:Name="Theater" Opacity="0">
@@ -304,7 +337,6 @@
                                          Visibility="Collapsed"
                                          VerticalAlignment="Top"/>
 
-
                     </Grid>
                 </ScrollViewer>
             </PivotItem>
@@ -327,6 +359,7 @@
                     <ListView x:Name="HourlyList"
                               HorizontalAlignment="Stretch"
                               ItemContainerStyle="{StaticResource ListViewItemFill}">
+                        
                         <ListView.Header>
                             <controls:ScrollHeader TargetListViewBase="{x:Bind HourlyList}"
                                                    Mode="QuickReturn">
@@ -374,7 +407,7 @@
                                             <Button Margin="10,0,0,0"
                                                         HorizontalAlignment="Center">
                                                 <TextBlock x:Name="DailyForecastButton"
-                                                           x:Uid="HourlyToDailyButton"
+                                                           x:Uid="DailyForecastButton"
                                                            Text="daily forecast"
                                                            Typography.Capitals="SmallCaps"
                                                            FontWeight="Bold"
@@ -393,6 +426,7 @@
                                 </UserControl>
                             </controls:ScrollHeader>
                         </ListView.Header>
+                        
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="forecast:HourDataPoint">
                                 <UserControl>
@@ -496,6 +530,7 @@
                     <ListView x:Name="DailyList"
                               HorizontalAlignment="Stretch"
                               ItemContainerStyle="{StaticResource ListViewItemFill}">
+                        
                         <ListView.Header>
                             <controls:ScrollHeader TargetListViewBase="{x:Bind DailyList}"
                                                    Mode="QuickReturn">
@@ -565,6 +600,7 @@
                                 </UserControl>
                             </controls:ScrollHeader>
                         </ListView.Header>
+                        
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="forecast:DayDataPoint">
                                 <UserControl>
@@ -573,7 +609,7 @@
                                               HorizontalAlignment="Center"
                                               Padding="20"
                                               Opacity="0"
-                                              Loaded="HourForecast_Loaded">
+                                              Loaded="DailyForecast_Loaded">
 
                                         <VisualStateManager.VisualStateGroups>
                                             <VisualStateGroup x:Name="DailyForecastStates">

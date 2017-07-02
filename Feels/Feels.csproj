@@ -112,7 +112,7 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\Unit.cs" />
+    <Compile Include="Models\WeatherUnit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BackgroundTasks.cs" />
     <Compile Include="Services\DataTransfer.cs" />
@@ -121,7 +121,6 @@
     <Compile Include="Services\Settings.cs" />
     <Compile Include="Services\TileDesigner.cs" />
     <Compile Include="Services\UI.cs" />
-    <Compile Include="Services\VisualTreeExtensions.cs" />
     <Compile Include="Services\Wallpaper.cs" />
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>

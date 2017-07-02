@@ -2,17 +2,19 @@
 using Windows.UI.Xaml;
 using Windows.System.UserProfile;
 using Windows.Devices.Geolocation;
+using DarkSkyApi;
+using Windows.ApplicationModel;
 
 namespace Feels.Services {
     public class Settings {
-        //private const string _bingSearchKey = "pCzCBMoEJtZ76ni+ge9sbAYr5PXDfe2ksLPW63wxcVs= ";
+        #region keys
         private static string ThemeKey {
             get {
                 return "Theme";
             }
         }
 
-        private static string LangKey {
+        private static string LanguageKey {
             get {
                 return "Language";
             }
@@ -36,6 +38,14 @@ namespace Feels.Services {
             }
         }
 
+        private static string AppVersionKey {
+            get {
+                return "AppVersion";
+            }
+        }
+        #endregion keys
+
+        #region position
         public static void SavePosition(BasicGeoposition position) {
             var settingsValues = ApplicationData.Current.LocalSettings.Values;
             var composite = new ApplicationDataCompositeValue {
@@ -59,29 +69,77 @@ namespace Feels.Services {
 
             return coord;
         }
+        #endregion position
 
+        #region language
         public static void SaveLanguage(string language) {
             var settingsValues = ApplicationData.Current.LocalSettings.Values;
-            settingsValues[LangKey] = language;
+            settingsValues[LanguageKey] = language;
         }
 
         public static string GetLanguage() {
             string defaultLanguage = GlobalizationPreferences.Languages[0];
 
             var settingsValues = ApplicationData.Current.LocalSettings.Values;
-            return settingsValues.ContainsKey(LangKey) ? (string)settingsValues[LangKey] : defaultLanguage;
+            return settingsValues.ContainsKey(LanguageKey) ? (string)settingsValues[LanguageKey] : defaultLanguage;
         }
 
-        public static void SaveUnit(string unit) {
+        public static void SaveAppCurrentLanguage(string language) {
             var settingsValues = ApplicationData.Current.LocalSettings.Values;
-            settingsValues[UnitKey] = unit;
+            settingsValues[LanguageKey] = language;
         }
 
-        public static string GetUnit() {
+        public static string GetAppCurrentLanguage() {
+            string defaultLanguage = GlobalizationPreferences.Languages[0];
+
             var settingsValues = ApplicationData.Current.LocalSettings.Values;
-            return settingsValues.ContainsKey(UnitKey) ? (string)settingsValues[UnitKey] : null;
+            return settingsValues.ContainsKey(LanguageKey) ? (string)settingsValues[LanguageKey] : defaultLanguage;
+        }
+        #endregion language
+
+        #region units
+        public static void SaveUnit(Unit unit) {
+            var settingsValues = ApplicationData.Current.LocalSettings.Values;
+            settingsValues[UnitKey] = unit.ToString();
         }
 
+        public static Unit GetUnit() {
+            var settingsValues = ApplicationData.Current.LocalSettings.Values;
+
+            if (settingsValues.ContainsKey(UnitKey)) {
+                var savedUnit = (string)settingsValues[UnitKey];
+                return ConvertToUnit(savedUnit);
+            }
+
+            return Unit.SI;
+        }
+
+        private static Unit ConvertToUnit(string value) {
+            if (value == Unit.SI.ToString()) {
+                return Unit.SI;
+            }
+
+            if (value == Unit.US.ToString()) {
+                return Unit.US;
+            }
+
+            if (value == Unit.CA.ToString()) {
+                return Unit.CA;
+            }
+
+            if (value == Unit.UK.ToString()) {
+                return Unit.UK;
+            }
+
+            if (value == Unit.UK2.ToString()) {
+                return Unit.UK2;
+            }
+
+            return Unit.SI;
+        }
+        #endregion units
+
+        #region theme
         public static bool IsApplicationThemeLight() {
             ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
             localSettings.Values.TryGetValue(ThemeKey, out var previousTheme);
@@ -97,7 +155,9 @@ namespace Feels.Services {
             localSettings.Values[ThemeKey] = theme.ToString();
             App.UpdateAppTheme();
         }
+        #endregion theme
 
+        #region first launch
         public static void SaveFirstLaunchPassed() {
             ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
             localSettings.Values[FirstLaunchKey] = false;
@@ -107,7 +167,9 @@ namespace Feels.Services {
             ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
             return localSettings.Values.ContainsKey(FirstLaunchKey) ? false : true;
         }
+        #endregion first launch
 
+        #region favorites cities
         //public static async Task SaveFavoritesAsync(ObservableKeyedCollection favorites, string source) {
         //    string json = JsonConvert.SerializeObject(favorites);
         //    StorageFile file =
@@ -127,6 +189,34 @@ namespace Feels.Services {
         //    ObservableKeyedCollection favorites = JsonConvert.DeserializeObject<ObservableKeyedCollection>(json);
         //    return favorites;
         //}
+        #endregion favorites cities
 
+        #region appversion
+        public static bool IsNewUpdatedLaunch() {
+            var isNewUpdatedLaunch = true;
+            var currentVersion = GetAppVersion();
+            var settingsValues = ApplicationData.Current.LocalSettings.Values;
+
+            if (settingsValues.ContainsKey(AppVersionKey)) {
+                string savedVersion = (string)settingsValues[AppVersionKey];
+
+
+                if (savedVersion == currentVersion) {
+                    isNewUpdatedLaunch = false;
+                } else { settingsValues[AppVersionKey] = currentVersion; }
+            } else { settingsValues[AppVersionKey] = currentVersion; }
+
+            return isNewUpdatedLaunch;
+        }
+
+        public static string GetAppVersion() {
+            Package package = Package.Current;
+            PackageId packageId = package.Id;
+            PackageVersion version = packageId.Version;
+
+            return string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
+
+        }
+        #endregion appversion
     }
 }

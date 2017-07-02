@@ -142,10 +142,10 @@
     <value>paramètres</value>
   </data>
   <data name="ContributeFifthLine.Text" xml:space="preserve">
-    <value>Visitez le lien suivant pour plus d'information</value>
+    <value>visitez le lien suivant pour plus d'information</value>
   </data>
   <data name="ContributeFirstLine.Text" xml:space="preserve">
-    <value>Ce projet est open source et vous pouvez y contribuer de plusieurs manières:</value>
+    <value>ce projet est open source et vous pouvez y contribuer de plusieurs manières:</value>
   </data>
   <data name="ContributeFourthLine.Text" xml:space="preserve">
     <value>- éditer le code de l'application</value>
@@ -160,7 +160,7 @@
     <value>- suggérer une fonctionnalité</value>
   </data>
   <data name="ContributeTitle.Text" xml:space="preserve">
-    <value>Contribuer</value>
+    <value>contribuer</value>
   </data>
   <data name="CurrentForecastButton.Text" xml:space="preserve">
     <value>météo actuelle</value>
@@ -169,22 +169,22 @@
     <value>météo journalière</value>
   </data>
   <data name="Dark.Text" xml:space="preserve">
-    <value>Sombre</value>
+    <value>sombre</value>
   </data>
   <data name="DataContent1.Text" xml:space="preserve">
-    <value>Les données des citations proviennent des sites</value>
+    <value>les données des citations proviennent des sites</value>
   </data>
   <data name="DataContent2.Text" xml:space="preserve">
     <value>et cette application n'est aucunement liée à ces sites.</value>
   </data>
   <data name="DataTitle.Text" xml:space="preserve">
-    <value>Données</value>
+    <value>données</value>
   </data>
   <data name="DynamicTileLabel.Text" xml:space="preserve">
-    <value>Mettre à jour la tuile de l'application périodiquement</value>
+    <value>mettre à jour la tuile de l'application périodiquement</value>
   </data>
   <data name="DynamicTileTitle.Text" xml:space="preserve">
-    <value>Tuile dynamique</value>
+    <value>tuile dynamique</value>
   </data>
   <data name="EmptyDailyForecast.Text" xml:space="preserve">
     <value>Il n'y a aucune donnée pour la météo journalière pour l'instant :(</value>
@@ -193,16 +193,16 @@
     <value>Il n'y a aucune donnée pour la météo horaire pour l'instant :(</value>
   </data>
   <data name="FeedbackButton.Content" xml:space="preserve">
-    <value>Envoyer un avis</value>
+    <value>envoyer un avis</value>
   </data>
   <data name="FeedbackLabel.Text" xml:space="preserve">
-    <value>Suggérer une amélioration ou signaler un problème</value>
+    <value>suggérer une amélioration ou signaler un problème</value>
   </data>
   <data name="FeedbackTitle.Text" xml:space="preserve">
-    <value>Mon avis</value>
+    <value>mon avis</value>
   </data>
   <data name="FeelsLikeText.Text" xml:space="preserve">
-    <value>Température ressentie </value>
+    <value>température ressentie </value>
   </data>
   <data name="FindLocationManually.Text" xml:space="preserve">
     <value>Trouvez votre ville manuelement</value>
@@ -220,10 +220,10 @@
     <value>grèle</value>
   </data>
   <data name="HourlyForecastButton.Text" xml:space="preserve">
-    <value>météo journalière</value>
+    <value>météo horaire</value>
   </data>
   <data name="ImagesSourceContent.Text" xml:space="preserve">
-    <value>Les images proviennent de</value>
+    <value>les images proviennent de</value>
   </data>
   <data name="ImagesSourceTitle.Text" xml:space="preserve">
     <value>Images</value>
@@ -232,7 +232,7 @@
     <value>Langue</value>
   </data>
   <data name="Loading.Text" xml:space="preserve">
-    <value>Chargement...</value>
+    <value>chargement...</value>
   </data>
   <data name="LocationAutoDetect.Text" xml:space="preserve">
     <value>Votre position actuelle sera automatiquement déterminée</value>
@@ -243,20 +243,20 @@
   <data name="partly-cloudy-night" xml:space="preserve">
     <value>nuit partiellement couverte</value>
   </data>
-  <data name="PersonalizationHeader.Text" xml:space="preserve">
+  <data name="PersonalizationPivot.Header" xml:space="preserve">
     <value>personalisation</value>
   </data>
   <data name="rain" xml:space="preserve">
     <value>pluie</value>
   </data>
   <data name="RatingButton.Content" xml:space="preserve">
-    <value>Noter l'app</value>
+    <value>noter l'app</value>
   </data>
   <data name="RatingLabel.Text" xml:space="preserve">
-    <value>Notez l'application sur le Store</value>
+    <value>notez l'application sur le Store</value>
   </data>
   <data name="RatingTitle.Text" xml:space="preserve">
-    <value>Notation</value>
+    <value>notation</value>
   </data>
   <data name="SearchText.Text" xml:space="preserve">
     <value>search</value>
@@ -268,10 +268,10 @@
     <value>neige</value>
   </data>
   <data name="SwypeLeftToHourly.Text" xml:space="preserve">
-    <value>Balayer l'écran d'un doigt vers la gauche pour accéder à la météo journalière</value>
+    <value>Accéder à la météo journalière</value>
   </data>
   <data name="SwypeRightToHourly.Text" xml:space="preserve">
-    <value>Balayer l'écran d'un doigt vers la droite pour accéder à la météo horaire</value>
+    <value>Accéder à la météo horaire</value>
   </data>
   <data name="Tasks.Text" xml:space="preserve">
     <value>Tâches</value>
@@ -293,5 +293,44 @@
   </data>
   <data name="wind" xml:space="preserve">
     <value>vent</value>
+  </data>
+  <data name="TileIntervalUpdate.Header" xml:space="preserve">
+    <value>récurrence</value>
+  </data>
+  <data name="DynamicTileActivity.Text" xml:space="preserve">
+    <value>activité de la tuile dynamique</value>
+  </data>
+  <data name="TileLastRun" xml:space="preserve">
+    <value>dernière exécution de la tâche pour la tuile dynamique: </value>
+  </data>
+  <data name="UnitsText.Text" xml:space="preserve">
+    <value>unités</value>
+  </data>
+  <data name="LanguageSelected" xml:space="preserve">
+    <value>sélectionné</value>
+  </data>
+  <data name="LanguageLabel.Text" xml:space="preserve">
+    <value>langue</value>
+  </data>
+  <data name="LanguageSubLabel.Text" xml:space="preserve">
+    <value>choisissez la langue affichée</value>
+  </data>
+  <data name="UnitsSubLabel.Text" xml:space="preserve">
+    <value>choisissez l'unité de température</value>
+  </data>
+  <data name="ItemDay.Content" xml:space="preserve">
+    <value>une fois par jour</value>
+  </data>
+  <data name="ItemFifteenMinutes.Content" xml:space="preserve">
+    <value>15 min</value>
+  </data>
+  <data name="ItemHalfHour.Content" xml:space="preserve">
+    <value>chaque demi-heure</value>
+  </data>
+  <data name="ItemHour.Content" xml:space="preserve">
+    <value>chaque heure</value>
+  </data>
+  <data name="ItemThreeHours.Content" xml:space="preserve">
+    <value>toutes les 3 heures</value>
   </data>
 </root>

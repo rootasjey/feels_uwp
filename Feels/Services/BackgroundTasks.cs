@@ -1,49 +1,95 @@
 ﻿using System;
 using Windows.ApplicationModel.Background;
+using Windows.Storage;
 
 namespace Feels.Services {
     public static class BackgroundTasks {
-        static string _taskName = "UpdateWeather";
-        static string _entryPoint = "Tasks.UpdateWeather";
+        #region variables
+        private static string _TileTaskName {
+            get {
+                return "UpdateWeather";
+            }
+        }
 
-        static string _backgroundTaskName = "LockScreenUpdater";
-        static string _backgroundEntryPoint = "OptimizedTasks.LockScreenUpdater";
+        private static string _TileTaskEntryPoint {
+            get {
+                return "Tasks.UpdateWeather";
+            }
+        }
 
+        private static string _LockscreenTaskName {
+            get {
+                return "LockScreenUpdater";
+            }
+        }
+
+        private static string _LockscreenTaskEntryPoint {
+            get {
+                return "OptimizedTasks.LockScreenUpdater";
+            }
+        }
+
+        private static string TileTaskInterval {
+            get {
+                return "TileTaskInterval";
+            }
+        }
+        #endregion variables
+
+        #region lockscreen task
         public static bool IsLockscreenTaskActivated() {
             foreach (var task in BackgroundTaskRegistration.AllTasks) {
-                if (task.Value.Name == GetTaskBackgroundName()) {
+                if (task.Value.Name == _LockscreenTaskName) {
                     return true;
                 }
             }
             return false;
-        }
-
-        public static void RegisterWeatherTask() {
-            RegisterBackgroundTask(GetWeatherTaskName(), GetWeatherTaskEntryPoint());
-        }
-
-        public static void UnregisterQuoteTask() {
-            UnregisterBackgroundTask(GetWeatherTaskName());
         }
 
         public static void RegisterLockscreenTask() {
-            RegisterBackgroundTask(GetTaskBackgroundName(), GetTaskBackgroundEntryPoint());
+            RegisterBackgroundTask(_LockscreenTaskName, _LockscreenTaskEntryPoint);
         }
 
         public static void UnregisterLockscreenTask() {
-            UnregisterBackgroundTask(GetTaskBackgroundName());
+            UnregisterBackgroundTask(_LockscreenTaskName);
         }
 
-        public static bool IsWeatherTaskActivated() {
+        #endregion lockscreen task
+
+        #region tile task
+        public static void RegisterTileTask(uint interval) {
+            RegisterBackgroundTask(_TileTaskName, _TileTaskEntryPoint, interval);
+        }
+
+        public static void UnregisterTileTask() {
+            UnregisterBackgroundTask(_TileTaskName);
+        }
+
+        public static uint GetTileTaskInterval() {
+            var settingsValues = ApplicationData.Current.LocalSettings.Values;
+            return settingsValues.ContainsKey(TileTaskInterval) ? (uint)settingsValues[TileTaskInterval] : 60;
+        }
+
+        public static ApplicationDataCompositeValue GetTileTaskActivity() {
+            var key = "TileUpdaterTask" + "Activity";
+            var settingsValues = ApplicationData.Current.LocalSettings.Values;
+            return settingsValues.ContainsKey(key) ? (ApplicationDataCompositeValue)settingsValues[key] : null;
+        }
+
+        public static bool IsTileTaskActivated() {
             foreach (var task in BackgroundTaskRegistration.AllTasks) {
-                if (task.Value.Name == GetWeatherTaskName()) {
+                if (task.Value.Name == _TileTaskName) {
                     return true;
                 }
             }
             return false;
         }
 
-        private static async void RegisterBackgroundTask(string taskName, string entryPoint) {
+        #endregion tile task
+
+
+        #region tasks
+        private static async void RegisterBackgroundTask(string taskName, string entryPoint, uint interval = 60) {
             foreach (var task in BackgroundTaskRegistration.AllTasks) {
                 if (task.Value.Name == taskName) {
                     return;
@@ -60,7 +106,7 @@ namespace Feels.Services {
                 Name = taskName,
                 TaskEntryPoint = entryPoint
             };
-            builder.SetTrigger(new TimeTrigger(60, false));
+            builder.SetTrigger(new TimeTrigger(interval, false));
             BackgroundTaskRegistration taskRegistered = builder.Register();
         }
 
@@ -74,21 +120,6 @@ namespace Feels.Services {
             }
         }
 
-        public static string GetWeatherTaskName() {
-            return _taskName;
-        }
-
-        public static string GetWeatherTaskEntryPoint() {
-            return _entryPoint;
-        }
-
-        public static string GetTaskBackgroundName() {
-            return _backgroundTaskName;
-        }
-
-        public static string GetTaskBackgroundEntryPoint() {
-            return _backgroundEntryPoint;
-        }
-
+        #endregion tasks
     }
 }
