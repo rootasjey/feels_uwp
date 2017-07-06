@@ -118,231 +118,231 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutHeader.Text" xml:space="preserve">
-    <value>about</value>
+    <value>о проекте</value>
   </data>
   <data name="BackgroundsTasksHeader.Text" xml:space="preserve">
-    <value>background tasks</value>
+    <value>работа в фоне</value>
   </data>
   <data name="BetaMessage" xml:space="preserve">
-    <value>This app is in beta and can act not as expected, contains bugs or missing features. Please report any unexpected behavior via email or on GitHub. Thanks!</value>
+    <value>Это приложение в Beta версии и может работать не так, как ожидается, содержать ошибки или отсутствующие функции. Пожалуйста, сообщайте о любых ошибках по почте или на GitHub. Спасибо!</value>
   </data>
   <data name="ButtonRestart.Content" xml:space="preserve">
-    <value>restart</value>
+    <value>перезапустить</value>
   </data>
   <data name="clear-day" xml:space="preserve">
-    <value>clear day</value>
+    <value>ясный день</value>
   </data>
   <data name="clear-night" xml:space="preserve">
-    <value>clear night</value>
+    <value>ясная ночь</value>
   </data>
   <data name="cloudy" xml:space="preserve">
-    <value>cloudy</value>
+    <value>облачно</value>
   </data>
   <data name="CmdRefresh.Label" xml:space="preserve">
-    <value>refresh</value>
+    <value>обновить</value>
   </data>
   <data name="CmdSettings.Label" xml:space="preserve">
-    <value>settings</value>
+    <value>настройки</value>
   </data>
   <data name="ContributeFifthLine.Text" xml:space="preserve">
-    <value>visit this link for more information</value>
+    <value>посетите ссылку для более подробной информации</value>
   </data>
   <data name="ContributeFirstLine.Text" xml:space="preserve">
-    <value>this project is open source and you can contribute in many ways</value>
+    <value>это проект с открытым исходным кодом и вы можете участвовать в нем разными способами:</value>
   </data>
   <data name="ContributeFourthLine.Text" xml:space="preserve">
-    <value>- edit app's code source</value>
+    <value>- радактировать исходный код</value>
   </data>
   <data name="ContributeSecondLine.Text" xml:space="preserve">
-    <value>- report a bug</value>
+    <value>- сообщить об ошибке</value>
   </data>
   <data name="ContributeSixthLine.Text" xml:space="preserve">
-    <value>and come participate in this project :)</value>
+    <value>и становитесь участником проекта :)</value>
   </data>
   <data name="ContributeThirdLine.Text" xml:space="preserve">
-    <value>- suggest a feature</value>
+    <value>- предложить идею</value>
   </data>
   <data name="ContributeTitle.Text" xml:space="preserve">
-    <value>contribute</value>
+    <value>участвуйте</value>
   </data>
   <data name="CurrentForecastButton.Text" xml:space="preserve">
-    <value>current forecast</value>
+    <value>погода сейчас</value>
   </data>
   <data name="DailyForecastButton.Text" xml:space="preserve">
-    <value>daily forecast</value>
+    <value>погода по дням</value>
   </data>
   <data name="Dark.Text" xml:space="preserve">
-    <value>dark</value>
+    <value>темная</value>
   </data>
   <data name="DataContent1.Text" xml:space="preserve">
-    <value>data come from these sources</value>
+    <value>данные о погоде мы получаем из</value>
   </data>
   <data name="DataContent2.Text" xml:space="preserve">
-    <value>and this app has no link with these entities</value>
+    <value>и приложение не имеет отношения к поставщикам проноза погоды</value>
   </data>
   <data name="DataTitle.Text" xml:space="preserve">
-    <value>data</value>
+    <value>данные</value>
   </data>
   <data name="DynamicTileActivity.Text" xml:space="preserve">
-    <value>dynamic tile activity</value>
+    <value>живая плитка</value>
   </data>
   <data name="DynamicTileLabel.Text" xml:space="preserve">
-    <value>update live tile periodically</value>
+    <value>периодически обновлять живую плитку</value>
   </data>
   <data name="DynamicTileTitle.Text" xml:space="preserve">
-    <value>dynamic tile</value>
+    <value>живая плитка</value>
   </data>
   <data name="EmptyDailyForecast.Text" xml:space="preserve">
-    <value>There is no data for daily forecast at the moment :(</value>
+    <value>На данный момент нет данных о прогнозе на несколько дней :(</value>
   </data>
   <data name="EmptyHourlyForecast.Text" xml:space="preserve">
-    <value>There is no data for hourly forecast at the moment :(</value>
+    <value>На данный момент нет данных о прогнозе на несколько часов :(</value>
   </data>
   <data name="FeedbackButton.Content" xml:space="preserve">
-    <value>send a request</value>
+    <value>обратная связь</value>
   </data>
   <data name="FeedbackLabel.Text" xml:space="preserve">
-    <value>suggest an improvement or signal a bug</value>
+    <value>предложить идею или сообщить об ошибке</value>
   </data>
   <data name="FeedbackTitle.Text" xml:space="preserve">
-    <value>my request</value>
+    <value>мои сообщения</value>
   </data>
   <data name="FeelsLikeText.Text" xml:space="preserve">
-    <value>feels more like</value>
+    <value>по ощущениям</value>
   </data>
   <data name="FindLocationManually.Text" xml:space="preserve">
-    <value>Search for your city manually</value>
+    <value>Выбрать город</value>
   </data>
   <data name="FindMe.Text" xml:space="preserve">
-    <value>find me</value>
+    <value>мое местоположение</value>
   </data>
   <data name="fog" xml:space="preserve">
-    <value>fog</value>
+    <value>туман</value>
   </data>
   <data name="GithubRepository.Text" xml:space="preserve">
-    <value>GitHub repository</value>
+    <value>репозиторий на GitHub</value>
   </data>
   <data name="hail" xml:space="preserve">
-    <value>hail</value>
+    <value>град</value>
   </data>
   <data name="HourlyForecastButton.Text" xml:space="preserve">
-    <value>hourly forecast</value>
+    <value>погода по часам</value>
   </data>
   <data name="ImagesSourceContent.Text" xml:space="preserve">
-    <value>pictures are from</value>
+    <value>за изображения и иконки спасибо</value>
   </data>
   <data name="ImagesSourceTitle.Text" xml:space="preserve">
-    <value>pictures</value>
+    <value>изображения</value>
   </data>
   <data name="ItemDay.Content" xml:space="preserve">
-    <value>once a day</value>
+    <value>раз в день</value>
   </data>
   <data name="ItemFifteenMinutes.Content" xml:space="preserve">
-    <value>15 min</value>
+    <value>15 минут</value>
   </data>
   <data name="ItemHalfHour.Content" xml:space="preserve">
-    <value>half an hour</value>
+    <value>полчаса</value>
   </data>
   <data name="ItemHour.Content" xml:space="preserve">
-    <value>every hour</value>
+    <value>каждый час</value>
   </data>
   <data name="ItemThreeHours.Content" xml:space="preserve">
-    <value>every 3 hours</value>
+    <value>каждые 3 часа</value>
   </data>
   <data name="LanguageButton.Content" xml:space="preserve">
-    <value>language</value>
+    <value>язык</value>
   </data>
   <data name="LanguageLabel.Text" xml:space="preserve">
-    <value>language</value>
+    <value>язык</value>
   </data>
   <data name="LanguageSelected" xml:space="preserve">
-    <value>language selected</value>
+    <value>язык выбран</value>
   </data>
   <data name="LanguageSubLabel.Text" xml:space="preserve">
-    <value>choose displayed language</value>
+    <value>выберете язык приложения</value>
   </data>
   <data name="LastTileTaskError.Text" xml:space="preserve">
-    <value>no error</value>
+    <value>ошибки нет</value>
   </data>
   <data name="LastUpdatedTask.Text" xml:space="preserve">
-    <value>never run</value>
+    <value>никогда</value>
   </data>
   <data name="Loading.Text" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Загрузка...</value>
   </data>
   <data name="LocationAutoDetect.Text" xml:space="preserve">
-    <value>Your current location will be determined automatically</value>
+    <value>Ваше местоположение будет определятся автоматически</value>
   </data>
   <data name="partly-cloudy-day" xml:space="preserve">
-    <value>party cloudy day</value>
+    <value>немного облачный день</value>
   </data>
   <data name="partly-cloudy-night" xml:space="preserve">
-    <value>party cloudy night</value>
+    <value>немного обачная ночь</value>
   </data>
   <data name="PersonalizationPivot.Header" xml:space="preserve">
-    <value>personalization</value>
+    <value>персонализация</value>
   </data>
   <data name="rain" xml:space="preserve">
-    <value>rain</value>
+    <value>дождь</value>
   </data>
   <data name="RatingButton.Content" xml:space="preserve">
-    <value>note the app</value>
+    <value>оценить</value>
   </data>
   <data name="RatingLabel.Text" xml:space="preserve">
-    <value>note the app in the Store</value>
+    <value>будем признательны, если Вы оцените приложение в Магазине</value>
   </data>
   <data name="RatingTitle.Text" xml:space="preserve">
-    <value>notation</value>
+    <value>оцените</value>
   </data>
   <data name="SearchText.Text" xml:space="preserve">
-    <value>rechercher</value>
+    <value>поиск</value>
   </data>
   <data name="sleet" xml:space="preserve">
-    <value>sleet</value>
+    <value>мокрый снег</value>
   </data>
   <data name="snow" xml:space="preserve">
-    <value>snow</value>
+    <value>снег</value>
   </data>
   <data name="SwypeLeftToHourly.Text" xml:space="preserve">
-    <value>swype left to see daily forecast</value>
+    <value>проведите влево, чтобы посмотреть прогноз по дням</value>
   </data>
   <data name="SwypeRightToHourly.Text" xml:space="preserve">
-    <value>swipe right to see hourly forecast</value>
+    <value>проведите вправо, чтобы посмотреть почасовой прогноз</value>
   </data>
   <data name="TaskNotWorkingText.Text" xml:space="preserve">
-    <value>if the task doesn't work properly, restart it</value>
+    <value>если задача не работает, перезапустите ее</value>
   </data>
   <data name="Tasks.Text" xml:space="preserve">
-    <value>Tasks</value>
+    <value>Задачи</value>
   </data>
   <data name="Theme.Text" xml:space="preserve">
-    <value>Theme</value>
+    <value>Тема</value>
   </data>
   <data name="ThemeSwitch.OffContent" xml:space="preserve">
-    <value>dark theme</value>
+    <value>темная тема</value>
   </data>
   <data name="ThemeSwitch.OnContent" xml:space="preserve">
-    <value>white theme</value>
+    <value>светлая тема</value>
   </data>
   <data name="thunderstorm" xml:space="preserve">
-    <value>thunderstorm</value>
+    <value>гроза</value>
   </data>
   <data name="TileIntervalUpdate.Header" xml:space="preserve">
-    <value>recurrence</value>
+    <value>каждые</value>
   </data>
   <data name="TileLastRun" xml:space="preserve">
-    <value>tile task last run on:</value>
+    <value>обновлять живую плитку:</value>
   </data>
   <data name="tornado" xml:space="preserve">
-    <value>tornado</value>
+    <value>ураган</value>
   </data>
   <data name="UnitsSubLabel.Text" xml:space="preserve">
-    <value>choose temperature units</value>
+    <value>выберете единицы измерения температуры</value>
   </data>
   <data name="UnitsText.Text" xml:space="preserve">
-    <value>units</value>
+    <value>единицы измерения</value>
   </data>
   <data name="wind" xml:space="preserve">
-    <value>wind</value>
+    <value>ветер</value>
   </data>
 </root>
