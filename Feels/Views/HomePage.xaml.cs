@@ -107,7 +107,9 @@ namespace Feels.Views {
         }
 
         async void InitializePageData() {
-            if (PageDataSource.Forecast != null && _ForceDataRefresh == false) {
+            if (PageDataSource.Forecast != null 
+                && _ForceDataRefresh == false) {
+
                 HideSplashView();
                 HideLoadingView();
                 GetCurrentCity(LastPosition);
@@ -343,14 +345,17 @@ namespace Feels.Views {
 
         #region scene theater
         async void DrawScene() {
-            var scene = Scene.CreateNew(PageDataSource.Forecast.Currently, PageDataSource.Forecast.Daily.Days[0]);
+            var scene = Scene.CreateNew(
+                PageDataSource.Forecast.Currently, 
+                PageDataSource.Forecast.Daily.Days[0]);
+
             Theater.Children.Add(scene);
 
             await scene.Fade(0, 0).Offset(0, 200, 0).StartAsync();
             Theater.Fade(1, 1000).Start();
             scene.Fade(1, 1000).Offset(0, 0, 1000).Start();
 
-            AddLightingEffects(scene);
+            //AddLightingEffects(scene);
         }
 
         void AddLightingEffects(Grid scene) {

@@ -6,6 +6,7 @@
     xmlns:forecast="using:DarkSkyApi.Models"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
+    xmlns:iconPacks="using:MahApps.Metro.IconPacks"
     x:Class="Feels.Views.HomePage"
     mc:Ignorable="d">
 
@@ -14,7 +15,6 @@
             <RowDefinition x:Name="TitleBarRow" Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WindowsStates">
                 <VisualState x:Name="MobileState">
@@ -101,7 +101,10 @@
             <PivotItem x:Name="NowPivot" Margin="0,-51,0,0">
                 <ScrollViewer x:Name="PivotContent">
                     <Grid>
-                        <Grid x:Name="Theater" Opacity="0">
+
+                        <Grid x:Name="Theater" 
+                              Visibility="Visible" 
+                              Opacity="0">
                         </Grid>
 
                         <StackPanel x:Name="SplashView"
@@ -113,42 +116,43 @@
                                         Height="90" Width="90"/>
                             <TextBlock Text="feels" FontSize="60"
                                        Opacity=".5"/>
+                            <!--<iconPacks:PackIconModern Kind="Snowflake" Height="50" Width="50" />-->
                         </StackPanel>
 
                         <Grid x:Name="WeatherView" 
                               VerticalAlignment="Top"
                               HorizontalAlignment="Center"
-                              Margin="24,180,24,0"
+                              Margin="24,60,24,0"
                               Padding="0,0,0,100"
                               Visibility="Collapsed">
 
                             <StackPanel x:Name="WeatherViewContent">
-                                <TextBlock x:Name="Status" 
-                                            Text="Clair" 
-                                            Width="200"
-                                           FontWeight="SemiBold"
-                                            Typography.Capitals="SmallCaps"
-                                            TextAlignment="Center"
-                                            TextWrapping="Wrap"
-                                            FontSize="32"/>
 
                                 <TextBlock x:Name="City" Text="paris"
                                                Typography.Capitals="AllSmallCaps"
-                                               FontWeight="Light"
-                                               FontSize="24"
-                                               Opacity=".5"
+                                               FontWeight="Bold"
+                                               FontSize="26"
+                                               Opacity="1"
                                                TextAlignment="Center"/>
 
+                                <TextBlock x:Name="TimeView"
+                                           Visibility="Collapsed"
+                                           Typography.Capitals="AllSmallCaps"
+                                           Text="Monday 11:35 AM"
+                                           TextAlignment="Center"
+                                           />
+
                                 <StackPanel Orientation="Horizontal"
-                                                HorizontalAlignment="Center">
-                                    
+                                            Margin="0,250,0,0"
+                                            HorizontalAlignment="Center">
+
                                     <TextBlock x:Name="Temperature"
                                                    Text="42°"
-                                                   Margin="12,40,0,0"
-                                                   FontWeight="Bold" 
-                                                   FontSize="90"/>
+                                                   Margin="12,0,0,0"
+                                                   FontWeight="SemiBold" 
+                                                   FontSize="60"/>
                                 </StackPanel>
-                                
+
                                 <TextBlock x:Name="TempUnit" 
                                                Text="celcius"
                                                FontSize="22"
@@ -164,12 +168,20 @@
                                            Opacity=".6"
                                            HorizontalAlignment="Center"/>
 
+                                <TextBlock x:Name="Status" 
+                                           Text="Clair" 
+                                           FontWeight="SemiBold"
+                                            Typography.Capitals="AllSmallCaps"
+                                            TextAlignment="Center"
+                                            TextWrapping="Wrap"
+                                            FontSize="26"/>
 
                                 <StackPanel x:Name="MinMaxTemp"
                                             HorizontalAlignment="Center"
                                             Orientation="Horizontal"
                                             Opacity=".5"
                                             Margin="0,50,0,0">
+
                                     <Grid x:Name="MaxTemp" 
                                                 Margin="0,0,0,0"
                                                 HorizontalAlignment="Center">
@@ -177,10 +189,11 @@
                                             <ColumnDefinition Width="30"/>
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
+
                                         <FontIcon Glyph="&#xE11C;" FontSize="18"/>
                                         <TextBlock x:Name="MaxTempValue" 
-                                                        Text="40" 
-                                                        FontSize="20" 
+                                                   Text="40" 
+                                                   FontSize="20" 
                                                    Grid.Column="1"/>
                                     </Grid>
 
@@ -349,7 +362,7 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Margin="24,0,24,0">
-                        
+
                         <TextBlock x:Uid="EmptyHourlyForecast" 
                                    Text="Hourly Forecast no data to show :("
                                    FontSize="26"
@@ -359,7 +372,7 @@
                     <ListView x:Name="HourlyList"
                               HorizontalAlignment="Stretch"
                               ItemContainerStyle="{StaticResource ListViewItemFill}">
-                        
+
                         <ListView.Header>
                             <controls:ScrollHeader TargetListViewBase="{x:Bind HourlyList}"
                                                    Mode="QuickReturn">
@@ -391,7 +404,7 @@
                                                 </VisualState>
                                             </VisualStateGroup>
                                         </VisualStateManager.VisualStateGroups>
-                                        
+
                                         <StackPanel x:Name="PanelHourlyNavigation"
                                                     Orientation="Horizontal"
                                                     HorizontalAlignment="Left">
@@ -426,7 +439,7 @@
                                 </UserControl>
                             </controls:ScrollHeader>
                         </ListView.Header>
-                        
+
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="forecast:HourDataPoint">
                                 <UserControl>
@@ -530,7 +543,7 @@
                     <ListView x:Name="DailyList"
                               HorizontalAlignment="Stretch"
                               ItemContainerStyle="{StaticResource ListViewItemFill}">
-                        
+
                         <ListView.Header>
                             <controls:ScrollHeader TargetListViewBase="{x:Bind DailyList}"
                                                    Mode="QuickReturn">
@@ -562,7 +575,7 @@
                                                 </VisualState>
                                             </VisualStateGroup>
                                         </VisualStateManager.VisualStateGroups>
-                                        
+
                                         <StackPanel x:Name="PanelDailyNavigation" 
                                                     Margin="0,0,0,0"
                                                     Grid.Row="0"
@@ -600,7 +613,7 @@
                                 </UserControl>
                             </controls:ScrollHeader>
                         </ListView.Header>
-                        
+
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="forecast:DayDataPoint">
                                 <UserControl>

@@ -42,6 +42,7 @@
                                       SelectionChanged="LanguageSelection_SelectionChanged">
                                 <ComboBoxItem Content="English" Tag="EN"/>
                                 <ComboBoxItem Content="Français" Tag="FR"/>
+                                <ComboBoxItem Content="Russian" Tag="RU"/>
                             </ComboBox>
                         </StackPanel>
 

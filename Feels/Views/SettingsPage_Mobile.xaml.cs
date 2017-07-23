@@ -227,6 +227,11 @@ namespace Feels.Views {
                 LanguageSelection.SelectedIndex = 1;
                 return;
             }
+
+            if (culture.CompareInfo.IndexOf(language, "ru", CompareOptions.IgnoreCase) >= 0) {
+                LanguageSelection.SelectedIndex = 2;
+                return;
+            }
         }
 
         private void LanguageSelection_SelectionChanged(object sender, SelectionChangedEventArgs e) {
