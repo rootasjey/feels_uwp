@@ -202,7 +202,7 @@
     <value>mon avis</value>
   </data>
   <data name="FeelsLikeText.Text" xml:space="preserve">
-    <value>température ressentie </value>
+    <value>température ressentie</value>
   </data>
   <data name="FindLocationManually.Text" xml:space="preserve">
     <value>Trouvez votre ville manuelement</value>
@@ -332,5 +332,89 @@
   </data>
   <data name="ItemThreeHours.Content" xml:space="preserve">
     <value>toutes les 3 heures</value>
+  </data>
+  <data name="ButtonPrivacyPolicyGitHub.Content" xml:space="preserve">
+    <value>version GitHub de la politique de confidentialité</value>
+  </data>
+  <data name="ButtonRestart.Content" xml:space="preserve">
+    <value>redémarer</value>
+  </data>
+  <data name="ContactMeLabel.Text" xml:space="preserve">
+    <value>Vous pouvez me contactez à cette adresse: </value>
+  </data>
+  <data name="ContactMeTwitterLabel.Text" xml:space="preserve">
+    <value>Vous pouvez également me contacter sur twitter @jeremiecorpinot</value>
+  </data>
+  <data name="LastTileTaskError.Text" xml:space="preserve">
+    <value>aucune erreur</value>
+  </data>
+  <data name="LastUpdatedTask.Text" xml:space="preserve">
+    <value>jamais lancé</value>
+  </data>
+  <data name="LocationInformationLabel.Text" xml:space="preserve">
+    <value>Information de localisation</value>
+  </data>
+  <data name="LocationLine0.Text" xml:space="preserve">
+    <value>Votre localisation est uniquement utilisée par </value>
+  </data>
+  <data name="LocationLine1.Text" xml:space="preserve">
+    <value>Votre localisation est uniquement utilisée pour définir automatiquement la ville où vous vous situez afin de vous afficher des informations météo pertinentes</value>
+  </data>
+  <data name="LocationLine2.Text" xml:space="preserve">
+    <value>Nous ne sauvegardons pas vos donées de localisation pour une utilisation ultérieure</value>
+  </data>
+  <data name="LocationLine3.Text" xml:space="preserve">
+    <value>Nous n'envoyons aucune données à une tierce-partie, société ou autre entité.</value>
+  </data>
+  <data name="LocationLine4.Text" xml:space="preserve">
+    <value>Vous pouvez vérifiez l'utilisation de vos données par l'application ici: </value>
+  </data>
+  <data name="LocationLine5.Text" xml:space="preserve">
+    <value>code source.</value>
+  </data>
+  <data name="PrivacyPivot.Header" xml:space="preserve">
+    <value>politique de confidentialité</value>
+  </data>
+  <data name="PrivacyPolicyLine0.Text" xml:space="preserve">
+    <value>Vos données personnelles sont importantes pour nous et nous les respectons.</value>
+  </data>
+  <data name="PrivacyPolicyLine1.Text" xml:space="preserve">
+    <value>-Nous ne partageons vos données personnelles avec aucune entité</value>
+  </data>
+  <data name="PrivacyPolicyLine2.Text" xml:space="preserve">
+    <value>-Nous ne stockons aucune information vous concernant</value>
+  </data>
+  <data name="TaskNotWorkingText.Text" xml:space="preserve">
+    <value>si la tâche en arrière-plan ne fonctionne pas, redémarrez-là</value>
+  </data>
+  <data name="CloudCover.Text" xml:space="preserve">
+    <value>couverture</value>
+  </data>
+  <data name="Highest.Text" xml:space="preserve">
+    <value>haute</value>
+  </data>
+  <data name="Humidity.Text" xml:space="preserve">
+    <value>humidité</value>
+  </data>
+  <data name="Lowest.Text" xml:space="preserve">
+    <value>basse</value>
+  </data>
+  <data name="Pressure.Text" xml:space="preserve">
+    <value>pression</value>
+  </data>
+  <data name="Probability.Text" xml:space="preserve">
+    <value>probabilité</value>
+  </data>
+  <data name="Sunrise.Text" xml:space="preserve">
+    <value>levé</value>
+  </data>
+  <data name="Sunset.Text" xml:space="preserve">
+    <value>couché</value>
+  </data>
+  <data name="WindSpeed.Text" xml:space="preserve">
+    <value>vent</value>
+  </data>
+  <data name="UpdateVersion.Text" xml:space="preserve">
+    <value>Mise à jour</value>
   </data>
 </root>

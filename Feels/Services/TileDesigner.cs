@@ -152,8 +152,8 @@ namespace Feels.Services {
 
             string GetDetailedStatus()
             {
-                string formatedText = string.Format("{0} {1} {2} ({3}/{4})", 
-                    location, currentTemperature, forecast.Currently.Summary, maxTemperature, minTemperature);
+                string formatedText = string.Format("{0} {1} ({3}/{4}) {2}", 
+                    location, currentTemperature, minTemperature, maxTemperature, forecast.Currently.Summary);
                 return formatedText;
             }
 
@@ -318,7 +318,7 @@ namespace Feels.Services {
                                         HintTextStacking = AdaptiveSubgroupTextStacking.Center,
                                         Children = {
                                             new AdaptiveText() {
-                                                Text = condition,
+                                                Text = forecast.Currently.Summary,
                                                 HintStyle = AdaptiveTextStyle.Body
                                             },
                                             new AdaptiveText() {

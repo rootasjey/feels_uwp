@@ -1,6 +1,7 @@
 ﻿using DarkSkyApi;
 using DarkSkyApi.Models;
 using Feels.Services;
+using System.Globalization;
 using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
@@ -17,8 +18,31 @@ namespace Feels.Data {
             if (!NetworkInterface.GetIsNetworkAvailable()) { return; }
             if (Client == null) Client = new DarkSkyService(_APIKey);
 
-            Forecast = await Client.GetWeatherDataAsync(lat, lon, Settings.GetUnit());
+            var lang = GetLanguage();
+            var unit = Settings.GetUnit();
 
+            Forecast = await Client.GetWeatherDataAsync(lat, lon, unit, lang);
+
+        }
+
+        Language GetLanguage() {
+            var lang = Settings.GetAppCurrentLanguage();
+
+            var culture = new CultureInfo(lang);
+
+            if (culture.CompareInfo.IndexOf(lang, "fr", CompareOptions.IgnoreCase) >= 0) {
+                return Language.French;
+            }
+
+            if (culture.CompareInfo.IndexOf(lang, "en", CompareOptions.IgnoreCase) >= 0) {
+                return Language.English;
+            }
+
+            if (culture.CompareInfo.IndexOf(lang, "ru", CompareOptions.IgnoreCase) >= 0) {
+                return Language.Russian;
+            }
+
+            return Language.English;
         }
 
         private async Task<string> Fetch(string url) {

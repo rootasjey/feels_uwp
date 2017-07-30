@@ -1,20 +1,43 @@
 ﻿using DarkSkyApi;
 using DarkSkyApi.Models;
 using System;
+using System.Globalization;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Tasks.Services;
 using Windows.ApplicationModel.Background;
 using Windows.Devices.Geolocation;
 using Windows.Services.Maps;
+using Windows.Storage;
 
 namespace Tasks {
-    public sealed class UpdateWeather : IBackgroundTask {
+    public sealed class TileTask : IBackgroundTask {
+        #region variables
         BackgroundTaskDeferral _deferral;
 
         volatile bool _cancelRequested = false;
 
         private const string _APIKey = "57281e87e833689d3150c587198f04c6";
+
+        private static string LanguageKey {
+            get {
+                return "Language";
+            }
+        }
+
+        private static string UnitKey {
+            get {
+                return "Unit";
+            }
+        }
+
+        private static string _TileTaskActivity {
+            get {
+                return "TileUpdaterTaskActivity";
+            }
+        }
+
+        #endregion variables
 
         private void StartTask(IBackgroundTaskInstance taskInstance) {
             _deferral = taskInstance.GetDeferral();
@@ -32,6 +55,7 @@ namespace Tasks {
         /// <param name="reason"></param>
         private void OnCanceled(IBackgroundTaskInstance sender, BackgroundTaskCancellationReason reason) {
             _cancelRequested = true;
+            LogTaskError(reason);
         }
 
         public async void Run(IBackgroundTaskInstance taskInstance) {
@@ -46,15 +70,19 @@ namespace Tasks {
             var forecast = await FetchCurrentWeather(coord.Latitude, coord.Longitude);
             TileDesigner.UpdatePrimary(forecast, city);
 
+            LogTaskActivity();
+
             EndTask();
         }
 
         private async Task<Forecast> FetchCurrentWeather(double lat, double lon) {
             if (!NetworkInterface.GetIsNetworkAvailable()) { return null; }
 
+            var unit = (Unit)Settings.GetUnit();
+            var lang = GetLanguage();
+
             var client = new DarkSkyService(_APIKey);
-            var forecast = await client.GetWeatherDataAsync(lat, lon, Unit.SI);
-            return forecast;
+            return await client.GetWeatherDataAsync(lat, lon, unit, lang);
         }
 
         async Task<Geoposition> GetPosition() {
@@ -84,6 +112,46 @@ namespace Tasks {
             }
 
             return "";
+        }
+
+        Language GetLanguage() {
+            var lang = Settings.GetAppCurrentLanguage();
+
+            var culture = new CultureInfo(lang);
+
+            if (culture.CompareInfo.IndexOf(lang, "fr", CompareOptions.IgnoreCase) >= 0) {
+                return Language.French;
+            }
+
+            if (culture.CompareInfo.IndexOf(lang, "en", CompareOptions.IgnoreCase) >= 0) {
+                return Language.English;
+            }
+
+            if (culture.CompareInfo.IndexOf(lang, "ru", CompareOptions.IgnoreCase) >= 0) {
+                return Language.Russian;
+            }
+
+            return Language.English;
+        }
+
+        private void LogTaskActivity() {
+            var settingsValues = ApplicationData.Current.LocalSettings.Values;
+            var taskActivity = new ApplicationDataCompositeValue {
+                ["LastRun"] = DateTime.Now.ToLocalTime().ToString(),
+                ["Exception"] = null
+            };
+
+            settingsValues[_TileTaskActivity] = taskActivity;
+        }
+
+        private void LogTaskError(BackgroundTaskCancellationReason reason) {
+            var settingsValues = ApplicationData.Current.LocalSettings.Values;
+            var taskActivity = new ApplicationDataCompositeValue {
+                ["LastRun"] = DateTime.Now.ToLocalTime().ToString(),
+                ["Exception"] = reason.ToString()
+            };
+
+            settingsValues[_TileTaskActivity] = taskActivity;
         }
     }
 }

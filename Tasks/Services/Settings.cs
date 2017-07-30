@@ -5,8 +5,8 @@ using Windows.Devices.Geolocation;
 using DarkSkyApi;
 using Windows.ApplicationModel;
 
-namespace Feels.Services {
-    public class Settings {
+namespace Tasks.Services {
+    public sealed class Settings {
         #region keys
         private static string ThemeKey {
             get {
@@ -86,12 +86,7 @@ namespace Feels.Services {
         #endregion language
 
         #region units
-        public static void SaveUnit(Unit unit) {
-            var settingsValues = ApplicationData.Current.LocalSettings.Values;
-            settingsValues[UnitKey] = unit.ToString();
-        }
-
-        public static Unit GetUnit() {
+        public static object GetUnit() {
             var settingsValues = ApplicationData.Current.LocalSettings.Values;
 
             if (settingsValues.ContainsKey(UnitKey)) {
@@ -162,7 +157,6 @@ namespace Feels.Services {
             if ((string)previousTheme == theme.ToString()) return;
 
             localSettings.Values[ThemeKey] = theme.ToString();
-            App.UpdateAppTheme();
         }
         #endregion theme
 
@@ -209,10 +203,10 @@ namespace Feels.Services {
             if (settingsValues.ContainsKey(AppVersionKey)) {
                 string savedVersion = (string)settingsValues[AppVersionKey];
 
+
                 if (savedVersion == currentVersion) {
                     isNewUpdatedLaunch = false;
                 } else { settingsValues[AppVersionKey] = currentVersion; }
-
             } else { settingsValues[AppVersionKey] = currentVersion; }
 
             return isNewUpdatedLaunch;

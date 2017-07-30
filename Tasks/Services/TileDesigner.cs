@@ -28,33 +28,6 @@ namespace Tasks.Services {
         // ------------------
         // EXTRACTION METHODS
         // ------------------
-        static async Task<string> GetLocation(BasicGeoposition position) {
-            //MapService.ServiceToken = "AEKtGCjDSo2UnEvMVxOh~iS-cB5ZHhjZiIJ9RgGtVgw~AkzS_JYlIhjskoO8ziK63GAJmtcF7U_t4Gni6nBb-MncX6-iw8ldj_NgnmUIzMPY";
-
-            //Geopoint pointToReverseGeocode = new Geopoint(position);
-
-            // Reverse geocode the specified geographic location.
-            //MapLocationFinderResult result =
-            //    await MapLocationFinder.FindLocationsAtAsync(pointToReverseGeocode);
-
-            //// If the query returns results, display the name of the town
-            //// contained in the address of the first result.
-            //if (result.Status == MapLocationFinderStatus.Success && result.Locations.Count != 0) {
-            //    return result.Locations[0].Address.Town;
-            //}
-
-            //var r = new ReverseGeocodeRequest() {
-            //    BingMapsKey = BingMapsKey,
-            //    Point = new Coordinate(position.Latitude, position.Longitude),
-            //    IncludeNeighborhood = true
-            //};
-
-            //var response = await ServiceManager.GetResponseAsync(r);
-            
-
-            return "";
-        }
-
         static string GetTemperature(float temperature) {
             return ((int)temperature).ToString() + "°";
         }
@@ -164,8 +137,8 @@ namespace Tasks.Services {
 
             string GetDetailedStatus()
             {
-                string formatedText = string.Format("{0} {1} {2} ({3}/{4})",
-                    location, currentTemperature, forecast.Currently.Summary, maxTemperature, minTemperature);
+                string formatedText = string.Format("{0} {1} ({3}/{4}) {2}",
+                    location, currentTemperature, minTemperature, maxTemperature, forecast.Currently.Summary);
                 return formatedText;
             }
 
@@ -330,7 +303,7 @@ namespace Tasks.Services {
                                         HintTextStacking = AdaptiveSubgroupTextStacking.Center,
                                         Children = {
                                             new AdaptiveText() {
-                                                Text = condition,
+                                                Text = forecast.Currently.Summary,
                                                 HintStyle = AdaptiveTextStyle.Body
                                             },
                                             new AdaptiveText() {
