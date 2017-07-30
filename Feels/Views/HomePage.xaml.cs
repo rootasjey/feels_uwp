@@ -3,7 +3,6 @@ using Feels.Services;
 using Microsoft.Toolkit.Uwp.UI.Animations;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Numerics;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
@@ -621,6 +620,8 @@ namespace Feels.Views {
 
         private async void ShowLastUpdateChangelog() {
             PagePivot.IsEnabled = false;
+            AppBar.IsEnabled = false;
+
             await UpdateChangeLogFlyout.Scale(.9f, .9f, 0, 0, 0).Fade(0).StartAsync();
             UpdateChangeLogFlyout.Visibility = Visibility.Visible;
 
@@ -638,7 +639,9 @@ namespace Feels.Views {
             await UpdateChangeLogFlyout.Scale(.9f, .9f, x, y).Fade(0).StartAsync();
             UpdateChangeLogFlyout.Visibility = Visibility.Collapsed;
             PagePivot.Blur(0).Start();
+
             PagePivot.IsEnabled = true;
+            AppBar.IsEnabled = true;
         }
 
         #endregion update changelog

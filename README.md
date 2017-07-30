@@ -2,7 +2,7 @@
 Minimalistic weather app
 
 ## screenshot
-<img src="./cloudy.gif" height="400" alt="cloudy weather animation" style="display: inline-block;"/>
+<img src="./home.png" height="400" alt="cloudy weather animation" style="display: inline-block;"/>
 
 <img src="./hourly.png"  height="400" alt="hourly weather" style="display: inline-block;" />
 
@@ -53,7 +53,6 @@ You can contribute to improve this project by:
 ## todo
 
 * Lockscreen background
-* Add weather animations
 * Add city manually
 
 ## platforms
