@@ -94,6 +94,7 @@ namespace Feels.Views {
             if (toggle.IsOn) {
                 BackgroundTasks.RegisterTileTask(GetTileIntervalUpdate());
                 ShowTileTaskActivity();
+                UpdateTileTaskActivityText();
             } else {
                 BackgroundTasks.UnregisterTileTask();
                 HideTileTaskAcitvity();
@@ -150,11 +151,11 @@ namespace Feels.Views {
             if (activity == null) return;
 
             var message = _ResourcesLoader.GetString("TileLastRun");
-
-            LastUpdatedTask.Text = message + activity["DateTime"];
+            LastUpdatedTask.Text = message + activity["LastRun"];
 
             if (activity["Exception"] != null) {
-                LastTileTaskError.Text = activity["Exception"].ToString();
+                var reason = (string)activity["Exception"];
+                LastTileTaskError.Text = reason;
             }
         }
         #endregion tile task
@@ -244,6 +245,7 @@ namespace Feels.Views {
 
             App.UpdateLanguage();
             //ToastLanguageUpdated();
+            AutoRefreshDataOnNextNavigation();
 
             void ToastLanguageUpdated()
             {
@@ -307,19 +309,13 @@ namespace Feels.Views {
         #region temperature unit
         private void UnitsCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var selectedUnit = (WeatherUnit)e.AddedItems[0];
-
             var unit = Settings.GetUnit();
 
             if (selectedUnit.Value == unit) return;
 
             Settings.SaveUnit(selectedUnit.Value);
 
-            AutoRefreshDataOnNextNavigation();
-
-            void AutoRefreshDataOnNextNavigation()
-            {
-                HomePage._ForceDataRefresh = true;
-            }            
+            AutoRefreshDataOnNextNavigation();                      
         }
 
         private void UnitsCombo_Loaded(object sender, RoutedEventArgs e) {
@@ -336,5 +332,8 @@ namespace Feels.Views {
         }
         #endregion temperature unit
 
+        void AutoRefreshDataOnNextNavigation() {
+            HomePage._ForceDataRefresh = true;
+        }
     }
 }

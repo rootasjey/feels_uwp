@@ -105,6 +105,7 @@
     <Compile Include="Composition\ImageLoader.cs" />
     <Compile Include="Composition\ManagedSurface.cs" />
     <Compile Include="Composition\TextDrawer.cs" />
+    <Compile Include="Converters\LocalizedDay.cs" />
     <Compile Include="Converters\SimpleTemperature.cs" />
     <Compile Include="Converters\TimeParser.cs" />
     <Compile Include="Converters\WeatherIcon.cs" />
@@ -153,12 +154,17 @@
     <Content Include="Assets\Icons\moon.png" />
     <Content Include="Assets\Icons\partycloudy_day.png" />
     <Content Include="Assets\Icons\partycloudy_night.png" />
+    <Content Include="Assets\Icons\precip_proba.png" />
+    <Content Include="Assets\Icons\pressure.png" />
     <Content Include="Assets\Icons\rain.png" />
     <Content Include="Assets\Icons\sleet.png" />
     <Content Include="Assets\Icons\snow.png" />
     <Content Include="Assets\Icons\sun.png" />
+    <Content Include="Assets\Icons\sunrise.png" />
+    <Content Include="Assets\Icons\sunset.png" />
     <Content Include="Assets\Icons\thermo_down.png" />
     <Content Include="Assets\Icons\thermo_up.png" />
+    <Content Include="Assets\Icons\uv.png" />
     <Content Include="Assets\Icons\wind.png" />
     <Content Include="Assets\Icons\wind0.png" />
     <Content Include="Assets\LargeTile.scale-100.png" />

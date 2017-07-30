@@ -345,4 +345,76 @@
   <data name="UnitsSubLabel.Text" xml:space="preserve">
     <value>choose temperature units</value>
   </data>
+  <data name="ButtonPrivacyPolicyGitHub.Content" xml:space="preserve">
+    <value>privacy policy GitHub version</value>
+  </data>
+  <data name="ContactMeLabel.Text" xml:space="preserve">
+    <value>You can contact me by email at this address:</value>
+  </data>
+  <data name="ContactMeTwitterLabel.Text" xml:space="preserve">
+    <value>You can also contact me on twitter @jeremiecorpinot</value>
+  </data>
+  <data name="LocationInformationLabel.Text" xml:space="preserve">
+    <value>Location Information</value>
+  </data>
+  <data name="LocationLine0.Text" xml:space="preserve">
+    <value>Your location information is only used by the</value>
+  </data>
+  <data name="LocationLine1.Text" xml:space="preserve">
+    <value>Your location data is only used to define automatically the city where you are in order to show you relevant weather information.</value>
+  </data>
+  <data name="LocationLine2.Text" xml:space="preserve">
+    <value>We don't collect or save data for later use.</value>
+  </data>
+  <data name="LocationLine3.Text" xml:space="preserve">
+    <value>We don't send your data to any other third-party entity, firm, service.</value>
+  </data>
+  <data name="LocationLine4.Text" xml:space="preserve">
+    <value>You can verify what we do with your data by visiting the</value>
+  </data>
+  <data name="LocationLine5.Text" xml:space="preserve">
+    <value>source code.</value>
+  </data>
+  <data name="PrivacyPivot.Header" xml:space="preserve">
+    <value>privacy policy</value>
+  </data>
+  <data name="PrivacyPolicyLine0.Text" xml:space="preserve">
+    <value>Your privacy is important to us and we respect it.</value>
+  </data>
+  <data name="PrivacyPolicyLine1.Text" xml:space="preserve">
+    <value>-We don't share your personal information with anyone</value>
+  </data>
+  <data name="PrivacyPolicyLine2.Text" xml:space="preserve">
+    <value>-We don't store your personal information at all</value>
+  </data>
+  <data name="CloudCover.Text" xml:space="preserve">
+    <value>cloud cover</value>
+  </data>
+  <data name="Highest.Text" xml:space="preserve">
+    <value>highest</value>
+  </data>
+  <data name="Humidity.Text" xml:space="preserve">
+    <value>humidity</value>
+  </data>
+  <data name="Lowest.Text" xml:space="preserve">
+    <value>lowest</value>
+  </data>
+  <data name="Pressure.Text" xml:space="preserve">
+    <value>pressure</value>
+  </data>
+  <data name="Probability.Text" xml:space="preserve">
+    <value>probability</value>
+  </data>
+  <data name="Sunrise.Text" xml:space="preserve">
+    <value>sunrise</value>
+  </data>
+  <data name="Sunset.Text" xml:space="preserve">
+    <value>sunset</value>
+  </data>
+  <data name="WindSpeed.Text" xml:space="preserve">
+    <value>wind speed</value>
+  </data>
+  <data name="UpdateVersion.Text" xml:space="preserve">
+    <value>Update</value>
+  </data>
 </root>

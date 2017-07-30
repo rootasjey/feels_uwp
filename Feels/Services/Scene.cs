@@ -322,7 +322,7 @@ namespace Feels.Services {
                 Name = "PrimaryConditionScene",
                 VerticalAlignment = VerticalAlignment.Top,
                 HorizontalAlignment = HorizontalAlignment.Center,
-                Margin = new Thickness(0, 150, 0, 0)
+                Margin = new Thickness(0, 200, 0, 0)
             };
 
 
@@ -389,116 +389,6 @@ namespace Feels.Services {
             //return CreateFogIcon();
         }
 
-        static Grid CreateMoon(string condition) {
-            var height = 70;
-            var width = height;
-
-            var grid = new Grid() {
-                Name = "ConditionIcon",
-                Height = height,
-                Width = width,
-                Margin = new Thickness(0, 20, 0, 0),
-                VerticalAlignment = VerticalAlignment.Top
-            };
-
-            var compositor = ElementCompositionPreview.GetElementVisual(grid).Compositor;
-            var container = compositor.CreateContainerVisual();
-            container.Size = new Vector2(height, width);
-
-            SpriteVisual visual;
-
-            if (ImageLoader.Instance == null)
-                ImageLoader.Initialize(compositor);
-
-            LoadImage();
-            AddRotateAnimation();
-            AddLight();
-            
-            return grid;
-
-            void LoadImage()
-            {
-                ManagedSurface surface = ImageLoader.Instance.LoadFromUri(new Uri("ms-appx:///Assets/Icons/moon.png"));
-
-                visual = compositor.CreateSpriteVisual();
-                visual.Brush = compositor.CreateSurfaceBrush(surface.Surface);
-                visual.Size = new Vector2(70, 70);
-                container.Children.InsertAtTop(visual);
-                container.Opacity = 1f;
-
-                ElementCompositionPreview.SetElementChildVisual(grid, container);
-            }
-
-            void AddRotateAnimation()
-            {
-                var animation = compositor.CreateScalarKeyFrameAnimation();
-                animation.InsertKeyFrame(0f, 0f);
-                animation.InsertKeyFrame(1f, -3f);
-                animation.Duration = TimeSpan.FromSeconds(20);
-                animation.DelayTime = TimeSpan.FromSeconds(5);
-                animation.IterationBehavior = AnimationIterationBehavior.Forever;
-                animation.Direction = AnimationDirection.Alternate;
-
-                visual.RotationAxis = new Vector3(0, 0, 1);
-                visual.CenterPoint = new Vector3(height / 2, width / 2, 0);
-                visual.StartAnimation("RotationAngle", animation);
-            }
-
-            void AddLight()
-            {
-                var pointLight1 = compositor.CreatePointLight();
-                pointLight1.CoordinateSpace = container;
-                pointLight1.Color = Color.FromArgb(255, 247, 202, 24);
-                pointLight1.Targets.Add(container);
-
-                _LightsList.Add(pointLight1);
-            }
-        }
-
-        static Grid CreatePrimaryCloud() {
-            var height = 70;
-            var width = height;
-
-            var grid = new Grid() {
-                Name = "ConditionIcon",
-                Height = height,
-                Width = width,
-                Margin = new Thickness(0, 20, 0, 0),
-                VerticalAlignment = VerticalAlignment.Top
-            };
-
-            var compositor = ElementCompositionPreview.GetElementVisual(grid).Compositor;
-            var container = compositor.CreateContainerVisual();
-            container.Size = new Vector2(height, width);
-
-            if (ImageLoader.Instance == null)
-                ImageLoader.Initialize(compositor);
-
-            ManagedSurface surface = ImageLoader.Instance.LoadFromUri(new Uri("ms-appx:///Assets/Icons/cloudy.png"));
-
-            var visual = compositor.CreateSpriteVisual();
-            visual.Brush = compositor.CreateSurfaceBrush(surface.Surface);
-            visual.Size = new Vector2(70, 70);
-            container.Children.InsertAtTop(visual);
-            container.Opacity = 1f;
-
-            ElementCompositionPreview.SetElementChildVisual(grid, container);
-
-            // ------------
-            // ANIMATION //
-            // ------------
-            var animation = compositor.CreateScalarKeyFrameAnimation();
-            animation.InsertKeyFrame(0f, -5f);
-            animation.InsertKeyFrame(1f, 5f);
-            animation.Duration = TimeSpan.FromSeconds(5);
-            animation.DelayTime = TimeSpan.FromSeconds(5);
-            animation.IterationBehavior = AnimationIterationBehavior.Forever;
-            animation.Direction = AnimationDirection.Alternate;
-            visual.StartAnimation("Offset.x", animation);
-
-            return grid;
-        }
-        
         static Grid AddAnimations(Grid scene, string condition) {
             var animationsScene = new Grid();
 
@@ -745,7 +635,7 @@ namespace Feels.Services {
             // ANIMATION //
             // ------------
             var animation = compositor.CreateScalarKeyFrameAnimation();
-            animation.InsertKeyFrame(0f, .5f);
+            animation.InsertKeyFrame(0f, 1f);
             animation.InsertKeyFrame(1f, 0f);
             animation.Duration = TimeSpan.FromSeconds(duration);
             animation.DelayTime = TimeSpan.FromSeconds(duration / 2);
@@ -890,7 +780,6 @@ namespace Feels.Services {
                 Kind = PackIconModernKind.Cloud
             };
         }
-
 
         static Canvas CreateClearDayIcon() {
             var sunRadius = 100;

@@ -163,18 +163,8 @@ namespace Feels {
         }
 
         public static void UpdateLanguage() {
-            var lang = Settings.GetLanguage();
+            var lang = Settings.GetAppCurrentLanguage();
             ApplicationLanguages.PrimaryLanguageOverride = lang;
-
-            var culture = new CultureInfo(lang);
-            //if (culture.CompareInfo.IndexOf(lang, "fr", CompareOptions.IgnoreCase) >= 0) {
-            //    DataSource = new Evene();
-            //    return;
-            //}
-            //if (culture.CompareInfo.IndexOf(lang, "en", CompareOptions.IgnoreCase) >= 0) {
-            //    DataSource = new Quotesondesign();
-            //    return;
-            //}
         }
     }
 }

@@ -107,8 +107,9 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Services\Settings.cs" />
     <Compile Include="Services\TileDesigner.cs" />
-    <Compile Include="UpdateWeather.cs" />
+    <Compile Include="TileTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

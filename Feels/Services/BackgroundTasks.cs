@@ -7,13 +7,13 @@ namespace Feels.Services {
         #region variables
         private static string _TileTaskName {
             get {
-                return "UpdateWeather";
+                return "TileTask";
             }
         }
 
         private static string _TileTaskEntryPoint {
             get {
-                return "Tasks.UpdateWeather";
+                return "Tasks.TileTask";
             }
         }
 
@@ -29,9 +29,15 @@ namespace Feels.Services {
             }
         }
 
-        private static string TileTaskInterval {
+        private static string _TileTaskInterval {
             get {
                 return "TileTaskInterval";
+            }
+        }
+
+        private static string _TileTaskActivity {
+            get {
+                return "TileUpdaterTaskActivity";
             }
         }
         #endregion variables
@@ -67,13 +73,12 @@ namespace Feels.Services {
 
         public static uint GetTileTaskInterval() {
             var settingsValues = ApplicationData.Current.LocalSettings.Values;
-            return settingsValues.ContainsKey(TileTaskInterval) ? (uint)settingsValues[TileTaskInterval] : 60;
+            return settingsValues.ContainsKey(_TileTaskInterval) ? (uint)settingsValues[_TileTaskInterval] : 60;
         }
 
         public static ApplicationDataCompositeValue GetTileTaskActivity() {
-            var key = "TileUpdaterTask" + "Activity";
             var settingsValues = ApplicationData.Current.LocalSettings.Values;
-            return settingsValues.ContainsKey(key) ? (ApplicationDataCompositeValue)settingsValues[key] : null;
+            return settingsValues.ContainsKey(_TileTaskActivity) ? (ApplicationDataCompositeValue)settingsValues[_TileTaskActivity] : null;
         }
 
         public static bool IsTileTaskActivated() {

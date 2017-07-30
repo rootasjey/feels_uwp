@@ -3,17 +3,21 @@ using Feels.Services;
 using Microsoft.Toolkit.Uwp.UI.Animations;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Numerics;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Devices.Geolocation;
 using Windows.Services.Maps;
 using Windows.System;
 using Windows.UI;
+using Windows.UI.Composition;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 
@@ -22,26 +26,32 @@ namespace Feels.Views {
         #region variables
         private SourceModel PageDataSource { get; set; }
 
-        CoreDispatcher UIDispatcher { get; set; }
+        CoreDispatcher _UIDispatcher { get; set; }
 
         private int _AnimationDelayHourForcast { get; set; }
 
         private int _AnimationDelayDailyForecast { get; set; } 
 
-        static DateTime LastFetchedTime { get; set; }
+        static DateTime _LastFetchedTime { get; set; }
 
-        static BasicGeoposition LastPosition { get; set; }
+        static BasicGeoposition _LastPosition { get; set; }
 
         public static bool _ForceDataRefresh { get; set; }
+
+        // Composition
+        private Compositor _compositor { get; set; }
+        private Visual _EarthVisual { get; set; }
+        private Visual _PinEarthVisual { get; set; }
         #endregion variables
 
         public HomePage() {
             InitializeComponent();
             InitializeTitleBar();
             InitializeVariables();
+            InitialzeEvents();
             InitializePageData();
 
-            //ShowUpdateChangelogIfIsNewLaunch();
+            ShowUpdateChangelog();
         }
 
         #region titlebar
@@ -86,24 +96,9 @@ namespace Feels.Views {
         #endregion titlebar
 
         #region data
-        async Task<bool> GetLocationPermission() {
-            var accessStatus = await Geolocator.RequestAccessAsync();
-
-            switch (accessStatus) {
-                case GeolocationAccessStatus.Unspecified:
-                    return false;
-                case GeolocationAccessStatus.Allowed:
-                    return true;
-                case GeolocationAccessStatus.Denied:
-                    return false;
-                default:
-                    return false;
-            }
-        }
-
         private void InitializeVariables() {
             PageDataSource = App.DataSource;
-            UIDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
+            _UIDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
         }
 
         async void InitializePageData() {
@@ -112,7 +107,7 @@ namespace Feels.Views {
 
                 HideSplashView();
                 HideLoadingView();
-                GetCurrentCity(LastPosition);
+                GetCurrentCity(_LastPosition);
                 PopulateView();
             }
 
@@ -121,7 +116,6 @@ namespace Feels.Views {
             }
 
             CleanTheater();
-
             FetchNewData();
 
             async void FetchNewData()
@@ -142,7 +136,16 @@ namespace Feels.Views {
             }
         }
 
-        
+        void InitialzeEvents() {
+            Application.Current.Resuming += App_Resuming;
+        }
+
+        private void App_Resuming(object sender, object e) {
+            var task = _UIDispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                InitializePageData();
+            });
+        }
+
         void PopulateView() {
             PopulateFirstPage();
             BindHourlyListData();
@@ -151,65 +154,11 @@ namespace Feels.Views {
             ShowBetaMessageAsync();
         }
 
-        async void GetCurrentCity(BasicGeoposition position) {
-            Geopoint pointToReverseGeocode = new Geopoint(position);
-
-            // Reverse geocode the specified geographic location.
-            MapLocationFinderResult result =
-                await MapLocationFinder.FindLocationsAtAsync(pointToReverseGeocode);
-
-            // If the query returns results, display the name of the town
-            // contained in the address of the first result.
-            if (result.Status == MapLocationFinderStatus.Success) {
-                if (result.Locations.Count == 0) return;
-                City.Text = result.Locations[0].Address.Town;
-            }
-        }
-
-        async Task FetchCurrentLocation(BasicGeoposition basicPosition) {
-            await PageDataSource.FetchCurrentWeather(basicPosition.Latitude, basicPosition.Longitude);
-
-            if (PageDataSource.Forecast == null) {
-                SafeExit();
-                return;
-            }
-
-            NowPivot.DataContext = PageDataSource.Forecast.Currently;            
-        }
-
-        async Task<BasicGeoposition> GetPosition() {
-            var locator = new Geolocator();
-            var positionToReturn = new BasicGeoposition();
-
-            try {
-                // NOTE: sometimes GetPositionAsync() is stuck in a loop
-                // set a timeout and try a different way (e.g. cached location)
-                var position = await locator.GetGeopositionAsync(
-                    TimeSpan.FromMinutes(5), TimeSpan.FromSeconds(10));
-
-                if (position == null) {
-                    positionToReturn = Settings.GetLastSavedPosition();
-                } else {
-                    positionToReturn = position.Coordinate.Point.Position;
-                    Settings.SavePosition(positionToReturn);
-                }
-
-                LastFetchedTime = DateTime.Now;
-                LastPosition = positionToReturn;
-
-                return positionToReturn;
-
-            } catch {
-                return positionToReturn;
-            }
-        }
-
         void SafeExit() {
             ShowEmptyView();
         }
 
         void ShowEmptyView() {
-            //SplashView.Visibility = Visibility.Visible;
             ShowNoAccessView();
         }
 
@@ -221,7 +170,7 @@ namespace Feels.Views {
                 return true;
             }
 
-            if (DateTime.Now.Hour - LastFetchedTime.Hour > 0) {
+            if (DateTime.Now.Hour - _LastFetchedTime.Hour > 0) {
                 return true;
             }
 
@@ -232,8 +181,8 @@ namespace Feels.Views {
             var currLat = (int)coord.Latitude;
             var currLon = (int)coord.Longitude;
 
-            var prevLat = (int)LastPosition.Latitude;
-            var prevLon = (int)LastPosition.Longitude;
+            var prevLat = (int)_LastPosition.Latitude;
+            var prevLon = (int)_LastPosition.Longitude;
 
             if (currLat != prevLat || currLon != prevLon) {
                 return true;
@@ -247,7 +196,8 @@ namespace Feels.Views {
 
             WeatherView.Visibility = Visibility.Visible;
 
-            var currentWeather = PageDataSource.Forecast.Currently;
+            var weatherCurrent = PageDataSource.Forecast.Currently;
+            var weatherToday = PageDataSource.Forecast.Daily.Days[0];
 
             await AnimateSlideIn(WeatherViewContent);
             AnimateTemperature();
@@ -259,7 +209,7 @@ namespace Feels.Views {
 
             async void AnimateTemperature()
             {
-                int temperature = (int)currentWeather.Temperature;
+                int temperature = (int)weatherCurrent.Temperature;
 
                 var max = temperature;
                 var curr = 0;
@@ -273,7 +223,7 @@ namespace Feels.Views {
                         div = Math.Abs(max - curr) == 0 ? 1 : Math.Abs(max - curr);
                         delay = 1000 / div;
 
-                        await UIDispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                        await _UIDispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
                             Temperature.Text = string.Format("{0}°", curr);
                         });
                     });
@@ -282,11 +232,18 @@ namespace Feels.Views {
 
             void FillInData()
             {
-                Status.Text = currentWeather.Summary;
-                FeelsLike.Text = string.Format("{0} {1}", "Feels more like ", currentWeather.ApparentTemperature);
-                PrecipValue.Text = string.Format("{0}%", currentWeather.PrecipitationProbability * 100);
-                //SunriseBlock.Text = currentWeather.Sunrise;
-                //SunsetBlock.Text = currentWeather.Sunset;
+                Status.Text = weatherCurrent.Summary;
+                FeelsLike.Text += string.Format(" {0}°{1}", weatherCurrent.ApparentTemperature, Settings.GetTemperatureUnit());
+                PrecipProbaValue.Text = string.Format("{0}%", weatherToday.PrecipitationProbability * 100);
+                HumidityValue.Text = string.Format("{0}%", weatherCurrent.Humidity * 100);
+                SunriseTime.Text = weatherToday.SunriseTime.ToLocalTime().ToString("hh:mm");
+                SunsetTime.Text = weatherToday.SunsetTime.ToLocalTime().ToString("hh:mm");
+
+                WindSpeed.Text = string.Format("{0}{1}", weatherCurrent.WindSpeed, GetWindSpeedUnits());
+                CloudCover.Text = string.Format("{0}%", weatherCurrent.CloudCover * 100);
+                Pressure.Text = string.Format("{0}{1}", weatherCurrent.Pressure, GetPressureUnits());
+
+                LastTimeUpdate.Text = DateTime.Now.ToLocalTime().ToString("dddd HH:mm");
 
                 if (PageDataSource.Forecast.Daily.Days == null ||
                     PageDataSource.Forecast.Daily.Days.Count == 0) return;
@@ -298,19 +255,6 @@ namespace Feels.Views {
                 MaxTempValue.Text = maxTemp.ToString();
                 MinTempValue.Text = minTemp.ToString();
             }
-        }
-
-        void ShowLoadingView() {
-            SplashView.Visibility = Visibility.Collapsed;
-            WeatherView.Visibility = Visibility.Collapsed;
-            LocationDisabledMessage.Visibility = Visibility.Collapsed;
-
-            AnimateSlideIn(LoadingView);
-        }
-
-        void HideLoadingView() {
-            LoadingView.Visibility = Visibility.Collapsed;
-            ResetOpacity(LoadingView);
         }
 
         void HideSplashView() {
@@ -343,6 +287,184 @@ namespace Feels.Views {
         }
         #endregion data
 
+        #region location
+        async Task<bool> GetLocationPermission() {
+            var accessStatus = await Geolocator.RequestAccessAsync();
+
+            switch (accessStatus) {
+                case GeolocationAccessStatus.Unspecified:
+                    return false;
+                case GeolocationAccessStatus.Allowed:
+                    return true;
+                case GeolocationAccessStatus.Denied:
+                    return false;
+                default:
+                    return false;
+            }
+        }
+
+        async void GetCurrentCity(BasicGeoposition position) {
+            Geopoint pointToReverseGeocode = new Geopoint(position);
+
+            // Reverse geocode the specified geographic location.
+            MapLocationFinderResult result =
+                await MapLocationFinder.FindLocationsAtAsync(pointToReverseGeocode);
+
+            // If the query returns results, display the name of the town
+            // contained in the address of the first result.
+            if (result.Status == MapLocationFinderStatus.Success) {
+                if (result.Locations.Count == 0) return;
+                City.Text = result.Locations[0].Address.Town;
+            }
+        }
+
+        async Task FetchCurrentLocation(BasicGeoposition basicPosition) {
+            await PageDataSource.FetchCurrentWeather(basicPosition.Latitude, basicPosition.Longitude);
+
+            if (PageDataSource.Forecast == null) {
+                SafeExit();
+                return;
+            }
+
+            NowPivot.DataContext = PageDataSource.Forecast.Currently;
+        }
+
+        async Task<BasicGeoposition> GetPosition() {
+            var locator = new Geolocator();
+            var positionToReturn = new BasicGeoposition();
+
+            try {
+                // NOTE: sometimes GetPositionAsync() is stuck in a loop
+                // set a timeout and try a different way (e.g. cached location)
+                var position = await locator.GetGeopositionAsync(
+                    TimeSpan.FromMinutes(5), TimeSpan.FromSeconds(10));
+
+                if (position == null) {
+                    positionToReturn = Settings.GetLastSavedPosition();
+                } else {
+                    positionToReturn = position.Coordinate.Point.Position;
+                    Settings.SavePosition(positionToReturn);
+                }
+
+                _LastFetchedTime = DateTime.Now;
+                _LastPosition = positionToReturn;
+
+                return positionToReturn;
+
+            } catch {
+                return positionToReturn;
+            }
+        }
+
+        #endregion location
+
+        #region units
+        string GetWindSpeedUnits() {
+            var unit = Settings.GetUnit();
+
+            switch (unit) {
+                case DarkSkyApi.Unit.US:
+                    return "miles/h";
+                case DarkSkyApi.Unit.SI:
+                    return "m/s";
+                case DarkSkyApi.Unit.CA:
+                    return "km/h";
+                case DarkSkyApi.Unit.UK:
+                    return "miles/h";
+                case DarkSkyApi.Unit.UK2:
+                    return "miles/h";
+                case DarkSkyApi.Unit.Auto:
+                    return "m/s";
+                default:
+                    return "miles/h";
+            }
+        }
+
+        string GetPressureUnits() {
+            var unit = Settings.GetUnit();
+
+            switch (unit) {
+                case DarkSkyApi.Unit.US:
+                case DarkSkyApi.Unit.CA:
+                case DarkSkyApi.Unit.UK:
+                case DarkSkyApi.Unit.UK2:
+                case DarkSkyApi.Unit.Auto:
+                    return "millibars";
+                case DarkSkyApi.Unit.SI:
+                    return "hPa";
+                default:
+                    return "millibars";
+            }
+        }
+        #endregion units
+
+        #region loading view
+        void ShowLoadingView() {
+            SplashView.Visibility = Visibility.Collapsed;
+            WeatherView.Visibility = Visibility.Collapsed;
+            LocationDisabledMessage.Visibility = Visibility.Collapsed;
+
+            StartEarthRotation();
+            StartPinEarthOffsetAnimation();
+
+            AnimateSlideIn(LoadingView);
+        }
+
+        void HideLoadingView() {
+            LoadingView.Visibility = Visibility.Collapsed;
+            ResetOpacity(LoadingView);
+
+            StopEarthRotation();
+            StopPinEarthAnimation();
+        }
+
+        void StartEarthRotation() {
+            var visual = ElementCompositionPreview.GetElementVisual(EarthIcon);
+            var compositor = visual.Compositor;
+
+            var animationRotate = compositor.CreateScalarKeyFrameAnimation();
+            animationRotate.InsertKeyFrame(0f, 0f);
+            animationRotate.InsertKeyFrame(1f, 20f);
+            animationRotate.Duration = TimeSpan.FromSeconds(10);
+            animationRotate.IterationBehavior = AnimationIterationBehavior.Forever;
+            animationRotate.Direction = AnimationDirection.Alternate;
+
+            visual.RotationAxis = new Vector3(0, 0, 1);
+            visual.CenterPoint = new Vector3((float)EarthIcon.Height / 2, (float)EarthIcon.Width / 2, 0);
+
+            visual.StartAnimation("RotationAngle", animationRotate);
+
+            _EarthVisual = visual;
+            _compositor = compositor;
+        }
+
+        void StopEarthRotation() {
+            _EarthVisual?.StopAnimation("RotationAngle");
+        }
+
+        void StartPinEarthOffsetAnimation() {
+            var visual = ElementCompositionPreview.GetElementVisual(PinEarthIcon);
+            ElementCompositionPreview.SetIsTranslationEnabled(PinEarthIcon, true);
+
+            var animationOffset = _compositor.CreateScalarKeyFrameAnimation();
+            animationOffset.InsertKeyFrame(0f, 0);
+            animationOffset.InsertKeyFrame(1f, 20);
+            animationOffset.Duration = TimeSpan.FromSeconds(3);
+            animationOffset.Direction = AnimationDirection.Alternate;
+            animationOffset.IterationBehavior = AnimationIterationBehavior.Forever;
+
+            visual.StartAnimation("Translation.y", animationOffset);
+
+            _PinEarthVisual = visual;
+        }
+
+        void StopPinEarthAnimation() {
+            _PinEarthVisual?.StopAnimation("Translation.y");
+        }
+
+        #endregion loading view
+
+
         #region scene theater
         async void DrawScene() {
             var scene = Scene.CreateNew(
@@ -354,21 +476,6 @@ namespace Feels.Views {
             await scene.Fade(0, 0).Offset(0, 200, 0).StartAsync();
             Theater.Fade(1, 1000).Start();
             scene.Fade(1, 1000).Offset(0, 0, 1000).Start();
-
-            //AddLightingEffects(scene);
-        }
-
-        void AddLightingEffects(Grid scene) {
-            Scene.AddAmbiantLight(scene);
-
-            Scene.AddPointLight(
-                scene, 
-                (Grid)scene.FindName("ConditionIcon"),
-                new Dictionary<string, object>() {
-                    {"condition", PageDataSource.Forecast.Currently.Icon }
-                });
-            //Scene.AddSpotLight(scene, conditionIcon);
-            
         }
 
         async Task AnimateSlideIn(Panel view) {
@@ -404,6 +511,7 @@ namespace Feels.Views {
 
         void CleanTheater() {
             Theater.Children.Clear();
+            Theater.Fade(0).Start();
         }
         #endregion scene theater
 
@@ -484,7 +592,7 @@ namespace Feels.Views {
 
         #region others
         void UpdateMainTile() {
-            TileDesigner.UpdatePrimary(LastPosition);
+            TileDesigner.UpdatePrimary(_LastPosition);
         }
 
         async Task ShowBetaMessageAsync() {
@@ -501,8 +609,12 @@ namespace Feels.Views {
         #endregion others
 
         #region update changelog
-        private void ShowUpdateChangelogIfIsNewLaunch() {
+        /// <summary>
+        /// Show update change log if the app has been updated
+        /// </summary>
+        private void ShowUpdateChangelog() {
             if (Settings.IsNewUpdatedLaunch()) {
+                UpdateVersion.Text += string.Format(" {0}", Settings.GetAppVersion());
                 ShowLastUpdateChangelog();
             }
         }

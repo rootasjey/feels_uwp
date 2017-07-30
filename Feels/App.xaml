@@ -9,6 +9,7 @@
         <converters:WeatherIcon x:Name="WeatherIcon"/>
         <converters:SimpleTemperature x:Name="SimpleTemperature"/>
         <converters:TimeParser x:Name="TimeParser"/>
+        <converters:LocalizedDay x:Name="LocalizedDay"/>
 
         <Style x:Key="ListViewItemFill" TargetType="ListViewItem">
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
