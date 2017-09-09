@@ -417,4 +417,31 @@
   <data name="UpdateVersion.Text" xml:space="preserve">
     <value>Update</value>
   </data>
+  <data name="MoonPhase.Text" xml:space="preserve">
+    <value>moon phase</value>
+  </data>
+  <data name="MoonPhaseFirstQuarter" xml:space="preserve">
+    <value>first quarter</value>
+  </data>
+  <data name="MoonPhaseFullMoon" xml:space="preserve">
+    <value>full moon</value>
+  </data>
+  <data name="MoonPhaseNewMoon" xml:space="preserve">
+    <value>new moon</value>
+  </data>
+  <data name="MoonPhaseThirdQuarter" xml:space="preserve">
+    <value>third quarter</value>
+  </data>
+  <data name="MoonPhaseWaningCrescent" xml:space="preserve">
+    <value>waning crescent</value>
+  </data>
+  <data name="MoonPhaseWaningGibbous" xml:space="preserve">
+    <value>waning gibbous</value>
+  </data>
+  <data name="MoonPhaseWaxingCrescent" xml:space="preserve">
+    <value>waxing crescent</value>
+  </data>
+  <data name="MoonPhaseWaxingGibbous" xml:space="preserve">
+    <value>waxing gibbous</value>
+  </data>
 </root>

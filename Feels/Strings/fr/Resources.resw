@@ -118,303 +118,330 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutHeader.Text" xml:space="preserve">
-    <value>about</value>
+    <value>à propos</value>
   </data>
   <data name="BackgroundsTasksHeader.Text" xml:space="preserve">
-    <value>background tasks</value>
+    <value>tâches en arrière-plan</value>
   </data>
   <data name="BetaMessage" xml:space="preserve">
-    <value>This app is in beta and can act not as expected, contains bugs or missing features. Please report any unexpected behavior via email or on GitHub. Thanks!</value>
+    <value>Cette application est en beta et peut donc contenir des bugs, des textes non-traduits ainsi que des fonctionnalités manquantes. Merci de repporter (par mail ou github) tout comportement anormal. Merci</value>
   </data>
   <data name="clear-day" xml:space="preserve">
-    <value>clear day</value>
+    <value>ciel dégagé</value>
   </data>
   <data name="clear-night" xml:space="preserve">
-    <value>clear night</value>
+    <value>nuit dégagée</value>
   </data>
   <data name="cloudy" xml:space="preserve">
-    <value>cloudy</value>
+    <value>nuageux</value>
   </data>
   <data name="CmdRefresh.Label" xml:space="preserve">
-    <value>refresh</value>
+    <value>rafraîchir</value>
   </data>
   <data name="CmdSettings.Label" xml:space="preserve">
-    <value>settings</value>
+    <value>paramètres</value>
   </data>
   <data name="ContributeFifthLine.Text" xml:space="preserve">
-    <value>visit this link for more information</value>
+    <value>visitez le lien suivant pour plus d'information</value>
   </data>
   <data name="ContributeFirstLine.Text" xml:space="preserve">
-    <value>this project is open source and you can contribute in many ways</value>
+    <value>ce projet est open source et vous pouvez y contribuer de plusieurs manières:</value>
   </data>
   <data name="ContributeFourthLine.Text" xml:space="preserve">
-    <value>- edit app's code source</value>
+    <value>- éditer le code de l'application</value>
   </data>
   <data name="ContributeSecondLine.Text" xml:space="preserve">
-    <value>- report a bug</value>
+    <value>- signaler un bug</value>
   </data>
   <data name="ContributeSixthLine.Text" xml:space="preserve">
-    <value>and come participate in this project :)</value>
+    <value>et venez participer à ce projet :)</value>
   </data>
   <data name="ContributeThirdLine.Text" xml:space="preserve">
-    <value>- suggest a feature</value>
+    <value>- suggérer une fonctionnalité</value>
   </data>
   <data name="ContributeTitle.Text" xml:space="preserve">
-    <value>contribute</value>
+    <value>contribuer</value>
   </data>
   <data name="CurrentForecastButton.Text" xml:space="preserve">
-    <value>current forecast</value>
+    <value>météo actuelle</value>
   </data>
   <data name="DailyForecastButton.Text" xml:space="preserve">
-    <value>daily forecast</value>
+    <value>météo journalière</value>
   </data>
   <data name="Dark.Text" xml:space="preserve">
-    <value>dark</value>
+    <value>sombre</value>
   </data>
   <data name="DataContent1.Text" xml:space="preserve">
-    <value>data come from these sources</value>
+    <value>les données des citations proviennent des sites</value>
   </data>
   <data name="DataContent2.Text" xml:space="preserve">
-    <value>and this app has no link with these entities</value>
+    <value>et cette application n'est aucunement liée à ces sites.</value>
   </data>
   <data name="DataTitle.Text" xml:space="preserve">
-    <value>data</value>
+    <value>données</value>
   </data>
   <data name="DynamicTileLabel.Text" xml:space="preserve">
-    <value>update live tile periodically</value>
+    <value>mettre à jour la tuile de l'application périodiquement</value>
   </data>
   <data name="DynamicTileTitle.Text" xml:space="preserve">
-    <value>dynamic tile</value>
+    <value>tuile dynamique</value>
   </data>
   <data name="EmptyDailyForecast.Text" xml:space="preserve">
-    <value>There is no data for daily forecast at the moment :(</value>
+    <value>Il n'y a aucune donnée pour la météo journalière pour l'instant :(</value>
   </data>
   <data name="EmptyHourlyForecast.Text" xml:space="preserve">
-    <value>There is no data for hourly forecast at the moment :(</value>
+    <value>Il n'y a aucune donnée pour la météo horaire pour l'instant :(</value>
   </data>
   <data name="FeedbackButton.Content" xml:space="preserve">
-    <value>send a request</value>
+    <value>envoyer un avis</value>
   </data>
   <data name="FeedbackLabel.Text" xml:space="preserve">
-    <value>suggest an improvement or signal a bug</value>
+    <value>suggérer une amélioration ou signaler un problème</value>
   </data>
   <data name="FeedbackTitle.Text" xml:space="preserve">
-    <value>my request</value>
+    <value>mon avis</value>
   </data>
   <data name="FeelsLikeText.Text" xml:space="preserve">
-    <value>feels more like</value>
+    <value>température ressentie</value>
   </data>
   <data name="FindLocationManually.Text" xml:space="preserve">
-    <value>Search for your city manually</value>
+    <value>Trouvez votre ville manuelement</value>
   </data>
   <data name="FindMe.Text" xml:space="preserve">
-    <value>find me</value>
+    <value>localisez-moi</value>
   </data>
   <data name="fog" xml:space="preserve">
-    <value>fog</value>
+    <value>brouillard</value>
   </data>
   <data name="GithubRepository.Text" xml:space="preserve">
-    <value>GitHub repository</value>
+    <value>répertoire GitHub</value>
   </data>
   <data name="hail" xml:space="preserve">
-    <value>hail</value>
+    <value>grèle</value>
   </data>
   <data name="HourlyForecastButton.Text" xml:space="preserve">
-    <value>hourly forecast</value>
+    <value>météo horaire</value>
   </data>
   <data name="ImagesSourceContent.Text" xml:space="preserve">
-    <value>pictures are from</value>
+    <value>les images proviennent de</value>
   </data>
   <data name="ImagesSourceTitle.Text" xml:space="preserve">
-    <value>pictures</value>
+    <value>Images</value>
   </data>
   <data name="LanguageButton.Content" xml:space="preserve">
-    <value>language</value>
+    <value>Langue</value>
   </data>
   <data name="Loading.Text" xml:space="preserve">
-    <value>Loading...</value>
+    <value>chargement...</value>
   </data>
   <data name="LocationAutoDetect.Text" xml:space="preserve">
-    <value>Your current location will be determined automatically</value>
+    <value>Votre position actuelle sera automatiquement déterminée</value>
   </data>
   <data name="partly-cloudy-day" xml:space="preserve">
-    <value>party cloudy day</value>
+    <value>partiellement couvert</value>
   </data>
   <data name="partly-cloudy-night" xml:space="preserve">
-    <value>party cloudy night</value>
+    <value>nuit partiellement couverte</value>
   </data>
   <data name="PersonalizationPivot.Header" xml:space="preserve">
-    <value>personalization</value>
+    <value>personalisation</value>
   </data>
   <data name="rain" xml:space="preserve">
-    <value>rain</value>
+    <value>pluie</value>
   </data>
   <data name="RatingButton.Content" xml:space="preserve">
-    <value>note the app</value>
+    <value>noter l'app</value>
   </data>
   <data name="RatingLabel.Text" xml:space="preserve">
-    <value>note the app in the Store</value>
+    <value>notez l'application sur le Store</value>
   </data>
   <data name="RatingTitle.Text" xml:space="preserve">
     <value>notation</value>
   </data>
   <data name="SearchText.Text" xml:space="preserve">
-    <value>rechercher</value>
+    <value>search</value>
   </data>
   <data name="sleet" xml:space="preserve">
-    <value>sleet</value>
+    <value>neige fondue</value>
   </data>
   <data name="snow" xml:space="preserve">
-    <value>snow</value>
+    <value>neige</value>
   </data>
   <data name="SwypeLeftToHourly.Text" xml:space="preserve">
-    <value>swype left to see daily forecast</value>
+    <value>Accéder à la météo journalière</value>
   </data>
   <data name="SwypeRightToHourly.Text" xml:space="preserve">
-    <value>swipe right to see hourly forecast</value>
+    <value>Accéder à la météo horaire</value>
   </data>
   <data name="Tasks.Text" xml:space="preserve">
-    <value>Tasks</value>
+    <value>Tâches</value>
   </data>
   <data name="Theme.Text" xml:space="preserve">
-    <value>Theme</value>
+    <value>Thème</value>
   </data>
   <data name="ThemeSwitch.OffContent" xml:space="preserve">
-    <value>dark theme</value>
+    <value>Thème Sombre</value>
   </data>
   <data name="ThemeSwitch.OnContent" xml:space="preserve">
-    <value>white theme</value>
+    <value>Thème Clair</value>
   </data>
   <data name="thunderstorm" xml:space="preserve">
-    <value>thunderstorm</value>
+    <value>orage</value>
   </data>
   <data name="tornado" xml:space="preserve">
-    <value>tornado</value>
+    <value>tornade</value>
   </data>
   <data name="wind" xml:space="preserve">
-    <value>wind</value>
+    <value>vent</value>
   </data>
-  <data name="ButtonRestart.Content" xml:space="preserve">
-    <value>restart</value>
+  <data name="TileIntervalUpdate.Header" xml:space="preserve">
+    <value>récurrence</value>
+  </data>
+  <data name="DynamicTileActivity.Text" xml:space="preserve">
+    <value>activité de la tuile dynamique</value>
+  </data>
+  <data name="TileLastRun" xml:space="preserve">
+    <value>dernière exécution de la tâche pour la tuile dynamique: </value>
+  </data>
+  <data name="UnitsText.Text" xml:space="preserve">
+    <value>unités</value>
+  </data>
+  <data name="LanguageSelected" xml:space="preserve">
+    <value>sélectionné</value>
+  </data>
+  <data name="LanguageLabel.Text" xml:space="preserve">
+    <value>langue</value>
+  </data>
+  <data name="LanguageSubLabel.Text" xml:space="preserve">
+    <value>choisissez la langue affichée</value>
+  </data>
+  <data name="UnitsSubLabel.Text" xml:space="preserve">
+    <value>choisissez l'unité de température</value>
   </data>
   <data name="ItemDay.Content" xml:space="preserve">
-    <value>once a day</value>
+    <value>une fois par jour</value>
   </data>
   <data name="ItemFifteenMinutes.Content" xml:space="preserve">
     <value>15 min</value>
   </data>
   <data name="ItemHalfHour.Content" xml:space="preserve">
-    <value>half an hour</value>
+    <value>chaque demi-heure</value>
   </data>
   <data name="ItemHour.Content" xml:space="preserve">
-    <value>every hour</value>
+    <value>chaque heure</value>
   </data>
   <data name="ItemThreeHours.Content" xml:space="preserve">
-    <value>every 3 hours</value>
-  </data>
-  <data name="LastTileTaskError.Text" xml:space="preserve">
-    <value>no error</value>
-  </data>
-  <data name="LastUpdatedTask.Text" xml:space="preserve">
-    <value>never run</value>
-  </data>
-  <data name="TaskNotWorkingText.Text" xml:space="preserve">
-    <value>if the task doesn't work properly, restart it</value>
-  </data>
-  <data name="TileIntervalUpdate.Header" xml:space="preserve">
-    <value>recurrence</value>
-  </data>
-  <data name="DynamicTileActivity.Text" xml:space="preserve">
-    <value>dynamic tile activity</value>
-  </data>
-  <data name="TileLastRun" xml:space="preserve">
-    <value>tile task last run on:</value>
-  </data>
-  <data name="UnitsText.Text" xml:space="preserve">
-    <value>units</value>
-  </data>
-  <data name="LanguageSelected" xml:space="preserve">
-    <value>language selected</value>
-  </data>
-  <data name="LanguageLabel.Text" xml:space="preserve">
-    <value>language</value>
-  </data>
-  <data name="LanguageSubLabel.Text" xml:space="preserve">
-    <value>choose displayed language</value>
-  </data>
-  <data name="UnitsSubLabel.Text" xml:space="preserve">
-    <value>choose temperature units</value>
+    <value>toutes les 3 heures</value>
   </data>
   <data name="ButtonPrivacyPolicyGitHub.Content" xml:space="preserve">
-    <value>privacy policy GitHub version</value>
+    <value>version GitHub de la politique de confidentialité</value>
+  </data>
+  <data name="ButtonRestart.Content" xml:space="preserve">
+    <value>redémarer</value>
   </data>
   <data name="ContactMeLabel.Text" xml:space="preserve">
-    <value>You can contact me by email at this address:</value>
+    <value>Vous pouvez me contactez à cette adresse: </value>
   </data>
   <data name="ContactMeTwitterLabel.Text" xml:space="preserve">
-    <value>You can also contact me on twitter @jeremiecorpinot</value>
+    <value>Vous pouvez également me contacter sur twitter @jeremiecorpinot</value>
+  </data>
+  <data name="LastTileTaskError.Text" xml:space="preserve">
+    <value>aucune erreur</value>
+  </data>
+  <data name="LastUpdatedTask.Text" xml:space="preserve">
+    <value>jamais lancé</value>
   </data>
   <data name="LocationInformationLabel.Text" xml:space="preserve">
-    <value>Location Information</value>
+    <value>Information de localisation</value>
   </data>
   <data name="LocationLine0.Text" xml:space="preserve">
-    <value>Your location information is only used by the</value>
+    <value>Votre localisation est uniquement utilisée par </value>
   </data>
   <data name="LocationLine1.Text" xml:space="preserve">
-    <value>Your location data is only used to define automatically the city where you are in order to show you relevant weather information.</value>
+    <value>Votre localisation est uniquement utilisée pour définir automatiquement la ville où vous vous situez afin de vous afficher des informations météo pertinentes</value>
   </data>
   <data name="LocationLine2.Text" xml:space="preserve">
-    <value>We don't collect or save data for later use.</value>
+    <value>Nous ne sauvegardons pas vos donées de localisation pour une utilisation ultérieure</value>
   </data>
   <data name="LocationLine3.Text" xml:space="preserve">
-    <value>We don't send your data to any other third-party entity, firm, service.</value>
+    <value>Nous n'envoyons aucune données à une tierce-partie, société ou autre entité.</value>
   </data>
   <data name="LocationLine4.Text" xml:space="preserve">
-    <value>You can verify what we do with your data by visiting the</value>
+    <value>Vous pouvez vérifiez l'utilisation de vos données par l'application ici: </value>
   </data>
   <data name="LocationLine5.Text" xml:space="preserve">
-    <value>source code.</value>
+    <value>code source.</value>
   </data>
   <data name="PrivacyPivot.Header" xml:space="preserve">
-    <value>privacy policy</value>
+    <value>politique de confidentialité</value>
   </data>
   <data name="PrivacyPolicyLine0.Text" xml:space="preserve">
-    <value>Your privacy is important to us and we respect it.</value>
+    <value>Vos données personnelles sont importantes pour nous et nous les respectons.</value>
   </data>
   <data name="PrivacyPolicyLine1.Text" xml:space="preserve">
-    <value>-We don't share your personal information with anyone</value>
+    <value>-Nous ne partageons vos données personnelles avec aucune entité</value>
   </data>
   <data name="PrivacyPolicyLine2.Text" xml:space="preserve">
-    <value>-We don't store your personal information at all</value>
+    <value>-Nous ne stockons aucune information vous concernant</value>
+  </data>
+  <data name="TaskNotWorkingText.Text" xml:space="preserve">
+    <value>si la tâche en arrière-plan ne fonctionne pas, redémarrez-là</value>
   </data>
   <data name="CloudCover.Text" xml:space="preserve">
-    <value>cloud cover</value>
+    <value>couverture</value>
   </data>
   <data name="Highest.Text" xml:space="preserve">
-    <value>highest</value>
+    <value>haute</value>
   </data>
   <data name="Humidity.Text" xml:space="preserve">
-    <value>humidity</value>
+    <value>humidité</value>
   </data>
   <data name="Lowest.Text" xml:space="preserve">
-    <value>lowest</value>
+    <value>basse</value>
   </data>
   <data name="Pressure.Text" xml:space="preserve">
-    <value>pressure</value>
+    <value>pression</value>
   </data>
   <data name="Probability.Text" xml:space="preserve">
-    <value>probability</value>
+    <value>probabilité</value>
   </data>
   <data name="Sunrise.Text" xml:space="preserve">
-    <value>sunrise</value>
+    <value>levé</value>
   </data>
   <data name="Sunset.Text" xml:space="preserve">
-    <value>sunset</value>
+    <value>couché</value>
   </data>
   <data name="WindSpeed.Text" xml:space="preserve">
-    <value>wind speed</value>
+    <value>vent</value>
   </data>
   <data name="UpdateVersion.Text" xml:space="preserve">
-    <value>Update</value>
+    <value>Mise à jour</value>
+  </data>
+  <data name="MoonPhase.Text" xml:space="preserve">
+    <value>phase lunaire</value>
+  </data>
+  <data name="MoonPhaseFirstQuarter" xml:space="preserve">
+    <value>premier quartier</value>
+  </data>
+  <data name="MoonPhaseFullMoon" xml:space="preserve">
+    <value>pleine lune</value>
+  </data>
+  <data name="MoonPhaseNewMoon" xml:space="preserve">
+    <value>nouvelle lune</value>
+  </data>
+  <data name="MoonPhaseThirdQuarter" xml:space="preserve">
+    <value>dernier quartier</value>
+  </data>
+  <data name="MoonPhaseWaningCrescent" xml:space="preserve">
+    <value>dernier croissant</value>
+  </data>
+  <data name="MoonPhaseWaningGibbous" xml:space="preserve">
+    <value>lune gibbeuse décroissante</value>
+  </data>
+  <data name="MoonPhaseWaxingCrescent" xml:space="preserve">
+    <value>premier croissant</value>
+  </data>
+  <data name="MoonPhaseWaxingGibbous" xml:space="preserve">
+    <value>lune gibbeuse croissante</value>
   </data>
 </root>

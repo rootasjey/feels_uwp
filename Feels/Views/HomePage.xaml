@@ -78,17 +78,7 @@
 
                 <RichTextBlock TextWrapping="Wrap" Margin="0,20,0,0">
                     <Paragraph>
-                        <Span>-Update weather animations and add missing ones</Span>
-                        <LineBreak/>
-                        <Span>-Selecting temperature unit now apply correctly</Span>
-                        <LineBreak/>
-                        <Span>-Add city on live tile and lockscreen</Span>
-                        <LineBreak/>
-                        <Span>-Add custom tile task recurrency</Span>
-                        <LineBreak/>
-                        <Span>-Add support for French, English and Russian languages</Span>
-                        <LineBreak/>
-                        <Span>-Fix reload command</Span>
+                        <Span>-Fix weather information displayed on lockscreen</Span>
                     </Paragraph>
                 </RichTextBlock>
 
@@ -369,6 +359,33 @@
                                             <TextBlock x:Name="Pressure" 
                                                        Text="16"
                                                        FontSize="14"
+                                                       FontWeight="SemiBold"
+                                                       HorizontalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid Margin="0,40,0,0">
+                                        <!--<Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="30*"/>
+                                            <ColumnDefinition Width="30*"/>
+                                            <ColumnDefinition Width="30*"/>
+                                        </Grid.ColumnDefinitions>-->
+
+                                        <StackPanel x:Name="PanelMoonPhase"
+                                                    HorizontalAlignment="Center">
+                                            <Grid x:Name="MoonPhaseIconContainer"
+                                                  HorizontalAlignment="Center"
+                                                  Margin="0,0,0,10"/>
+
+                                            <TextBlock x:Uid="MoonPhase" 
+                                                       Text="moon phase"
+                                                       Opacity=".5"
+                                                       FontSize="14"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Center"/>
+                                            <TextBlock x:Name="MoonPhaseValue" 
+                                                       Text="new moon"
+                                                       FontSize="16"
                                                        FontWeight="SemiBold"
                                                        HorizontalAlignment="Center"/>
                                         </StackPanel>

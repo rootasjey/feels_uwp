@@ -137,7 +137,7 @@ namespace Tasks.Services {
 
             string GetDetailedStatus()
             {
-                string formatedText = string.Format("{0} {1} ({3}/{4}) {2}",
+                string formatedText = string.Format("{0} {1} ({2}/{3}) {4}",
                     location, currentTemperature, minTemperature, maxTemperature, forecast.Currently.Summary);
                 return formatedText;
             }

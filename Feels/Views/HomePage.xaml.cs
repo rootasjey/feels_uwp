@@ -1,11 +1,13 @@
 ﻿using Feels.Data;
 using Feels.Services;
+using MahApps.Metro.IconPacks;
 using Microsoft.Toolkit.Uwp.UI.Animations;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
+using Windows.ApplicationModel.Resources;
 using Windows.Devices.Geolocation;
 using Windows.Services.Maps;
 using Windows.System;
@@ -19,6 +21,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Shapes;
 
 namespace Feels.Views {
     public sealed partial class HomePage : Page {
@@ -41,6 +44,8 @@ namespace Feels.Views {
         private Compositor _compositor { get; set; }
         private Visual _EarthVisual { get; set; }
         private Visual _PinEarthVisual { get; set; }
+
+        private ResourceLoader _ResourcesLoader { get; set; }
         #endregion variables
 
         public HomePage() {
@@ -98,6 +103,7 @@ namespace Feels.Views {
         private void InitializeVariables() {
             PageDataSource = App.DataSource;
             _UIDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
+            _ResourcesLoader = new ResourceLoader();
         }
 
         async void InitializePageData() {
@@ -130,7 +136,6 @@ namespace Feels.Views {
                 await FetchCurrentLocation(position);
 
                 HideLoadingView();
-
                 PopulateView();
             }
         }
@@ -253,6 +258,71 @@ namespace Feels.Views {
 
                 MaxTempValue.Text = maxTemp.ToString();
                 MinTempValue.Text = minTemp.ToString();
+
+                SetMoonPhase();
+            }
+
+            void SetMoonPhase() {
+                var moonPhase = weatherToday.MoonPhase;
+
+                var iconMoon = new PackIconModern() {
+                    Height = 32,
+                    Width = 32,
+                };
+                
+                if (moonPhase == 0) {
+                    MoonPhaseValue.Text = _ResourcesLoader.GetString("MoonPhaseNewMoon");
+                    iconMoon.Kind = PackIconModernKind.MoonNew;
+
+                    MoonPhaseIconContainer.Children.Add(iconMoon);
+
+                } else if (moonPhase > 0 && moonPhase < .25) {
+                    MoonPhaseValue.Text = _ResourcesLoader.GetString("MoonPhaseWaxingCrescent");
+                    iconMoon.Kind = PackIconModernKind.MoonWaxingCrescent;
+
+                    MoonPhaseIconContainer.Children.Add(iconMoon);
+
+                } else if (moonPhase == .25) {
+                    MoonPhaseValue.Text = _ResourcesLoader.GetString("MoonPhaseFirstQuarter");
+                    iconMoon.Kind = PackIconModernKind.MoonFirstQuarter;
+
+                    MoonPhaseIconContainer.Children.Add(iconMoon);
+
+                } else if (moonPhase > .25 && moonPhase < .5) {
+                    MoonPhaseValue.Text = _ResourcesLoader.GetString("MoonPhaseWaxingGibbous");
+                    iconMoon.Kind = PackIconModernKind.MoonWaxingGibbous;
+
+                    MoonPhaseIconContainer.Children.Add(iconMoon);
+
+                } else if (moonPhase == .5) {
+                    MoonPhaseValue.Text = _ResourcesLoader.GetString("MoonPhaseFullMoon");
+
+                    var fullMoon = new Ellipse() {
+                        Height = 30,
+                        Width = 30,
+                        Fill = new SolidColorBrush(Colors.White)
+                    };
+
+                    MoonPhaseIconContainer.Children.Add(fullMoon);
+
+                } else if (moonPhase > .5 && moonPhase < .75) {
+                    MoonPhaseValue.Text = _ResourcesLoader.GetString("MoonPhaseWaningGibbous");
+                    iconMoon.Kind = PackIconModernKind.MoonWaningGibbous;
+
+                    MoonPhaseIconContainer.Children.Add(iconMoon);
+
+                } else if (moonPhase == .75) {
+                    MoonPhaseValue.Text = _ResourcesLoader.GetString("MoonPhaseThirdQuarter");
+                    iconMoon.Kind = PackIconModernKind.MoonThirdQuarter;
+                    
+                    MoonPhaseIconContainer.Children.Add(iconMoon);
+
+                } else { // moonPhase > .75
+                    MoonPhaseValue.Text = _ResourcesLoader.GetString("MoonPhaseWaningCrescent");
+                    iconMoon.Kind = PackIconModernKind.MoonWaxingCrescent;
+
+                    MoonPhaseIconContainer.Children.Add(iconMoon);
+                }
             }
         }
 
@@ -462,7 +532,6 @@ namespace Feels.Views {
         }
 
         #endregion loading view
-
 
         #region scene theater
         async void DrawScene() {
