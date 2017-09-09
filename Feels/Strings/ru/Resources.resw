@@ -127,7 +127,7 @@
     <value>Это приложение в Beta версии и может работать не так, как ожидается, содержать ошибки или отсутствующие функции. Пожалуйста, сообщайте о любых ошибках по почте или на GitHub. Спасибо!</value>
   </data>
   <data name="ButtonRestart.Content" xml:space="preserve">
-    <value>перезапустить</value>
+    <value>Перезапустить</value>
   </data>
   <data name="clear-day" xml:space="preserve">
     <value>ясный день</value>
@@ -139,16 +139,16 @@
     <value>облачно</value>
   </data>
   <data name="CmdRefresh.Label" xml:space="preserve">
-    <value>обновить</value>
+    <value>Обновить</value>
   </data>
   <data name="CmdSettings.Label" xml:space="preserve">
-    <value>настройки</value>
+    <value>Настройки</value>
   </data>
   <data name="ContributeFifthLine.Text" xml:space="preserve">
-    <value>посетите ссылку для более подробной информации</value>
+    <value>Посетите</value>
   </data>
   <data name="ContributeFirstLine.Text" xml:space="preserve">
-    <value>это проект с открытым исходным кодом и вы можете участвовать в нем разными способами:</value>
+    <value>Это проект с открытым исходным кодом и вы можете участвовать в нем разными способами:</value>
   </data>
   <data name="ContributeFourthLine.Text" xml:space="preserve">
     <value>- радактировать исходный код</value>
@@ -157,40 +157,40 @@
     <value>- сообщить об ошибке</value>
   </data>
   <data name="ContributeSixthLine.Text" xml:space="preserve">
-    <value>и становитесь участником проекта :)</value>
+    <value>для более подробной информации и становитесь участником проекта :)</value>
   </data>
   <data name="ContributeThirdLine.Text" xml:space="preserve">
     <value>- предложить идею</value>
   </data>
   <data name="ContributeTitle.Text" xml:space="preserve">
-    <value>участвуйте</value>
+    <value>Участвуйте</value>
   </data>
   <data name="CurrentForecastButton.Text" xml:space="preserve">
     <value>погода сейчас</value>
   </data>
   <data name="DailyForecastButton.Text" xml:space="preserve">
-    <value>погода по дням</value>
+    <value>прогноз по дням</value>
   </data>
   <data name="Dark.Text" xml:space="preserve">
     <value>темная</value>
   </data>
   <data name="DataContent1.Text" xml:space="preserve">
-    <value>данные о погоде мы получаем из</value>
+    <value>Данные о погоде мы получаем из</value>
   </data>
   <data name="DataContent2.Text" xml:space="preserve">
-    <value>и приложение не имеет отношения к поставщикам проноза погоды</value>
+    <value>и приложение не имеет отношения к поставщику проноза погоды</value>
   </data>
   <data name="DataTitle.Text" xml:space="preserve">
-    <value>данные</value>
+    <value>Источник</value>
   </data>
   <data name="DynamicTileActivity.Text" xml:space="preserve">
-    <value>живая плитка</value>
+    <value>Живая плитка</value>
   </data>
   <data name="DynamicTileLabel.Text" xml:space="preserve">
-    <value>периодически обновлять живую плитку</value>
+    <value>Периодически обновлять живую плитку</value>
   </data>
   <data name="DynamicTileTitle.Text" xml:space="preserve">
-    <value>живая плитка</value>
+    <value>Живая плитка</value>
   </data>
   <data name="EmptyDailyForecast.Text" xml:space="preserve">
     <value>На данный момент нет данных о прогнозе на несколько дней :(</value>
@@ -199,13 +199,13 @@
     <value>На данный момент нет данных о прогнозе на несколько часов :(</value>
   </data>
   <data name="FeedbackButton.Content" xml:space="preserve">
-    <value>обратная связь</value>
+    <value>Обратная связь</value>
   </data>
   <data name="FeedbackLabel.Text" xml:space="preserve">
-    <value>предложить идею или сообщить об ошибке</value>
+    <value>Предложить идею или сообщить об ошибке</value>
   </data>
   <data name="FeedbackTitle.Text" xml:space="preserve">
-    <value>мои сообщения</value>
+    <value>Напишите</value>
   </data>
   <data name="FeelsLikeText.Text" xml:space="preserve">
     <value>по ощущениям</value>
@@ -220,22 +220,22 @@
     <value>туман</value>
   </data>
   <data name="GithubRepository.Text" xml:space="preserve">
-    <value>репозиторий на GitHub</value>
+    <value>страницу</value>
   </data>
   <data name="hail" xml:space="preserve">
     <value>град</value>
   </data>
   <data name="HourlyForecastButton.Text" xml:space="preserve">
-    <value>погода по часам</value>
+    <value>прогноз по часам</value>
   </data>
   <data name="ImagesSourceContent.Text" xml:space="preserve">
-    <value>за изображения и иконки спасибо</value>
+    <value>За изображения и иконки благодарим</value>
   </data>
   <data name="ImagesSourceTitle.Text" xml:space="preserve">
-    <value>изображения</value>
+    <value>Изображения</value>
   </data>
   <data name="ItemDay.Content" xml:space="preserve">
-    <value>раз в день</value>
+    <value>день</value>
   </data>
   <data name="ItemFifteenMinutes.Content" xml:space="preserve">
     <value>15 минут</value>
@@ -244,25 +244,25 @@
     <value>полчаса</value>
   </data>
   <data name="ItemHour.Content" xml:space="preserve">
-    <value>каждый час</value>
+    <value>час</value>
   </data>
   <data name="ItemThreeHours.Content" xml:space="preserve">
-    <value>каждые 3 часа</value>
+    <value>3 часа</value>
   </data>
   <data name="LanguageButton.Content" xml:space="preserve">
-    <value>язык</value>
+    <value>Язык</value>
   </data>
   <data name="LanguageLabel.Text" xml:space="preserve">
-    <value>язык</value>
+    <value>Язык</value>
   </data>
   <data name="LanguageSelected" xml:space="preserve">
     <value>язык выбран</value>
   </data>
   <data name="LanguageSubLabel.Text" xml:space="preserve">
-    <value>выберете язык приложения</value>
+    <value>Выберете язык приложения</value>
   </data>
   <data name="LastTileTaskError.Text" xml:space="preserve">
-    <value>ошибки нет</value>
+    <value>Ошибок нет</value>
   </data>
   <data name="LastUpdatedTask.Text" xml:space="preserve">
     <value>никогда</value>
@@ -286,13 +286,13 @@
     <value>дождь</value>
   </data>
   <data name="RatingButton.Content" xml:space="preserve">
-    <value>оценить</value>
+    <value>Оценить</value>
   </data>
   <data name="RatingLabel.Text" xml:space="preserve">
-    <value>будем признательны, если Вы оцените приложение в Магазине</value>
+    <value>Будем благодарны, если Вы оцените приложение в Магазине</value>
   </data>
   <data name="RatingTitle.Text" xml:space="preserve">
-    <value>оцените</value>
+    <value>Оцените</value>
   </data>
   <data name="SearchText.Text" xml:space="preserve">
     <value>поиск</value>
@@ -304,13 +304,13 @@
     <value>снег</value>
   </data>
   <data name="SwypeLeftToHourly.Text" xml:space="preserve">
-    <value>проведите влево, чтобы посмотреть прогноз по дням</value>
+    <value>проведите влево для посмотра прогноза по дням</value>
   </data>
   <data name="SwypeRightToHourly.Text" xml:space="preserve">
-    <value>проведите вправо, чтобы посмотреть почасовой прогноз</value>
+    <value>проведите вправо для посмотра прогноза по часам</value>
   </data>
   <data name="TaskNotWorkingText.Text" xml:space="preserve">
-    <value>если задача не работает, перезапустите ее</value>
+    <value>Если плитка не обновляется, перезапустите задачу</value>
   </data>
   <data name="Tasks.Text" xml:space="preserve">
     <value>Задачи</value>
@@ -328,7 +328,7 @@
     <value>гроза</value>
   </data>
   <data name="TileIntervalUpdate.Header" xml:space="preserve">
-    <value>каждые</value>
+    <value>Обновлять раз в...</value>
   </data>
   <data name="TileLastRun" xml:space="preserve">
     <value>обновлять живую плитку:</value>
@@ -337,85 +337,85 @@
     <value>ураган</value>
   </data>
   <data name="UnitsSubLabel.Text" xml:space="preserve">
-    <value>выберете единицы измерения температуры</value>
+    <value>Выберете единицы измерения температуры</value>
   </data>
   <data name="UnitsText.Text" xml:space="preserve">
-    <value>единицы измерения</value>
+    <value>Единицы измерения</value>
   </data>
   <data name="wind" xml:space="preserve">
     <value>ветер</value>
   </data>
   <data name="ButtonPrivacyPolicyGitHub.Content" xml:space="preserve">
-    <value>privacy policy GitHub version</value>
+    <value>репозиторий GitHub</value>
   </data>
   <data name="ContactMeLabel.Text" xml:space="preserve">
-    <value>You can contact me by email at this address:</value>
+    <value>Вы моете связаться со мной (на английском) по этому адресу:</value>
   </data>
   <data name="ContactMeTwitterLabel.Text" xml:space="preserve">
-    <value>You can also contact me on twitter @jeremiecorpinot</value>
+    <value>Также вы можете найти меня в Twitter: @jeremiecorpinot</value>
   </data>
   <data name="LocationInformationLabel.Text" xml:space="preserve">
-    <value>Location Information</value>
+    <value>Местоположение</value>
   </data>
   <data name="LocationLine0.Text" xml:space="preserve">
-    <value>Your location information is only used by the</value>
+    <value>Ваше местоположение используется только</value>
   </data>
   <data name="LocationLine1.Text" xml:space="preserve">
-    <value>Your location data is only used to define automatically the city where you are in order to show you relevant weather information.</value>
+    <value>Местоположение используется только для автоматического определения города,чтобы отображать актуальный прогноз погоды.</value>
   </data>
   <data name="LocationLine2.Text" xml:space="preserve">
-    <value>We don't collect or save data for later use.</value>
+    <value>Приложение не собирает и не хранит данные для иного использования.</value>
   </data>
   <data name="LocationLine3.Text" xml:space="preserve">
-    <value>We don't send your data to any other third-party entity, firm, service.</value>
+    <value>Приложение не отправляет данные о местоположении третьим лицам, компаниям или сервисам.</value>
   </data>
   <data name="LocationLine4.Text" xml:space="preserve">
-    <value>You can verify what we do with your data by visiting the</value>
+    <value>Вы можете убедиться в безопасности ваших данных, открыв</value>
   </data>
   <data name="LocationLine5.Text" xml:space="preserve">
-    <value>source code.</value>
+    <value>исходный код.</value>
   </data>
   <data name="PrivacyPivot.Header" xml:space="preserve">
-    <value>privacy policy</value>
+    <value>конфиденциальность</value>
   </data>
   <data name="PrivacyPolicyLine0.Text" xml:space="preserve">
-    <value>Your privacy is important to us and we respect it.</value>
+    <value>Ваша конфиденциальность важна для нас и мы её уважаем.</value>
   </data>
   <data name="PrivacyPolicyLine1.Text" xml:space="preserve">
-    <value>-We don't share your personal information with anyone</value>
+    <value>- Мы ни с кем не делимся вашей личной информацией.</value>
   </data>
   <data name="PrivacyPolicyLine2.Text" xml:space="preserve">
-    <value>-We don't store your personal information at all</value>
+    <value>- Мы не храним вашу личную информацию вообще.</value>
   </data>
   <data name="CloudCover.Text" xml:space="preserve">
-    <value>cloud cover</value>
+    <value>облачность</value>
   </data>
   <data name="Highest.Text" xml:space="preserve">
-    <value>highest</value>
+    <value>максимум</value>
   </data>
   <data name="Humidity.Text" xml:space="preserve">
-    <value>humidity</value>
+    <value>влажность</value>
   </data>
   <data name="Lowest.Text" xml:space="preserve">
-    <value>lowest</value>
+    <value>минимум</value>
   </data>
   <data name="Pressure.Text" xml:space="preserve">
-    <value>pressure</value>
+    <value>давление</value>
   </data>
   <data name="Probability.Text" xml:space="preserve">
-    <value>probability</value>
+    <value>осадки</value>
   </data>
   <data name="Sunrise.Text" xml:space="preserve">
-    <value>sunrise</value>
+    <value>восход</value>
   </data>
   <data name="Sunset.Text" xml:space="preserve">
-    <value>sunset</value>
+    <value>закат</value>
   </data>
   <data name="WindSpeed.Text" xml:space="preserve">
-    <value>wind speed</value>
+    <value>ветер</value>
   </data>
   <data name="UpdateVersion.Text" xml:space="preserve">
-    <value>Update</value>
+    <value>Версия</value>
   </data>
   <data name="MoonPhase.Text" xml:space="preserve">
     <value>moon phase</value>
