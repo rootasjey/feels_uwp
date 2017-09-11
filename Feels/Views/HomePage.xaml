@@ -68,24 +68,40 @@
 
             <StackPanel ScrollViewer.VerticalScrollBarVisibility="Disabled"
                         Padding="0,20">
-                <TextBlock x:Name="UpdateVersion"
-                           x:Uid="UpdateVersion"
-                           Text="Update 1.1.0" 
-                           FontSize="24"
-                           Typography.Capitals="SmallCaps"/>
+                <StackPanel Orientation="Horizontal">
+                    <FontIcon Glyph="&#xEB3C;" FontSize="30" Margin="0,0,12,0"/>
+                    <TextBlock Text="September Update" 
+                               FontSize="38"
+                               FontWeight="Normal"
+                               Typography.Capitals="AllSmallCaps"/>
+                </StackPanel>
 
-                <TextBlock Text="30 July 2017" Opacity=".5"/>
+                <TextBlock x:Name="UpdateVersion"
+                           x:Uid="UpdateVersion" Opacity=".5"/>
 
                 <RichTextBlock TextWrapping="Wrap" Margin="0,20,0,0">
-                    <Paragraph>
-                        <Span>-Fix weather information displayed on lockscreen</Span>
+                    <Paragraph Margin="0,12">
+                        <Span FontSize="22" 
+                              FontWeight="Medium" 
+                              Foreground="{ThemeResource SystemControlForegroundAccentBrush}">
+                            MOON PHASES 🌗
+                        </Span>
+                        <LineBreak/>
+                        <Span>Now you can see the moon phase </Span>
+                        <LineBreak/>
+                        <Span>in detailed information (at the bottom of the page),</Span>
+                        <LineBreak/>
+                        <Span>and directly at night (at the top).</Span>
                     </Paragraph>
                 </RichTextBlock>
 
                 <Button x:Name="ChangelogDismissButton" 
-                            Content="okay" 
-                            HorizontalAlignment="Center"
-                            Tapped="ChangelogDismissButton_Tapped"/>
+                        Content="OKAY" 
+                        Margin="0,22,0,0"
+                        Width="100"
+                        Height="40"
+                        HorizontalAlignment="Left"
+                        Tapped="ChangelogDismissButton_Tapped"/>
             </StackPanel>
         </FlyoutPresenter>
 

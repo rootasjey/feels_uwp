@@ -1,5 +1,6 @@
 ﻿using Feels.Data;
 using Feels.Services;
+using Feels.Services.WeatherScene;
 using MahApps.Metro.IconPacks;
 using Microsoft.Toolkit.Uwp.UI.Animations;
 using System;
@@ -155,7 +156,7 @@ namespace Feels.Views {
             BindHourlyListData();
             BindDailyListData();
 
-            ShowBetaMessageAsync();
+            //ShowBetaMessageAsync();
         }
 
         void SafeExit() {
@@ -535,7 +536,7 @@ namespace Feels.Views {
 
         #region scene theater
         async void DrawScene() {
-            var scene = Scene.CreateNew(
+            var scene = Scenes.CreateNew(
                 PageDataSource.Forecast.Currently, 
                 PageDataSource.Forecast.Daily.Days[0]);
 

@@ -115,11 +115,16 @@
     <Compile Include="Services\BackgroundTasks.cs" />
     <Compile Include="Services\DataTransfer.cs" />
     <Compile Include="Services\Events.cs" />
-    <Compile Include="Services\Scene.cs" />
+    <Compile Include="Services\WeatherScene\Animations.cs" />
+    <Compile Include="Services\WeatherScene\Backgrounds.cs" />
+    <Compile Include="Services\WeatherScene\Icons.cs" />
+    <Compile Include="Services\WeatherScene\Lights.cs" />
+    <Compile Include="Services\WeatherScene\Scenes.cs" />
     <Compile Include="Services\Settings.cs" />
     <Compile Include="Services\TileDesigner.cs" />
     <Compile Include="Services\UI.cs" />
     <Compile Include="Services\Wallpaper.cs" />
+    <Compile Include="Services\WeatherScene\Visuals.cs" />
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
