@@ -84,6 +84,7 @@ namespace Feels.Views {
 
             if (savedLocations?.Count > 0) {
                 var favoriteLocation = _lastLocationSelected;
+
                 if (favoriteLocation == null) {
                     favoriteLocation = await Settings.GetFavoriteLocation();
                 }
@@ -242,6 +243,28 @@ namespace Feels.Views {
             var listItem = (SlidableListItem)sender;
             var location = (LocationItem)listItem.DataContext;
 
+            DeleteSavedLocation(location);
+        }
+
+        private void CmdDeleteSavedLocation_Tapped(object sender, TappedRoutedEventArgs e) {
+            DeleteSavedLocation(_lastLocationSelected);
+        }
+
+        private void SavedLocation_RightTapped(object sender, RightTappedRoutedEventArgs ev) {
+            var listItem = (SlidableListItem)sender;
+            var location = (LocationItem)listItem.DataContext;
+
+            _lastLocationSelected = location;
+            SavedLocationRightTappedFlyout.ShowAt(listItem);
+        }
+
+        #endregion events
+
+        #region others methods
+
+        private void DeleteSavedLocation(LocationItem location) {
+            if (location == null) return;
+
             if (string.IsNullOrEmpty(location.Id)) {
                 return;
             }
@@ -253,10 +276,6 @@ namespace Feels.Views {
             _savedLocations.Remove(location);
             Settings.SaveLocationsAsync(_savedLocations.ToList());
         }
-
-        #endregion events
-
-        #region others methods
 
         private async Task<IReadOnlyList<MapLocation>> GetLocationFrom(string query) {
             var position = new BasicGeoposition {

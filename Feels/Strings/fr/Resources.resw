@@ -468,4 +468,7 @@
   <data name="TryAgainButton.Content" xml:space="preserve">
     <value>essayer à nouveau</value>
   </data>
+  <data name="CmdDeleteSavedLocation.Text" xml:space="preserve">
+    <value>supprimer</value>
+  </data>
 </root>

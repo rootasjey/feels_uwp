@@ -23,7 +23,8 @@
                 RightLabel="Delete"
                 MouseSlidingEnabled="True"
                 RightCommandRequested="SlidableListItem_RightCommandRequested"
-                Tapped="LocationSelected_Tapped">
+                Tapped="LocationSelected_Tapped"
+                RightTapped="SavedLocation_RightTapped">
 
                 <Grid MinHeight="80">
                     <Grid.ColumnDefinitions>
@@ -41,6 +42,13 @@
                 </Grid>
             </controls:SlidableListItem>
         </DataTemplate>
+
+        <MenuFlyout x:Name="SavedLocationRightTappedFlyout">
+            <MenuFlyoutItem x:Name="CmdDeleteSavedLocation"
+                            x:Uid="CmdDeleteSavedLocation"
+                            Text="Delete"
+                            Tapped="CmdDeleteSavedLocation_Tapped"/>
+        </MenuFlyout>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
