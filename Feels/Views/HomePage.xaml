@@ -9,11 +9,36 @@
     x:Class="Feels.Views.HomePage"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+          >
         <Grid.RowDefinitions>
             <RowDefinition x:Name="TitleBarRow" Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
+        <!--Mouse Page Navigation-->
+        <FontIcon x:Name="PageArrowLeft" 
+                  Glyph="&#xE00E;" 
+                  FontSize="32" 
+                  Grid.Row="1"
+                  Opacity=".5"
+                  Visibility="Collapsed"
+                  HorizontalAlignment="Left"
+                  FontFamily="Segoe MDL2 Assets"
+                  PointerEntered="PageArrow_PointerEntered"
+                  PointerExited="PageArrow_PointerExited"/>
+
+        <FontIcon x:Name="PageArrowRight" 
+                  Glyph="&#xE00F;" 
+                  FontSize="32" 
+                  Grid.Row="1" 
+                  Opacity=".5"
+                  Visibility="Collapsed"
+                  HorizontalAlignment="Right" 
+                  FontFamily="Segoe MDL2 Assets"
+                  PointerEntered="PageArrow_PointerEntered"
+                  PointerExited="PageArrow_PointerExited"/>
+
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WindowsStates">
                 <VisualState x:Name="MobileState">
@@ -106,7 +131,6 @@
         </FlyoutPresenter>
 
         <Pivot x:Name="PagePivot" Grid.Row="1">
-            
             <PivotItem x:Name="NowPivot" Margin="0,-51,0,0">
                 <ScrollViewer x:Name="PivotContent">
                     <Grid>
@@ -136,7 +160,7 @@
 
                             <StackPanel x:Name="WeatherViewContent">
 
-                                <TextBlock x:Name="City" Text="paris"
+                                <TextBlock x:Name="TownTextBlock" Text="paris"
                                                Typography.Capitals="AllSmallCaps"
                                                FontWeight="Bold"
                                                FontSize="26"
@@ -930,14 +954,16 @@
 
         <CommandBar x:Name="AppBar"
                     Grid.Row="1"
-                    Background="Transparent"
                     VerticalAlignment="Bottom" 
                     Opening="AppBar_Opening"
                     Closed="AppBar_Closed"
-                    ClosedDisplayMode="Minimal">
+                    ClosedDisplayMode="Compact">
             <CommandBar.SecondaryCommands>
                 <AppBarButton Label="settings" x:Uid="CmdSettings" Tapped="GoToSettings_Tapped" />
             </CommandBar.SecondaryCommands>
+            <AppBarButton x:Name="CmdLocations" x:Uid="CmdLocations"
+                          Label="locations" Icon="Map"
+                          Tapped="CmdLocations_Tapped"/>
             <AppBarButton x:Name="CmdRefresh" x:Uid="CmdRefresh"
                           Label="refresh" Icon="Refresh" 
                           Tapped="CmdRefresh_Tapped"/>

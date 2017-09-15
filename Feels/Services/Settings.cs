@@ -1,9 +1,14 @@
-﻿using Windows.Storage;
+﻿using System;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.System.UserProfile;
 using Windows.Devices.Geolocation;
 using DarkSkyApi;
 using Windows.ApplicationModel;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Feels.Models;
+using Newtonsoft.Json;
 
 namespace Feels.Services {
     public class Settings {
@@ -41,6 +46,18 @@ namespace Feels.Services {
         private static string AppVersionKey {
             get {
                 return "AppVersion";
+            }
+        }
+
+        private static string SavedLocationsKey {
+            get {
+                return "Savedlocations.json";
+            }
+        }
+
+        private static string FavoriteLocationKey {
+            get {
+                return "FavoriteLocation";
             }
         }
         #endregion keys
@@ -178,27 +195,58 @@ namespace Feels.Services {
         }
         #endregion first launch
 
-        #region favorites cities
-        //public static async Task SaveFavoritesAsync(ObservableKeyedCollection favorites, string source) {
-        //    string json = JsonConvert.SerializeObject(favorites);
-        //    StorageFile file =
-        //        await ApplicationData
-        //                .Current
-        //                .LocalFolder
-        //                .CreateFileAsync("favorites-" + source + ".json", CreationCollisionOption.ReplaceExisting);
+        #region locations
+        public static async Task SaveLocationsAsync(List<LocationItem> locations) {
+            string json = JsonConvert.SerializeObject(locations);
 
-        //    await FileIO.WriteTextAsync(file, json);
-        //}
+            StorageFile file =
+                await ApplicationData
+                        .Current
+                        .LocalFolder
+                        .CreateFileAsync(SavedLocationsKey, CreationCollisionOption.ReplaceExisting);
 
-        //public static async Task<ObservableKeyedCollection> LoadFavoritesAsync(string source) {
-        //    StorageFile file = (StorageFile)await ApplicationData.Current.LocalFolder.TryGetItemAsync("favorites-" + source + ".json");
-        //    if (file == null) return null;
+            await FileIO.WriteTextAsync(file, json);
+        }
 
-        //    string json = await FileIO.ReadTextAsync(file);
-        //    ObservableKeyedCollection favorites = JsonConvert.DeserializeObject<ObservableKeyedCollection>(json);
-        //    return favorites;
-        //}
-        #endregion favorites cities
+        public static async Task<List<LocationItem>> GetSavedLocationAsync() {
+            StorageFile file = (StorageFile)await ApplicationData.Current.LocalFolder.TryGetItemAsync(SavedLocationsKey);
+            if (file == null) return null;
+
+            string json = await FileIO.ReadTextAsync(file);
+            var savedLocationList = JsonConvert.DeserializeObject<List<LocationItem>>(json);
+            return savedLocationList;
+        }
+
+        public static async Task SaveFavoriteLocation(LocationItem location) {
+            string serializedLocation = JsonConvert.SerializeObject(location);
+
+            StorageFile file =
+                await ApplicationData
+                        .Current
+                        .LocalFolder
+                        .CreateFileAsync(FavoriteLocationKey, CreationCollisionOption.ReplaceExisting);
+
+            await FileIO.WriteTextAsync(file, serializedLocation);
+        }
+
+        public static async Task<LocationItem> GetFavoriteLocation() {
+            StorageFile file = (StorageFile)await ApplicationData.Current.LocalFolder.TryGetItemAsync(FavoriteLocationKey);
+            if (file == null) return null;
+
+            string json = await FileIO.ReadTextAsync(file);
+            var favoriteLocation = JsonConvert.DeserializeObject<LocationItem>(json);
+            return favoriteLocation;
+        }
+
+        public static async Task DeleteFavoriteLocation() {
+            StorageFile file = (StorageFile)await ApplicationData.Current.LocalFolder.TryGetItemAsync(FavoriteLocationKey);
+            if (file == null) return;
+
+            await file.DeleteAsync();
+        }
+
+
+        #endregion locations
 
         #region appversion
         public static bool IsNewUpdatedLaunch() {

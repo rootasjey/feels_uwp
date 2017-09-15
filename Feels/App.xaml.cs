@@ -2,13 +2,12 @@
 using Feels.Services;
 using Feels.Views;
 using System;
-using System.Globalization;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Resources;
 using Windows.Foundation.Metadata;
 using Windows.Globalization;
 using Windows.Phone.UI.Input;
-using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -21,13 +20,20 @@ namespace Feels {
 
         public static string DeviceType { get; set; }
 
+        public static ResourceLoader ResourceLoader { get; set; }
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
         public App() {
             InitializeComponent();
+            InitializeVariables();
             Suspending += OnSuspending;
+        }
+
+        private void InitializeVariables() {
+            ResourceLoader = new ResourceLoader();
         }
 
         /// <summary>

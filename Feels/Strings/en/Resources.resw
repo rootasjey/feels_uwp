@@ -444,4 +444,19 @@
   <data name="MoonPhaseWaxingGibbous" xml:space="preserve">
     <value>waxing gibbous</value>
   </data>
+  <data name="CmdLocations.Label" xml:space="preserve">
+    <value>locations</value>
+  </data>
+  <data name="CmdAddNewCity.Label" xml:space="preserve">
+    <value>add new</value>
+  </data>
+  <data name="CmdCancel.Label" xml:space="preserve">
+    <value>cancel</value>
+  </data>
+  <data name="TitleLocations.Text" xml:space="preserve">
+    <value>my locations</value>
+  </data>
+  <data name="MyCurrentPosition" xml:space="preserve">
+    <value>My current position</value>
+  </data>
 </root>
