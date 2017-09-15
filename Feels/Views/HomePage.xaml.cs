@@ -51,6 +51,10 @@ namespace Feels.Views {
 
         private Visual _PinEarthVisual { get; set; }
 
+        private AnimationSet _LeftArrowAnimationOut { get; set; }
+
+        private AnimationSet _RightArrowAnimationOut { get; set; }
+
         #endregion variables
 
         public HomePage() {
@@ -66,6 +70,7 @@ namespace Feels.Views {
         #region titlebar
         private void InitializeTitleBar() {
             App.DeviceType = Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily;
+
             if (App.DeviceType == "Windows.Mobile") {
                 var statusBar = StatusBar.GetForCurrentView();
                 statusBar.HideAsync();
@@ -666,18 +671,7 @@ namespace Feels.Views {
 
             InitializePageData();
         }
-
-        private void CurrentToHourlyButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
-            PagePivot.SelectedIndex = 1;
-        }
-
-        private void CurrentToDailyButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
-            PagePivot.SelectedIndex = 2;
-        }
-
-        private void HourlyToCurrentButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
-            PagePivot.SelectedIndex = 0;
-        }
+        
         private void HourlySummary_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
             HourlyList.ScrollToIndex(0);
         }
@@ -689,6 +683,7 @@ namespace Feels.Views {
         #endregion buttons
 
         #region events
+
         private async void HourForecast_Loaded(object sender, RoutedEventArgs e) {
             var panel = (Grid)sender;
 
@@ -721,6 +716,60 @@ namespace Feels.Views {
         private void PageArrow_PointerExited(object sender, PointerRoutedEventArgs e) {
             var arrow = (FontIcon)sender;
             arrow.Fade(.5f).Start();
+        }
+
+        private void Page_PointerEntered(object sender, PointerRoutedEventArgs ev) {
+            if (App.DeviceType != "Windows.Mobile" && PageArrowLeft.Visibility == Visibility.Collapsed) {
+                _LeftArrowAnimationOut?.Stop();
+                _LeftArrowAnimationOut?.Dispose();
+                _RightArrowAnimationOut?.Stop();
+                _RightArrowAnimationOut?.Dispose();
+
+                _LeftArrowAnimationOut = null;
+                _RightArrowAnimationOut = null;
+
+                PageArrowLeft.Visibility = Visibility.Visible;
+                PageArrowRight.Visibility = Visibility.Visible;
+
+                PageArrowLeft.Fade(.5f).Offset(0).Start();
+                PageArrowRight.Fade(.5f).Offset(0).Start();
+            }
+        }
+
+        private void Page_PointerExited(object sender, PointerRoutedEventArgs ev) {
+            if (App.DeviceType != "Windows.Mobile" && PageArrowLeft.Visibility == Visibility.Visible) {
+                _LeftArrowAnimationOut = PageArrowLeft.Fade(0).Offset(-30);
+                _RightArrowAnimationOut = PageArrowRight.Fade(0).Offset(30);
+
+                _LeftArrowAnimationOut.Completed += (s, e) => {
+                    PageArrowLeft.Visibility = Visibility.Collapsed;
+                };
+
+                _RightArrowAnimationOut.Completed += (s, e) => {
+                    PageArrowRight.Visibility = Visibility.Collapsed;
+                };
+
+                _LeftArrowAnimationOut.Start();
+                _RightArrowAnimationOut.Start();
+            }
+        }
+
+        private void PageArrowLeft_Tapped(object sender, TappedRoutedEventArgs e) {
+            if (PagePivot.SelectedIndex == 0) {
+                PagePivot.SelectedIndex = PagePivot.Items.Count - 1;
+                return;
+            }
+
+            PagePivot.SelectedIndex -= 1;
+        }
+
+        private void PageArrowRight_Tapped(object sender, TappedRoutedEventArgs e) {
+            if (PagePivot.SelectedIndex == PagePivot.Items.Count - 1) {
+                PagePivot.SelectedIndex = 0;
+                return;
+            }
+
+            PagePivot.SelectedIndex += 1;
         }
 
         #endregion events
@@ -807,5 +856,6 @@ namespace Feels.Views {
 
         #endregion update changelog
 
+        
     }
 }

@@ -165,12 +165,6 @@
   <data name="ContributeTitle.Text" xml:space="preserve">
     <value>Участвуйте</value>
   </data>
-  <data name="CurrentForecastButton.Text" xml:space="preserve">
-    <value>погода сейчас</value>
-  </data>
-  <data name="DailyForecastButton.Text" xml:space="preserve">
-    <value>прогноз по дням</value>
-  </data>
   <data name="Dark.Text" xml:space="preserve">
     <value>темная</value>
   </data>
@@ -224,9 +218,6 @@
   </data>
   <data name="hail" xml:space="preserve">
     <value>град</value>
-  </data>
-  <data name="HourlyForecastButton.Text" xml:space="preserve">
-    <value>прогноз по часам</value>
   </data>
   <data name="ImagesSourceContent.Text" xml:space="preserve">
     <value>За изображения и иконки благодарим</value>
@@ -458,5 +449,23 @@
   </data>
   <data name="MyCurrentPosition" xml:space="preserve">
     <value>My current position</value>
+  </data>
+  <data name="LoadingLocationsBlock.Text" xml:space="preserve">
+    <value>loading locations</value>
+  </data>
+  <data name="LocationFailedText.Text" xml:space="preserve">
+    <value>Seems like you aren't on Earth. Please check your location settings or your internet connection</value>
+  </data>
+  <data name="LocationListItem.RightLabel" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="LocationSettingsButton.Content" xml:space="preserve">
+    <value>location settings</value>
+  </data>
+  <data name="NoLocationFoundBlock.Text" xml:space="preserve">
+    <value>Sorry, there's no result for your query. Try something else.</value>
+  </data>
+  <data name="TryAgainButton.Content" xml:space="preserve">
+    <value>try again</value>
   </data>
 </root>

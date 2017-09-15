@@ -162,12 +162,6 @@
   <data name="ContributeTitle.Text" xml:space="preserve">
     <value>contribuer</value>
   </data>
-  <data name="CurrentForecastButton.Text" xml:space="preserve">
-    <value>météo actuelle</value>
-  </data>
-  <data name="DailyForecastButton.Text" xml:space="preserve">
-    <value>météo journalière</value>
-  </data>
   <data name="Dark.Text" xml:space="preserve">
     <value>sombre</value>
   </data>
@@ -218,9 +212,6 @@
   </data>
   <data name="hail" xml:space="preserve">
     <value>grèle</value>
-  </data>
-  <data name="HourlyForecastButton.Text" xml:space="preserve">
-    <value>météo horaire</value>
   </data>
   <data name="ImagesSourceContent.Text" xml:space="preserve">
     <value>les images proviennent de</value>
@@ -458,5 +449,23 @@
   </data>
   <data name="MyCurrentPosition" xml:space="preserve">
     <value>Ma position actuelle</value>
+  </data>
+  <data name="LoadingLocationsBlock.Text" xml:space="preserve">
+    <value>chargement des lieux</value>
+  </data>
+  <data name="LocationFailedText.Text" xml:space="preserve">
+    <value>Vous ne semblez pas avoir les pieds au sol. Veuillez vérifier vos paramètres de localisation ainsi que votre connexion internet.</value>
+  </data>
+  <data name="LocationListItem.RightLabel" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="LocationSettingsButton.Content" xml:space="preserve">
+    <value>paramètres de localisation</value>
+  </data>
+  <data name="NoLocationFoundBlock.Text" xml:space="preserve">
+    <value>Désolé, il n'y a aucun résultat pour ces termes de recherche. Essayez autre chose.</value>
+  </data>
+  <data name="TryAgainButton.Content" xml:space="preserve">
+    <value>essayer à nouveau</value>
   </data>
 </root>

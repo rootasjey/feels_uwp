@@ -48,6 +48,10 @@ namespace Feels.Views {
         }
 
         private void Page_KeyDown(CoreWindow sender, KeyEventArgs args) {
+            if (SearchLocationBox.FocusState != FocusState.Unfocused) {
+                return;
+            }
+
             if (Events.IsBackOrEscapeKey(args.VirtualKey) && Frame.CanGoBack) {
                 Frame.GoBack();
             }
@@ -90,6 +94,9 @@ namespace Feels.Views {
                         location.Longitude == favoriteLocation.Longitude) {
 
                         location.IsSelected = true;
+
+                    } else if (favoriteLocation == null & string.IsNullOrEmpty(location.Id)) {
+                        location.IsSelected = true; // select GPS if no favorite location
                     }
 
                     _savedLocations.Add(location);
@@ -136,6 +143,8 @@ namespace Feels.Views {
 
             CmdCancelAddCity.Visibility = Visibility.Visible;
             CmdAddNewCity.Visibility = Visibility.Collapsed;
+
+            SearchLocationBox.Focus(FocusState.Programmatic);
         }
 
         private void ShowContentLocationPanel() {
