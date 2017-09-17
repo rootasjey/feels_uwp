@@ -335,5 +335,25 @@ namespace Feels.Views {
         void AutoRefreshDataOnNextNavigation() {
             HomePage._ForceDataRefresh = true;
         }
+
+        private void BackgroundColorAnimationToggle_Toggled(object sender, RoutedEventArgs e) {
+            var toggle = (ToggleSwitch)sender;
+
+            var isAlreadyDeactivated = Settings.IsSceneColorAnimationDeactivated();
+
+            if (toggle.IsOn) {
+                if (isAlreadyDeactivated) return;
+
+                Settings.SaveSceneColorAnimationDeactivated(true);
+                return;
+            }
+
+            Settings.SaveSceneColorAnimationDeactivated(false);
+        }
+
+        private void BackgroundColorAnimationToggle_Loaded(object sender, RoutedEventArgs e) {
+            var toggle = (ToggleSwitch)sender;
+            toggle.IsOn = Settings.IsSceneColorAnimationDeactivated();
+        }
     }
 }

@@ -61,9 +61,15 @@ namespace Feels.Services {
             }
         }
 
-        private static string PressureUnit {
+        private static string PressureUnitKey {
             get {
                 return "PressureUnit";
+            }
+        }
+
+        private static string SceneColorAnimationDeactivatedKey {
+            get {
+                return "SceneColorAnimationDeactivated";
             }
         }
         #endregion keys
@@ -172,14 +178,14 @@ namespace Feels.Services {
 
         public static void SavePressureUnit(string unit) {
             var settingsValues = ApplicationData.Current.LocalSettings.Values;
-            settingsValues[PressureUnit] = unit;
+            settingsValues[PressureUnitKey] = unit;
         }
 
         public static string GetPressureUnit() {
             var settingsValues = ApplicationData.Current.LocalSettings.Values;
 
-            if (settingsValues.ContainsKey(PressureUnit)) {
-                var savedPressureUnit = (string)settingsValues[PressureUnit];
+            if (settingsValues.ContainsKey(PressureUnitKey)) {
+                var savedPressureUnit = (string)settingsValues[PressureUnitKey];
                 return savedPressureUnit;
             }
 
@@ -269,6 +275,20 @@ namespace Feels.Services {
 
 
         #endregion locations
+
+        #region animations
+        public static void SaveSceneColorAnimationDeactivated(bool status) {
+            var localSettings = ApplicationData.Current.LocalSettings;
+            localSettings.Values[SceneColorAnimationDeactivatedKey] = status;
+        }
+
+        public static bool IsSceneColorAnimationDeactivated() {
+            var settingsValues = ApplicationData.Current.LocalSettings.Values;
+
+            return settingsValues.ContainsKey(SceneColorAnimationDeactivatedKey) ?
+                (bool)settingsValues[SceneColorAnimationDeactivatedKey] : false;
+        }
+        #endregion animation
 
         #region appversion
         public static bool IsNewUpdatedLaunch() {

@@ -159,6 +159,10 @@ namespace Feels.Views {
                 return true;
             }
 
+            if (await Settings.GetFavoriteLocation() != null) {
+                return false;
+            }
+
             var geo = new Geolocator();
             var position = await geo.GetGeopositionAsync();
             var coord = position.Coordinate.Point.Position;
@@ -481,6 +485,8 @@ namespace Feels.Views {
         private async Task FetchCurrentWeather(LocationItem location) {
             await _PageDataSource.FetchCurrentWeather(location.Latitude, location.Longitude);
 
+            _LastFetchedTime = DateTime.Now;
+
             if (_PageDataSource.Forecast == null) {
                 SafeExit();
                 return;
@@ -506,7 +512,7 @@ namespace Feels.Views {
                     Settings.SavePosition(positionToReturn);
                 }
 
-                _LastFetchedTime = DateTime.Now;
+                //_LastFetchedTime = DateTime.Now;
                 _LastPosition = positionToReturn;
 
                 return positionToReturn;
@@ -629,7 +635,8 @@ namespace Feels.Views {
         private async void DrawScene() {
             var scene = Scenes.CreateNew(
                 _PageDataSource.Forecast.Currently, 
-                _PageDataSource.Forecast.Daily.Days[0]);
+                _PageDataSource.Forecast.Daily.Days[0],
+                Settings.IsSceneColorAnimationDeactivated());
 
             Theater.Children.Add(scene);
 

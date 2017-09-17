@@ -47,7 +47,7 @@
                             </ComboBox>
                         </StackPanel>
 
-                        <StackPanel Margin="0,20">
+                        <StackPanel x:Name="UnitsPanel" Margin="0,20">
                             <TextBlock Text="units" x:Uid="UnitsText" FontSize="24"/>
                             <TextBlock Text="choose temperature units"
                                        x:Uid="UnitsSubLabel"
@@ -65,6 +65,15 @@
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
+                        </StackPanel>
+
+                        <StackPanel x:Name="WeatherScenePanel">
+                            <TextBlock Text="animations" FontSize="24"/>
+                            <TextBlock Text="deactivate home background gradient color animation"
+                                       TextWrapping="Wrap"  Opacity=".5"/>
+                            <ToggleSwitch x:Name="BackgroundColorAnimationToggle"
+                                          Loaded="BackgroundColorAnimationToggle_Loaded"
+                                          Toggled="BackgroundColorAnimationToggle_Toggled"/>
                         </StackPanel>
                     </StackPanel>
                 </ScrollViewer>

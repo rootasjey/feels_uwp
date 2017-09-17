@@ -176,7 +176,8 @@
                               Visibility="Collapsed">
 
                             <StackPanel x:Name="WeatherViewContent">
-                                <StackPanel x:Name="MainWeatherContent">
+                                <StackPanel x:Name="MainWeatherContent"
+                                            Opacity="1">
                                     <TextBlock x:Name="TownTextBlock" Text="paris"
                                                    Typography.Capitals="AllSmallCaps"
                                                    FontWeight="Bold"
