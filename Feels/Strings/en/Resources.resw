@@ -489,4 +489,7 @@
   <data name="ButtonAddLocationManually.Content" xml:space="preserve">
     <value>add location manually</value>
   </data>
+  <data name="BlockTheme.Text" xml:space="preserve">
+    <value>theme</value>
+  </data>
 </root>

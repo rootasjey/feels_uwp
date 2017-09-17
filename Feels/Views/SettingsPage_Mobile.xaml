@@ -31,6 +31,16 @@
                 <ScrollViewer VerticalScrollBarVisibility="Hidden"
                               Margin="0,20,0,0">
                     <StackPanel x:Name="PersonalizationContentPanel">
+                        <StackPanel x:Name="ThemePanel" Margin="0,0,0,20">
+                            <TextBlock x:Uid="BlockTheme" Text="thème" FontSize="24"/>
+                            <ToggleSwitch x:Name="ThemeSwitch"
+                                          x:Uid="ThemeSwitch"
+                                          Loaded="ThemeSwitch_Loaded"
+                                          OnContent="Thème Clair"
+                                          OffContent="Thème Sombre"
+                                          Toggled="ThemeSwitch_Toggled"/>
+                        </StackPanel>
+                        
                         <StackPanel x:Name="LanguagePanel">
                             <TextBlock Text="language" x:Uid="LanguageLabel" FontSize="24"/>
                             

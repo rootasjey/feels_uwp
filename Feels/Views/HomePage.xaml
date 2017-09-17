@@ -142,8 +142,7 @@
         </FlyoutPresenter>
 
         <Pivot x:Name="PagePivot" Grid.Row="1">
-            <PivotItem x:Name="NowPivot" Margin="0,-51,0,0"
-                       RequestedTheme="Dark">
+            <PivotItem x:Name="NowPivot" Margin="0,-51,0,0">
                 <ScrollViewer x:Name="PivotContent">
                     <Grid>
 
@@ -162,7 +161,6 @@
                                        HorizontalAlignment="Center"
                                        Opacity=".5"/>
                             <TextBlock x:Uid="LoadingStuck" TextWrapping="Wrap"
-                                       FontWeight="Light"
                                        FontSize="18"
                                        Opacity=".7"
                                        Padding="20,0"
@@ -174,6 +172,7 @@
                               HorizontalAlignment="Center"
                               Margin="24,30,24,0"
                               Padding="0,0,0,100"
+                              RequestedTheme="Dark"
                               Visibility="Collapsed">
 
                             <StackPanel x:Name="WeatherViewContent">
@@ -706,7 +705,6 @@
                                                     Height="30"
                                                     Width="30"
                                                     VerticalAlignment="Center"
-                                                    Foreground="White"
                                                     Grid.Column="1"
                                                     />
 
@@ -838,7 +836,6 @@
                                                     Height="30"
                                                     Width="30"
                                                     VerticalAlignment="Center"
-                                                    Foreground="White"
                                                     Grid.Column="1"
                                                     />
 
@@ -897,7 +894,6 @@
                                                     Height="30"
                                                     Width="30"
                                                     VerticalAlignment="Center"
-                                                    Foreground="White"
                                                     Grid.Column="0"
                                                     />
 

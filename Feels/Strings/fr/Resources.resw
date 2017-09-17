@@ -475,7 +475,7 @@
     <value>direction</value>
   </data>
   <data name="LoadingStuck.Text" xml:space="preserve">
-    <value>Si vous utilisez la géolocalisation (GPS) pour afficher la météo, il se peut que le chargement se fige. Essayez de rédémarrer l'application si c'est le cas.</value>
+    <value>Si vous utilisez la géolocalisation (GPS) pour afficher la météo, il se peut que le chargement se fige. Essayez de redémarrer l'application dans ce cas.</value>
   </data>
   <data name="DescriptionPressure" xml:space="preserve">
     <value>La pression atmosphérique moyenne au niveau de la mer.</value>
@@ -488,5 +488,8 @@
   </data>
   <data name="ButtonAddLocationManually.Content" xml:space="preserve">
     <value>ajouter un lieu manuellement</value>
+  </data>
+  <data name="BlockTheme.Text" xml:space="preserve">
+    <value>thème</value>
   </data>
 </root>

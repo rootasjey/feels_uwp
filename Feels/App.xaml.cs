@@ -101,14 +101,29 @@ namespace Feels {
         }
 
         public static void UpdateAppTheme() {
+            UpdateTitleBarThemeButton();
+
             var frame = (Frame)Window.Current.Content;
+
+            if (Settings.IsApplicationThemeLight()) {
+                frame.RequestedTheme = ElementTheme.Light;
+                return;
+            }
+
             frame.RequestedTheme = ElementTheme.Dark;
         }
 
-        void UpdateTitleBarThemeButton() {
+        static void UpdateTitleBarThemeButton() {
             var titleBar = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TitleBar;
             titleBar.ButtonBackgroundColor = Colors.Transparent;
             titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
+
+            if (Settings.IsApplicationThemeLight()) {
+                titleBar.ButtonInactiveForegroundColor = Colors.Black;
+                titleBar.ButtonForegroundColor = Colors.Black;
+                return;
+            }
+
             titleBar.ButtonInactiveForegroundColor = Colors.White;
             titleBar.ButtonForegroundColor = Colors.White;
         }

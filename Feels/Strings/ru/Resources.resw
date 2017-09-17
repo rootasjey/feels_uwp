@@ -454,7 +454,7 @@
     <value>места погрузки</value>
   </data>
   <data name="LocationFailedText.Text" xml:space="preserve">
-    <value>Seems like you aren't on Earth. Please check your location settings or your internet connection</value>
+    <value>Похоже, ты не на земле. Проверьте местоположение или параметры подключения к Интернету</value>
   </data>
   <data name="LocationListItem.RightLabel" xml:space="preserve">
     <value>Удалить</value>
@@ -466,7 +466,7 @@
     <value>К сожалению это не результат для вашего запроса. Попробуйте что-нибудь другое.</value>
   </data>
   <data name="TryAgainButton.Content" xml:space="preserve">
-    <value>try again</value>
+    <value>Повторить</value>
   </data>
   <data name="CmdDeleteSavedLocation.Text" xml:space="preserve">
     <value>удалить</value>
@@ -475,7 +475,7 @@
     <value>направление</value>
   </data>
   <data name="LoadingStuck.Text" xml:space="preserve">
-    <value>Sometimes the loading get stucked if you're using GPS for the weather location. Try to close then restart the app if this happens.</value>
+    <value>Иногда погрузка застряла, если вы используете GPS для местоположения погоды. Попробуйте закрыть и перезапустить приложение, если это произойдет.</value>
   </data>
   <data name="DescriptionPressure" xml:space="preserve">
     <value>Атмосферного давления на уровне моря.</value>
@@ -488,5 +488,8 @@
   </data>
   <data name="ButtonAddLocationManually.Content" xml:space="preserve">
     <value>Добавить местоположение вручную</value>
+  </data>
+  <data name="BlockTheme.Text" xml:space="preserve">
+    <value>Цвет фона приложения</value>
   </data>
 </root>

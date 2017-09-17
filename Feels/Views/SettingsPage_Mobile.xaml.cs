@@ -332,6 +332,7 @@ namespace Feels.Views {
         }
         #endregion temperature unit
 
+        #region personalization
         void AutoRefreshDataOnNextNavigation() {
             HomePage._ForceDataRefresh = true;
         }
@@ -355,5 +356,19 @@ namespace Feels.Views {
             var toggle = (ToggleSwitch)sender;
             toggle.IsOn = Settings.IsSceneColorAnimationDeactivated();
         }
+
+        private void ThemeSwitch_Loaded(object sender, RoutedEventArgs e) {
+            var toggle = (ToggleSwitch)sender;
+            toggle.IsOn = Settings.IsApplicationThemeLight();
+        }
+
+        private void ThemeSwitch_Toggled(object sender, RoutedEventArgs e) {
+            var toggle = (ToggleSwitch)sender;
+
+            if (toggle.IsOn) Settings.UpdateAppTheme(ApplicationTheme.Light);
+            else Settings.UpdateAppTheme(ApplicationTheme.Dark);
+        }
+
+        #endregion personalization
     }
 }
