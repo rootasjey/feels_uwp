@@ -87,7 +87,7 @@ namespace Feels.Services.WeatherScene {
                 default:
                     break;
             }
-            
+
             scene.Children.Add(animationsScene);
             return scene;
         }
@@ -96,9 +96,9 @@ namespace Feels.Services.WeatherScene {
             var container = new Canvas();
             var rand = new Random();
 
-            for (int i = 0; i < 25; i++) {
+            for (int i = 0; i < 35; i++) {
                 var x = rand.Next(0, (int)_screenSize.Width);
-                var duration = rand.Next(2, 10);
+                var duration = rand.Next(3, 8);
                 var delay = rand.Next(0, 10);
 
                 var line = Icons.CreateLine(x, duration, delay, _screenSize);

@@ -36,7 +36,9 @@ namespace Feels.Views {
 
         private int _AnimationDelayHourForcast { get; set; }
 
-        private int _AnimationDelayDailyForecast { get; set; } 
+        private int _AnimationDelayDailyForecast { get; set; }
+
+        private int _DelayDetailItem { get; set; }
 
         static DateTime _LastFetchedTime { get; set; }
 
@@ -247,6 +249,7 @@ namespace Feels.Views {
 
             UI.AnimateNumericValue((int)weatherCurrent.Temperature, Temperature, _UIDispatcher, "°");
             PopulateWeatherView(weatherToday, weatherCurrent);
+            AnimateDetailsItems();
             SetMoonPhase(weatherToday);
             AnimateWindDirectionIcons();
 
@@ -792,6 +795,62 @@ namespace Feels.Views {
             PagePivot.SelectedIndex += 1;
         }
 
+        private void PanelPressure_Tapped(object sender, TappedRoutedEventArgs ev) {
+            var savedUnit = Settings.GetPressureUnit();
+            var baseUnit = GetPressureUnits();
+            var millibars = "millibars";
+
+            var description = new TextBlock() {
+                Text = App.ResourceLoader.GetString("DescriptionPressure"),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Margin = new Thickness(0, 0, 0, 20),
+                TextWrapping = TextWrapping.Wrap
+            };
+
+            var unitsChooser = new ComboBox() {
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
+
+            var baseUnitItem = new ComboBoxItem() {
+                Content = "Hectopascal",
+                Tag = "hpa"
+            };
+
+            var mercuryUnit = new ComboBoxItem() {
+                Content = "Millimeter of mercury",
+                Tag = "mmHg"
+            };
+
+            if (baseUnit == millibars) {
+                baseUnitItem.Content = millibars;
+                Tag = millibars;
+            }
+
+            unitsChooser.Items.Add(baseUnitItem);
+            unitsChooser.Items.Add(mercuryUnit);
+
+            unitsChooser.SelectedIndex = 0;
+
+            if (savedUnit != null) {
+                unitsChooser.SelectedIndex = 1;
+            }
+
+            unitsChooser.SelectionChanged += (s, e) => {
+                var unit = (string)((ComboBoxItem)unitsChooser.SelectedItem).Tag;
+
+                if (unit == "mmHg") { Settings.SavePressureUnit(unit); } else { Settings.SavePressureUnit(null); }
+
+                SetPressureValue(_PageDataSource.Forecast.Currently);
+            };
+
+            var panel = new StackPanel();
+            panel.Children.Add(description);
+            panel.Children.Add(unitsChooser);
+
+            SetFlyoutWeatherDetailContent(panel);
+            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
+        }
+
         #endregion events
 
         #region commandbar
@@ -877,66 +936,28 @@ namespace Feels.Views {
 
         #endregion update changelog
 
-        private void PanelPressure_Tapped(object sender, TappedRoutedEventArgs ev) {
-            var savedUnit = Settings.GetPressureUnit();
-            var baseUnit = GetPressureUnits();
-            var millibars = "millibars";
-
-            var description = new TextBlock() {
-                Text = App.ResourceLoader.GetString("DescriptionPressure"),
-                HorizontalAlignment = HorizontalAlignment.Center,
-                Margin = new Thickness(0,0,0,20),
-                TextWrapping = TextWrapping.Wrap
-            };
-
-            var unitsChooser = new ComboBox() {
-                HorizontalAlignment = HorizontalAlignment.Center
-            };
-
-            var baseUnitItem = new ComboBoxItem() {
-                Content = "Hectopascal",
-                Tag = "hpa"
-            };
-
-            var mercuryUnit = new ComboBoxItem() {
-                Content = "Millimeter of mercury",
-                Tag = "mmHg"
-            };
-
-            if (baseUnit == millibars) {
-                baseUnitItem.Content = millibars;
-                Tag = millibars;
-            }
-
-            unitsChooser.Items.Add(baseUnitItem);
-            unitsChooser.Items.Add(mercuryUnit);
-
-            unitsChooser.SelectedIndex = 0;
-
-            if (savedUnit != null) {
-                unitsChooser.SelectedIndex = 1;
-            }
-
-            unitsChooser.SelectionChanged += (s, e) => {
-                var unit = (string)((ComboBoxItem)unitsChooser.SelectedItem).Tag;
-
-                if (unit == "mmHg") { Settings.SavePressureUnit(unit); }
-                else { Settings.SavePressureUnit(null); }
-
-                SetPressureValue(_PageDataSource.Forecast.Currently);
-            };
-
-            var panel = new StackPanel();
-            panel.Children.Add(description);
-            panel.Children.Add(unitsChooser);
-
-            SetFlyoutWeatherDetailContent(panel);
-            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
-        }
-
         private void SetFlyoutWeatherDetailContent(Panel panel) {
             FlyoutWeatherDetailContent.Children.Clear();
             FlyoutWeatherDetailContent.Children.Add(panel);
         }
+
+        #region animations
+        private void AnimateDetailsItems() {
+            foreach (Grid item in PanelWeatherDetails.Children) {
+                foreach (StackPanel pan in item.Children) {
+                    _DelayDetailItem += 100;
+
+                    pan.Fade(0, 0)
+                        .Scale(.5f, .5f, 15, 15, 0)
+                        .Then()
+                        .Fade(1)
+                        .Scale(1, 1, 15, 15)
+                        .SetDelay(_DelayDetailItem)
+                        .Start();
+                }
+            }
+        }
+
+        #endregion animations
     }
 }

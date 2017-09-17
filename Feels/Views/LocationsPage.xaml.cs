@@ -28,6 +28,8 @@ namespace Feels.Views {
 
         private string _lastLocationQuery { get; set; }
 
+        private double _delaySavedLocationList { get; set; }
+
         #endregion variables
 
         #region navigation
@@ -301,5 +303,18 @@ namespace Feels.Views {
         }
 
         #endregion others methods
+
+        private void SavecLocation_Loaded(object sender, RoutedEventArgs e) {
+            _delaySavedLocationList += 100;
+
+            var item = (SlidableListItem)sender;
+            item.Offset(0, 50,0)
+                .Fade(0,0)
+                .Then()
+                .Offset(0)
+                .Fade(1)
+                .SetDelay(_delaySavedLocationList)
+                .Start();
+        }
     }
 }
