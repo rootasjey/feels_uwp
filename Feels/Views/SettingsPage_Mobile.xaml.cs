@@ -201,7 +201,7 @@ namespace Feels.Views {
         }
 
         private async void NoteButton_Click(object sender, RoutedEventArgs e) {
-            string appID = "9wzdncrcwfqr";
+            string appID = "9NB305KW0MBP";
             var op = await Windows.System.Launcher
                 .LaunchUriAsync(new Uri("ms-windows-store://review/?ProductId=" + appID));
         }

@@ -379,16 +379,16 @@
     <value>-We don't store your personal information at all</value>
   </data>
   <data name="CloudCover.Text" xml:space="preserve">
-    <value>cloud cover</value>
+    <value>cover</value>
   </data>
   <data name="Highest.Text" xml:space="preserve">
-    <value>highest</value>
+    <value>high</value>
   </data>
   <data name="Humidity.Text" xml:space="preserve">
     <value>humidity</value>
   </data>
   <data name="Lowest.Text" xml:space="preserve">
-    <value>lowest</value>
+    <value>low</value>
   </data>
   <data name="Pressure.Text" xml:space="preserve">
     <value>pressure</value>
@@ -403,7 +403,7 @@
     <value>sunset</value>
   </data>
   <data name="WindSpeed.Text" xml:space="preserve">
-    <value>wind speed</value>
+    <value>speed</value>
   </data>
   <data name="UpdateVersion.Text" xml:space="preserve">
     <value>Update</value>
@@ -470,5 +470,14 @@
   </data>
   <data name="CmdDeleteSavedLocation.Text" xml:space="preserve">
     <value>delete</value>
+  </data>
+  <data name="WindDirection.Text" xml:space="preserve">
+    <value>direction</value>
+  </data>
+  <data name="LoadingStuck.Text" xml:space="preserve">
+    <value>Sometimes the loading get stucked if you're using GPS for the weather location. Try to close then restart the app if this happens.</value>
+  </data>
+  <data name="DescriptionPressure" xml:space="preserve">
+    <value>The sea-level air pressure.</value>
   </data>
 </root>

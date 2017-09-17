@@ -60,6 +60,12 @@ namespace Feels.Services {
                 return "FavoriteLocation";
             }
         }
+
+        private static string PressureUnit {
+            get {
+                return "PressureUnit";
+            }
+        }
         #endregion keys
 
         #region position
@@ -162,6 +168,22 @@ namespace Feels.Services {
             }
 
             return Unit.SI;
+        }
+
+        public static void SavePressureUnit(string unit) {
+            var settingsValues = ApplicationData.Current.LocalSettings.Values;
+            settingsValues[PressureUnit] = unit;
+        }
+
+        public static string GetPressureUnit() {
+            var settingsValues = ApplicationData.Current.LocalSettings.Values;
+
+            if (settingsValues.ContainsKey(PressureUnit)) {
+                var savedPressureUnit = (string)settingsValues[PressureUnit];
+                return savedPressureUnit;
+            }
+
+            return null;
         }
         #endregion units
 

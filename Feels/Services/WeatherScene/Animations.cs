@@ -5,7 +5,6 @@ using Windows.UI.Composition;
 namespace Feels.Services.WeatherScene {
     public class Animations {
         public static Vector2KeyFrameAnimation CreateScaleAnimation(Compositor compositor, Vector2 ScaleXY, double duration) {
-            // ANIMATIONS
             var animation = compositor.CreateVector2KeyFrameAnimation();
             animation.InsertKeyFrame(0f, new Vector2(1, 1));
             animation.InsertKeyFrame(1f, ScaleXY);

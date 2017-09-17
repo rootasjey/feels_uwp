@@ -9,6 +9,12 @@
     x:Class="Feels.Views.HomePage"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <Flyout x:Key="FlyoutWeatherDetail">
+            <Grid x:Name="FlyoutWeatherDetailContent"/>
+        </Flyout>
+    </Page.Resources>
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
           PointerEntered="Page_PointerEntered"
           PointerExited="Page_PointerExited">
@@ -150,10 +156,16 @@
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Center">
                             <BitmapIcon UriSource="/Assets/icon.png" 
-                                        Foreground="White" 
                                         Height="90" Width="90"/>
                             <TextBlock Text="feels" FontSize="60"
+                                       HorizontalAlignment="Center"
                                        Opacity=".5"/>
+                            <TextBlock x:Uid="LoadingStuck" TextWrapping="Wrap"
+                                       FontWeight="Light"
+                                       FontSize="18"
+                                       Opacity=".7"
+                                       Padding="20,0"
+                                       Text="Sometimes the loading get stucked if you're using GPS for the weather location. Try to close then restart the app if this happens."/>
                         </StackPanel>
 
                         <Grid x:Name="WeatherView" 
@@ -164,62 +176,64 @@
                               Visibility="Collapsed">
 
                             <StackPanel x:Name="WeatherViewContent">
+                                <StackPanel x:Name="MainWeatherContent">
+                                    <TextBlock x:Name="TownTextBlock" Text="paris"
+                                                   Typography.Capitals="AllSmallCaps"
+                                                   FontWeight="Bold"
+                                                   FontSize="26"
+                                                   Opacity="1"
+                                                   TextAlignment="Center"/>
 
-                                <TextBlock x:Name="TownTextBlock" Text="paris"
+                                    <TextBlock x:Name="LastTimeUpdate"
+                                               Visibility="Visible"
                                                Typography.Capitals="AllSmallCaps"
-                                               FontWeight="Bold"
-                                               FontSize="26"
-                                               Opacity="1"
+                                               Text="Monday 11:35 AM"
                                                TextAlignment="Center"/>
 
-                                <TextBlock x:Name="LastTimeUpdate"
-                                           Visibility="Visible"
-                                           Typography.Capitals="AllSmallCaps"
-                                           Text="Monday 11:35 AM"
-                                           TextAlignment="Center"/>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,265,0,0"
+                                                HorizontalAlignment="Center">
+                                        <!--Margin="0,265,0,0"-->
 
-                                <StackPanel Orientation="Horizontal"
-                                            Margin="0,265,0,0"
-                                            HorizontalAlignment="Center">
-                                    <!--Margin="0,250,0,0"-->
+                                        <TextBlock x:Name="Temperature"
+                                                       Text="42°"
+                                                       Margin="12,0,0,0"
+                                                       FontWeight="SemiBold" 
+                                                       FontSize="80"/>
+                                    </StackPanel>
 
-                                    <TextBlock x:Name="Temperature"
-                                                   Text="42°"
-                                                   Margin="12,0,0,0"
-                                                   FontWeight="SemiBold" 
-                                                   FontSize="80"/>
+                                    <TextBlock x:Name="TempUnit" 
+                                                   Text="celcius"
+                                                   FontSize="22"
+                                                   Visibility="Collapsed"
+                                                   FontWeight="Bold"
+                                                   Opacity=".5"
+                                                   TextAlignment="Center"/>
+
+                                    <TextBlock x:Name="FeelsLike" 
+                                               x:Uid="FeelsLikeText"
+                                               Text="Feels more like "
+                                               FontWeight="Light"
+                                               Opacity=".6"
+                                               HorizontalAlignment="Center"/>
+
+                                    <TextBlock x:Name="Status" 
+                                               Text="Clair" 
+                                               FontWeight="SemiBold"
+                                                Typography.Capitals="AllSmallCaps"
+                                                TextAlignment="Center"
+                                                TextWrapping="Wrap"
+                                                FontSize="26"/>
                                 </StackPanel>
-
-                                <TextBlock x:Name="TempUnit" 
-                                               Text="celcius"
-                                               FontSize="22"
-                                               Visibility="Collapsed"
-                                               FontWeight="Bold"
-                                               Opacity=".5"
-                                               TextAlignment="Center"/>
-
-                                <TextBlock x:Name="FeelsLike" 
-                                           x:Uid="FeelsLikeText"
-                                           Text="Feels more like "
-                                           FontWeight="Light"
-                                           Opacity=".6"
-                                           HorizontalAlignment="Center"/>
-
-                                <TextBlock x:Name="Status" 
-                                           Text="Clair" 
-                                           FontWeight="SemiBold"
-                                            Typography.Capitals="AllSmallCaps"
-                                            TextAlignment="Center"
-                                            TextWrapping="Wrap"
-                                            FontSize="26"/>
-
+                                
                                 <StackPanel x:Name="PanelWeatherDetails"
+                                            MinWidth="270"
                                             Margin="0,90,0,0">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="30*"/>
-                                            <ColumnDefinition Width="30*"/>
-                                            <ColumnDefinition Width="30*"/>
+                                            <ColumnDefinition Width="40*"/>
+                                            <ColumnDefinition Width="40*"/>
+                                            <ColumnDefinition Width="40*"/>
                                         </Grid.ColumnDefinitions>
 
                                         <StackPanel x:Name="PanelMinTemp">
@@ -280,9 +294,9 @@
 
                                     <Grid Margin="0,40,0,0" Visibility="Visible">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="30*"/>
-                                            <ColumnDefinition Width="30*"/>
-                                            <ColumnDefinition Width="30*"/>
+                                            <ColumnDefinition Width="40*"/>
+                                            <ColumnDefinition Width="40*"/>
+                                            <ColumnDefinition Width="40*"/>
                                         </Grid.ColumnDefinitions>
 
                                         <StackPanel x:Name="PanelHumidity">
@@ -343,7 +357,7 @@
                                         </StackPanel>
                                     </Grid>
 
-                                    <Grid Margin="0,40,0,0">
+                                    <Grid Margin="0,40,0,0" Visibility="Visible">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="30*"/>
                                             <ColumnDefinition Width="30*"/>
@@ -368,8 +382,28 @@
                                                        HorizontalAlignment="Center"/>
                                         </StackPanel>
 
-                                        <StackPanel x:Name="PanelCloudCover"
+                                        <StackPanel x:Name="PanelWindDirection"
                                                     Grid.Column="1">
+                                            <BitmapIcon x:Name="WindDirectionIcon" 
+                                                        UriSource="/Assets/Icons/wind_direction.png"
+                                                        Height="30" Width="30"
+                                                        Margin="0,0,0,10"/>
+
+                                            <TextBlock x:Uid="WindDirection" 
+                                                       Text="wind direction"
+                                                       Opacity=".5"
+                                                       FontSize="14"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Center"/>
+                                            <TextBlock x:Name="WindDirection" 
+                                                       Text="16"
+                                                       FontSize="16"
+                                                       FontWeight="SemiBold"
+                                                       HorizontalAlignment="Center"/>
+                                        </StackPanel>
+
+                                        <StackPanel x:Name="PanelCloudCover"
+                                                    Grid.Column="2">
 
                                             <BitmapIcon UriSource="/Assets/Icons/cloudy.png"
                                                         Height="30" Width="30"
@@ -388,8 +422,58 @@
                                                        HorizontalAlignment="Center"/>
                                         </StackPanel>
 
+                                        
+                                    </Grid>
+
+                                    <Grid Margin="0,40,0,0" Visibility="Visible">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="40*"/>
+                                            <ColumnDefinition Width="40*"/>
+                                            <ColumnDefinition Width="40*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel x:Name="PanelMoonrise"
+                                                    Grid.Column="0">
+
+                                            <BitmapIcon UriSource="/Assets/Icons/moon_rise.png"
+                                                        Height="30" Width="30"
+                                                        Margin="0,0,0,10"/>
+
+                                            <TextBlock x:Uid="Sunrise" 
+                                                       Text="sunrise"
+                                                       Opacity=".5"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Center"/>
+                                            <TextBlock x:Name="MoonriseTime" 
+                                                       Text="16"
+                                                       FontSize="20"
+                                                       FontWeight="SemiBold"
+                                                       HorizontalAlignment="Center"/>
+                                        </StackPanel>
+
+                                        <StackPanel x:Name="PanelMoonset"
+                                                    Grid.Column="1">
+
+                                            <BitmapIcon UriSource="/Assets/Icons/moon_set.png"
+                                                        Height="30" Width="30"
+                                                        Margin="0,0,0,10"/>
+
+                                            <TextBlock x:Uid="Sunset" 
+                                                       Text="sunset"
+                                                       Opacity=".5"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Center"/>
+                                            <TextBlock x:Name="MoonsetTime" 
+                                                       Text="16"
+                                                       FontSize="20"
+                                                       FontWeight="SemiBold"
+                                                       HorizontalAlignment="Center"/>
+                                        </StackPanel>
+
                                         <StackPanel x:Name="PanelPressure"
-                                                    Grid.Column="2">
+                                                    Grid.Column="2"
+                                                    FlyoutBase.AttachedFlyout="{StaticResource FlyoutWeatherDetail}"
+                                                    Tapped="PanelPressure_Tapped">
 
                                             <BitmapIcon UriSource="/Assets/Icons/pressure.png"
                                                         Height="30" Width="30"
@@ -407,7 +491,7 @@
                                                        HorizontalAlignment="Center"/>
                                         </StackPanel>
                                     </Grid>
-
+                                    
                                     <Grid Margin="0,40,0,0">
                                         <!--<Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="30*"/>
@@ -840,6 +924,7 @@
 
         <CommandBar x:Name="AppBar"
                     Grid.Row="1"
+                    Canvas.ZIndex="4"
                     VerticalAlignment="Bottom" 
                     Opening="AppBar_Opening"
                     Closed="AppBar_Closed"

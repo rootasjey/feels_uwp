@@ -159,6 +159,8 @@
     <Content Include="Assets\Icons\dark_cloud.png" />
     <Content Include="Assets\Icons\fog.png" />
     <Content Include="Assets\Icons\moon.png" />
+    <Content Include="Assets\Icons\moon_rise.png" />
+    <Content Include="Assets\Icons\moon_set.png" />
     <Content Include="Assets\Icons\partycloudy_day.png" />
     <Content Include="Assets\Icons\partycloudy_night.png" />
     <Content Include="Assets\Icons\precip_proba.png" />
@@ -173,7 +175,7 @@
     <Content Include="Assets\Icons\thermo_up.png" />
     <Content Include="Assets\Icons\uv.png" />
     <Content Include="Assets\Icons\wind.png" />
-    <Content Include="Assets\Icons\wind0.png" />
+    <Content Include="Assets\Icons\wind_direction.png" />
     <Content Include="Assets\LargeTile.scale-100.png" />
     <Content Include="Assets\LargeTile.scale-125.png" />
     <Content Include="Assets\LargeTile.scale-150.png" />

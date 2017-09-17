@@ -382,13 +382,13 @@
     <value>облачность</value>
   </data>
   <data name="Highest.Text" xml:space="preserve">
-    <value>максимум</value>
+    <value>высокая</value>
   </data>
   <data name="Humidity.Text" xml:space="preserve">
     <value>влажность</value>
   </data>
   <data name="Lowest.Text" xml:space="preserve">
-    <value>минимум</value>
+    <value>низкая</value>
   </data>
   <data name="Pressure.Text" xml:space="preserve">
     <value>давление</value>
@@ -403,72 +403,81 @@
     <value>закат</value>
   </data>
   <data name="WindSpeed.Text" xml:space="preserve">
-    <value>ветер</value>
+    <value>скорость</value>
   </data>
   <data name="UpdateVersion.Text" xml:space="preserve">
     <value>Версия</value>
   </data>
   <data name="MoonPhase.Text" xml:space="preserve">
-    <value>moon phase</value>
+    <value>фазы Луны</value>
   </data>
   <data name="MoonPhaseFirstQuarter" xml:space="preserve">
-    <value>first quarter</value>
+    <value>первый квартал</value>
   </data>
   <data name="MoonPhaseFullMoon" xml:space="preserve">
-    <value>full moon</value>
+    <value>Полная Луна</value>
   </data>
   <data name="MoonPhaseNewMoon" xml:space="preserve">
-    <value>new moon</value>
+    <value>Новолуние</value>
   </data>
   <data name="MoonPhaseThirdQuarter" xml:space="preserve">
-    <value>third quarter</value>
+    <value>третий квартал</value>
   </data>
   <data name="MoonPhaseWaningCrescent" xml:space="preserve">
-    <value>waning crescent</value>
+    <value>Растущая Луна</value>
   </data>
   <data name="MoonPhaseWaningGibbous" xml:space="preserve">
-    <value>waning gibbous</value>
+    <value>Убывающая луна</value>
   </data>
   <data name="MoonPhaseWaxingCrescent" xml:space="preserve">
-    <value>waxing crescent</value>
+    <value>Ваксинг Полумесяца</value>
   </data>
   <data name="MoonPhaseWaxingGibbous" xml:space="preserve">
-    <value>waxing gibbous</value>
+    <value>Растущая Луна</value>
   </data>
   <data name="CmdLocations.Label" xml:space="preserve">
     <value>locations</value>
   </data>
   <data name="CmdAddNewCity.Label" xml:space="preserve">
-    <value>add new</value>
+    <value>Добавить новый</value>
   </data>
   <data name="CmdCancel.Label" xml:space="preserve">
-    <value>cancel</value>
+    <value>Отмена</value>
   </data>
   <data name="TitleLocations.Text" xml:space="preserve">
-    <value>my locations</value>
+    <value>Мои места</value>
   </data>
   <data name="MyCurrentPosition" xml:space="preserve">
-    <value>My current position</value>
+    <value>Моя текущая позиция</value>
   </data>
   <data name="LoadingLocationsBlock.Text" xml:space="preserve">
-    <value>loading locations</value>
+    <value>места погрузки</value>
   </data>
   <data name="LocationFailedText.Text" xml:space="preserve">
     <value>Seems like you aren't on Earth. Please check your location settings or your internet connection</value>
   </data>
   <data name="LocationListItem.RightLabel" xml:space="preserve">
-    <value>Delete</value>
+    <value>Удалить</value>
   </data>
   <data name="LocationSettingsButton.Content" xml:space="preserve">
-    <value>location settings</value>
+    <value>Параметры местоположения</value>
   </data>
   <data name="NoLocationFoundBlock.Text" xml:space="preserve">
-    <value>Sorry, there's no result for your query. Try something else.</value>
+    <value>К сожалению это не результат для вашего запроса. Попробуйте что-нибудь другое.</value>
   </data>
   <data name="TryAgainButton.Content" xml:space="preserve">
     <value>try again</value>
   </data>
   <data name="CmdDeleteSavedLocation.Text" xml:space="preserve">
-    <value>delete</value>
+    <value>удалить</value>
+  </data>
+  <data name="WindDirection.Text" xml:space="preserve">
+    <value>направление</value>
+  </data>
+  <data name="LoadingStuck.Text" xml:space="preserve">
+    <value>Sometimes the loading get stucked if you're using GPS for the weather location. Try to close then restart the app if this happens.</value>
+  </data>
+  <data name="DescriptionPressure" xml:space="preserve">
+    <value>Атмосферного давления на уровне моря.</value>
   </data>
 </root>

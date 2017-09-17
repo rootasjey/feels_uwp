@@ -1,4 +1,5 @@
-﻿using Feels.Data;
+﻿using DarkSkyApi.Models;
+using Feels.Data;
 using Feels.Models;
 using Feels.Services;
 using Feels.Services.WeatherScene;
@@ -19,6 +20,7 @@ using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
@@ -242,125 +244,143 @@ namespace Feels.Views {
             var weatherToday = _PageDataSource.Forecast.Daily.Days[0];
 
             await AnimateSlideIn(WeatherViewContent);
-            AnimateTemperature();
 
-            FillInData();
+            UI.AnimateNumericValue((int)weatherCurrent.Temperature, Temperature, _UIDispatcher, "°");
+            PopulateWeatherView(weatherToday, weatherCurrent);
+            SetMoonPhase(weatherToday);
+            AnimateWindDirectionIcons();
+
             DrawScene();
-
             UpdateMainTile();
+        }
 
-            async void AnimateTemperature()
-            {
-                int temperature = (int)weatherCurrent.Temperature;
+        private void PopulateWeatherView(DayDataPoint todayWeather, CurrentDataPoint currentWeather) {
+            Status.Text = currentWeather.Summary;
+            FeelsLike.Text += string.Format(" {0}°{1}", currentWeather.ApparentTemperature, Settings.GetTemperatureUnit());
+            PrecipProbaValue.Text = string.Format("{0}%", todayWeather.PrecipitationProbability * 100);
+            HumidityValue.Text = string.Format("{0}%", currentWeather.Humidity * 100);
 
-                var max = temperature;
-                var curr = 0;
-                var step = max > 0 ? 1 : -1;
-                var div = Math.Abs(max - curr);
-                var delay = 1000 / div;
+            SunriseTime.Text = todayWeather.SunriseTime.ToLocalTime().ToString("HH:mm");
+            SunsetTime.Text = todayWeather.SunsetTime.ToLocalTime().ToString("HH:mm");
+            MoonriseTime.Text = todayWeather.SunsetTime.ToLocalTime().ToString("HH:mm");
+            MoonsetTime.Text = todayWeather.SunriseTime.ToLocalTime().ToString("HH:mm");
 
-                while (max != curr) {
-                    await Task.Delay(delay).ContinueWith(async _ => {
-                        curr += step;
-                        div = Math.Abs(max - curr) == 0 ? 1 : Math.Abs(max - curr);
-                        delay = 1000 / div;
+            WindSpeed.Text = string.Format("{0}{1}", currentWeather.WindSpeed, GetWindSpeedUnits());
 
-                        await _UIDispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                            Temperature.Text = string.Format("{0}°", curr);
-                        });
-                    });
-                }
-            }
+            WindDirection.Text = string.Format("{0}°", currentWeather.WindBearing);
+            WindDirectionIcon
+                .Rotate(currentWeather.WindBearing + 180,
+                (float)WindDirectionIcon.ActualWidth / 2, (float)WindDirection.ActualHeight / 2)
+                .Start();
 
-            void FillInData()
-            {
-                Status.Text = weatherCurrent.Summary;
-                FeelsLike.Text += string.Format(" {0}°{1}", weatherCurrent.ApparentTemperature, Settings.GetTemperatureUnit());
-                PrecipProbaValue.Text = string.Format("{0}%", weatherToday.PrecipitationProbability * 100);
-                HumidityValue.Text = string.Format("{0}%", weatherCurrent.Humidity * 100);
-                SunriseTime.Text = weatherToday.SunriseTime.ToLocalTime().ToString("hh:mm");
-                SunsetTime.Text = weatherToday.SunsetTime.ToLocalTime().ToString("hh:mm");
+            CloudCover.Text = string.Format("{0}%", currentWeather.CloudCover * 100);
+            
 
-                WindSpeed.Text = string.Format("{0}{1}", weatherCurrent.WindSpeed, GetWindSpeedUnits());
-                CloudCover.Text = string.Format("{0}%", weatherCurrent.CloudCover * 100);
-                Pressure.Text = string.Format("{0}{1}", weatherCurrent.Pressure, GetPressureUnits());
+            LastTimeUpdate.Text = DateTime.Now.ToLocalTime().ToString("dddd HH:mm");
 
-                LastTimeUpdate.Text = DateTime.Now.ToLocalTime().ToString("dddd HH:mm");
+            if (_PageDataSource.Forecast.Daily.Days == null ||
+                _PageDataSource.Forecast.Daily.Days.Count == 0) return;
 
-                if (_PageDataSource.Forecast.Daily.Days == null ||
-                    _PageDataSource.Forecast.Daily.Days.Count == 0) return;
+            var currentDay = _PageDataSource.Forecast.Daily.Days[0];
+            var maxTemp = (int)currentDay.MaxTemperature;
+            var minTemp = (int)currentDay.MinTemperature;
 
-                var currentDay = _PageDataSource.Forecast.Daily.Days[0];
-                var maxTemp = (int)currentDay.MaxTemperature;
-                var minTemp = (int)currentDay.MinTemperature;
+            MaxTempValue.Text = maxTemp.ToString();
+            MinTempValue.Text = minTemp.ToString();
 
-                MaxTempValue.Text = maxTemp.ToString();
-                MinTempValue.Text = minTemp.ToString();
+            SetPressureValue(currentWeather);
+        }
 
-                SetMoonPhase();
-            }
+        private void AnimateWindDirectionIcons() {
+            var baseAngle = 0;
 
-            void SetMoonPhase() {
-                var moonPhase = weatherToday.MoonPhase;
+            var visual = ElementCompositionPreview.GetElementVisual(WindDirectionIcon);
+            var compositor = visual.Compositor;
 
-                var iconMoon = new PackIconModern() {
-                    Height = 32,
-                    Width = 32,
+            var animationRotate = compositor.CreateScalarKeyFrameAnimation();
+            animationRotate.InsertKeyFrame(0f, baseAngle);
+            animationRotate.InsertKeyFrame(1f, baseAngle + 20);
+            animationRotate.Duration = TimeSpan.FromSeconds(3);
+            animationRotate.IterationBehavior = AnimationIterationBehavior.Forever;
+            animationRotate.Direction = Windows.UI.Composition.AnimationDirection.Alternate;
+
+            visual.RotationAxis = new Vector3(0, 0, 1);
+            visual.CenterPoint = new Vector3((float)15, (float)15, 0);
+
+            visual.StartAnimation("RotationAngleInDegrees", animationRotate);
+        }
+
+        private void SetPressureValue(CurrentDataPoint currentWeather) {
+            var unit = Settings.GetPressureUnit();
+            var pressure = currentWeather.Pressure;
+
+            if (unit == null) { unit = GetPressureUnits(); }
+            else { pressure *= 0.75006168f; }
+
+            //Pressure.Text = string.Format("{0}{1}", pressure, unit);
+            UI.AnimateNumericValue(pressure, Pressure, _UIDispatcher, unit, 100);
+        }
+
+        private void SetMoonPhase(DayDataPoint weatherToday) {
+            var moonPhase = weatherToday.MoonPhase;
+
+            var iconMoon = new PackIconModern() {
+                Height = 32,
+                Width = 32,
+            };
+
+            if (moonPhase == 0) {
+                MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseNewMoon");
+                iconMoon.Kind = PackIconModernKind.MoonNew;
+
+                MoonPhaseIconContainer.Children.Add(iconMoon);
+
+            } else if (moonPhase > 0 && moonPhase < .25) {
+                MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseWaxingCrescent");
+                iconMoon.Kind = PackIconModernKind.MoonWaxingCrescent;
+
+                MoonPhaseIconContainer.Children.Add(iconMoon);
+
+            } else if (moonPhase == .25) {
+                MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseFirstQuarter");
+                iconMoon.Kind = PackIconModernKind.MoonFirstQuarter;
+
+                MoonPhaseIconContainer.Children.Add(iconMoon);
+
+            } else if (moonPhase > .25 && moonPhase < .5) {
+                MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseWaxingGibbous");
+                iconMoon.Kind = PackIconModernKind.MoonWaxingGibbous;
+
+                MoonPhaseIconContainer.Children.Add(iconMoon);
+
+            } else if (moonPhase == .5) {
+                MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseFullMoon");
+
+                var fullMoon = new Ellipse() {
+                    Height = 30,
+                    Width = 30,
+                    Fill = new SolidColorBrush(Colors.White)
                 };
-                
-                if (moonPhase == 0) {
-                    MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseNewMoon");
-                    iconMoon.Kind = PackIconModernKind.MoonNew;
 
-                    MoonPhaseIconContainer.Children.Add(iconMoon);
+                MoonPhaseIconContainer.Children.Add(fullMoon);
 
-                } else if (moonPhase > 0 && moonPhase < .25) {
-                    MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseWaxingCrescent");
-                    iconMoon.Kind = PackIconModernKind.MoonWaxingCrescent;
+            } else if (moonPhase > .5 && moonPhase < .75) {
+                MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseWaningGibbous");
+                iconMoon.Kind = PackIconModernKind.MoonWaningGibbous;
 
-                    MoonPhaseIconContainer.Children.Add(iconMoon);
+                MoonPhaseIconContainer.Children.Add(iconMoon);
 
-                } else if (moonPhase == .25) {
-                    MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseFirstQuarter");
-                    iconMoon.Kind = PackIconModernKind.MoonFirstQuarter;
+            } else if (moonPhase == .75) {
+                MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseThirdQuarter");
+                iconMoon.Kind = PackIconModernKind.MoonThirdQuarter;
 
-                    MoonPhaseIconContainer.Children.Add(iconMoon);
+                MoonPhaseIconContainer.Children.Add(iconMoon);
 
-                } else if (moonPhase > .25 && moonPhase < .5) {
-                    MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseWaxingGibbous");
-                    iconMoon.Kind = PackIconModernKind.MoonWaxingGibbous;
+            } else { // moonPhase > .75
+                MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseWaningCrescent");
+                iconMoon.Kind = PackIconModernKind.MoonWaxingCrescent;
 
-                    MoonPhaseIconContainer.Children.Add(iconMoon);
-
-                } else if (moonPhase == .5) {
-                    MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseFullMoon");
-
-                    var fullMoon = new Ellipse() {
-                        Height = 30,
-                        Width = 30,
-                        Fill = new SolidColorBrush(Colors.White)
-                    };
-
-                    MoonPhaseIconContainer.Children.Add(fullMoon);
-
-                } else if (moonPhase > .5 && moonPhase < .75) {
-                    MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseWaningGibbous");
-                    iconMoon.Kind = PackIconModernKind.MoonWaningGibbous;
-
-                    MoonPhaseIconContainer.Children.Add(iconMoon);
-
-                } else if (moonPhase == .75) {
-                    MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseThirdQuarter");
-                    iconMoon.Kind = PackIconModernKind.MoonThirdQuarter;
-                    
-                    MoonPhaseIconContainer.Children.Add(iconMoon);
-
-                } else { // moonPhase > .75
-                    MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseWaningCrescent");
-                    iconMoon.Kind = PackIconModernKind.MoonWaxingCrescent;
-
-                    MoonPhaseIconContainer.Children.Add(iconMoon);
-                }
+                MoonPhaseIconContainer.Children.Add(iconMoon);
             }
         }
 
@@ -566,7 +586,7 @@ namespace Feels.Views {
             animationRotate.InsertKeyFrame(1f, 20f);
             animationRotate.Duration = TimeSpan.FromSeconds(10);
             animationRotate.IterationBehavior = AnimationIterationBehavior.Forever;
-            animationRotate.Direction = AnimationDirection.Alternate;
+            animationRotate.Direction = Windows.UI.Composition.AnimationDirection.Alternate;
 
             visual.RotationAxis = new Vector3(0, 0, 1);
             visual.CenterPoint = new Vector3((float)EarthIcon.Height / 2, (float)EarthIcon.Width / 2, 0);
@@ -589,7 +609,7 @@ namespace Feels.Views {
             animationOffset.InsertKeyFrame(0f, 0);
             animationOffset.InsertKeyFrame(1f, 20);
             animationOffset.Duration = TimeSpan.FromSeconds(3);
-            animationOffset.Direction = AnimationDirection.Alternate;
+            animationOffset.Direction = Windows.UI.Composition.AnimationDirection.Alternate;
             animationOffset.IterationBehavior = AnimationIterationBehavior.Forever;
 
             visual.StartAnimation("Translation.y", animationOffset);
@@ -854,8 +874,69 @@ namespace Feels.Views {
             AppBar.IsEnabled = true;
         }
 
+
         #endregion update changelog
 
-        
+        private void PanelPressure_Tapped(object sender, TappedRoutedEventArgs ev) {
+            var savedUnit = Settings.GetPressureUnit();
+            var baseUnit = GetPressureUnits();
+            var millibars = "millibars";
+
+            var description = new TextBlock() {
+                Text = App.ResourceLoader.GetString("DescriptionPressure"),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Margin = new Thickness(0,0,0,20),
+                TextWrapping = TextWrapping.Wrap
+            };
+
+            var unitsChooser = new ComboBox() {
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
+
+            var baseUnitItem = new ComboBoxItem() {
+                Content = "Hectopascal",
+                Tag = "hpa"
+            };
+
+            var mercuryUnit = new ComboBoxItem() {
+                Content = "Millimeter of mercury",
+                Tag = "mmHg"
+            };
+
+            if (baseUnit == millibars) {
+                baseUnitItem.Content = millibars;
+                Tag = millibars;
+            }
+
+            unitsChooser.Items.Add(baseUnitItem);
+            unitsChooser.Items.Add(mercuryUnit);
+
+            unitsChooser.SelectedIndex = 0;
+
+            if (savedUnit != null) {
+                unitsChooser.SelectedIndex = 1;
+            }
+
+            unitsChooser.SelectionChanged += (s, e) => {
+                var unit = (string)((ComboBoxItem)unitsChooser.SelectedItem).Tag;
+
+                if (unit == "mmHg") { Settings.SavePressureUnit(unit); }
+                else { Settings.SavePressureUnit(null); }
+
+                SetPressureValue(_PageDataSource.Forecast.Currently);
+            };
+
+            var panel = new StackPanel();
+            panel.Children.Add(description);
+            panel.Children.Add(unitsChooser);
+
+            SetFlyoutWeatherDetailContent(panel);
+            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
+        }
+
+        private void SetFlyoutWeatherDetailContent(Panel panel) {
+            FlyoutWeatherDetailContent.Children.Clear();
+            FlyoutWeatherDetailContent.Children.Add(panel);
+        }
     }
 }

@@ -403,7 +403,7 @@
     <value>couché</value>
   </data>
   <data name="WindSpeed.Text" xml:space="preserve">
-    <value>vent</value>
+    <value>vitesse</value>
   </data>
   <data name="UpdateVersion.Text" xml:space="preserve">
     <value>Mise à jour</value>
@@ -470,5 +470,14 @@
   </data>
   <data name="CmdDeleteSavedLocation.Text" xml:space="preserve">
     <value>supprimer</value>
+  </data>
+  <data name="WindDirection.Text" xml:space="preserve">
+    <value>direction</value>
+  </data>
+  <data name="LoadingStuck.Text" xml:space="preserve">
+    <value>Si vous utilisez la géolocalisation (GPS) pour afficher la météo, il se peut que le chargement se fige. Essayez de rédémarrer l'application si c'est le cas.</value>
+  </data>
+  <data name="DescriptionPressure" xml:space="preserve">
+    <value>La pression atmosphérique moyenne au niveau de la mer.</value>
   </data>
 </root>
