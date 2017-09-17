@@ -564,7 +564,8 @@
                                        x:Uid="LocationFailedText"
                                        TextAlignment="Center"
                                        Text="Seems like you aren't on Earth. Please check your location settings or your internet connection"
-                                       FontSize="24" 
+                                       FontSize="20" 
+                                       FontWeight="SemiBold"
                                        Opacity=".7"
                                        TextWrapping="Wrap"/>
                             <Button x:Name="LocationSettingsButton"
@@ -583,6 +584,23 @@
                                     Background="{ThemeResource SystemControlHighlightAccentBrush}"
                                     Tapped="TryAgainButton_Tapped"
                                     HorizontalAlignment="Center"/>
+
+                            <Rectangle Width="200" Fill="{ThemeResource SystemControlHighlightAccentBrush}" 
+                                       Height="2" Margin="0,40"/>
+                            
+                            <TextBlock x:Uid="BlockDontUseGPS"
+                                       Margin="0,0,0,10"
+                                       Text="If you don't want to use your GPS location, you can add manually locations"
+                                       FontSize="18"
+                                       HorizontalAlignment="Center"
+                                       FontWeight="Light"
+                                       TextWrapping="Wrap"/>
+                            <Button x:Uid="ButtonAddLocationManually" 
+                                    Content="add location manually" 
+                                    HorizontalAlignment="Center"
+                                    Foreground="White"
+                                    Background="{ThemeResource SystemControlHighlightAccentBrush}"
+                                    Tapped="AddLocationManually_Tapped"/>
                         </StackPanel>
 
                         <Maps:MapControl x:Name="PageMapControl" 

@@ -480,4 +480,13 @@
   <data name="DescriptionPressure" xml:space="preserve">
     <value>Атмосферного давления на уровне моря.</value>
   </data>
+  <data name="BlockDeactivateBackgroundColor.Text" xml:space="preserve">
+    <value>Отключить анимацию цвета домашней фона</value>
+  </data>
+  <data name="BlockDontUseGPS.Text" xml:space="preserve">
+    <value>Если вы не хотите использовать местоположение GPS, можно вручную добавить местоположения</value>
+  </data>
+  <data name="ButtonAddLocationManually.Content" xml:space="preserve">
+    <value>Добавить местоположение вручную</value>
+  </data>
 </root>

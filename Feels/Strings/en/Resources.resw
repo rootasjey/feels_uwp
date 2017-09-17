@@ -480,4 +480,13 @@
   <data name="DescriptionPressure" xml:space="preserve">
     <value>The sea-level air pressure.</value>
   </data>
+  <data name="BlockDeactivateBackgroundColor.Text" xml:space="preserve">
+    <value>deactivate home background gradient color animation</value>
+  </data>
+  <data name="BlockDontUseGPS.Text" xml:space="preserve">
+    <value>If you don't want to use your GPS location, you can add manually locations</value>
+  </data>
+  <data name="ButtonAddLocationManually.Content" xml:space="preserve">
+    <value>add location manually</value>
+  </data>
 </root>

@@ -196,6 +196,7 @@ namespace Feels.Services {
             }
         }
 
+        // NOTE: Can be simplified
         public static async Task AnimateSlideIn(this Panel view) {
             view.Opacity = 0;
             view.Visibility = Visibility.Visible;
@@ -219,9 +220,13 @@ namespace Feels.Services {
                 var delay = 0;
                 foreach (var child in children) {
                     delay += 200;
-                    child.Fade((float)opacities[index], 1000, delay)
+
+                    child.Fade(0,0)
+                        .Then()
+                        .Fade((float)opacities[index], 1000, delay)
                          .Offset(0, 0, 1000, delay)
                          .Start();
+
                     index++;
                 }
             }

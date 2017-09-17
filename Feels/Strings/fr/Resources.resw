@@ -480,4 +480,13 @@
   <data name="DescriptionPressure" xml:space="preserve">
     <value>La pression atmosphérique moyenne au niveau de la mer.</value>
   </data>
+  <data name="BlockDeactivateBackgroundColor.Text" xml:space="preserve">
+    <value>désactiver l'animation de la couleur de l'arrière plan</value>
+  </data>
+  <data name="BlockDontUseGPS.Text" xml:space="preserve">
+    <value>Si vous ne souhaitez pas utiliser votre GPS, vous pouvez ajouter un nouveau lieu manuellement</value>
+  </data>
+  <data name="ButtonAddLocationManually.Content" xml:space="preserve">
+    <value>ajouter un lieu manuellement</value>
+  </data>
 </root>

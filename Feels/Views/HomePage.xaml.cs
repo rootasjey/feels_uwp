@@ -247,7 +247,7 @@ namespace Feels.Views {
             var weatherCurrent = _PageDataSource.Forecast.Currently;
             var weatherToday = _PageDataSource.Forecast.Daily.Days[0];
 
-            await AnimateSlideIn(WeatherViewContent);
+            await UI.AnimateSlideIn(WeatherViewContent);
 
             UI.AnimateNumericValue((int)weatherCurrent.Temperature, Temperature, _UIDispatcher, "°");
             PopulateWeatherView(weatherToday, weatherCurrent);
@@ -419,7 +419,7 @@ namespace Feels.Views {
             SplashView.Visibility = Visibility.Collapsed;
             WeatherView.Visibility = Visibility.Collapsed;
 
-            AnimateSlideIn(LocationDisabledMessage);
+            UI.AnimateSlideIn(LocationDisabledMessage);
         }
 
         #endregion data
@@ -573,7 +573,7 @@ namespace Feels.Views {
             StartEarthRotation();
             StartPinEarthOffsetAnimation();
 
-            AnimateSlideIn(LoadingView);
+            UI.AnimateSlideIn(LoadingView);
         }
 
         void HideLoadingView() {
@@ -645,37 +645,6 @@ namespace Feels.Views {
             scene.Fade(1, 1000).Offset(0, 0, 1000).Start();
         }
 
-        private async Task AnimateSlideIn(Panel view) {
-            view.Opacity = 0;
-            view.Visibility = Visibility.Visible;
-
-            List<double> opacities = new List<double>();
-
-            var children = view.Children;
-            foreach (var child in children) {
-                opacities.Add(child.Opacity);
-                child.Opacity = 0;
-                await child.Offset(0, 20, 0).StartAsync();
-            }
-
-            view.Opacity = 1;
-
-            AnimateView();
-
-            void AnimateView()
-            {
-                int index = 0;
-                var delay = 0;
-                foreach (var child in children) {
-                    delay += 200;
-                    child.Fade((float)opacities[index], 1000, delay)
-                         .Offset(0, 0, 1000, delay)
-                         .Start();
-                    index++;
-                }
-            }
-        }
-
         private void CleanTheater() {
             Theater.Children.Clear();
             Theater.Fade(0).Start();
@@ -696,7 +665,8 @@ namespace Feels.Views {
             //foreach (var item in LocationDisabledMessage.Children) {
             //    item.Opacity = 0;
             //}
-
+            _ForceDataRefresh = true;
+            CleanTheater();
             InitializePageData();
         }
         
@@ -964,5 +934,9 @@ namespace Feels.Views {
             }
         }
         #endregion animations
+
+        private void AddLocationManually_Tapped(object sender, TappedRoutedEventArgs e) {
+            Frame.Navigate(typeof(LocationsPage));
+        }
     }
 }

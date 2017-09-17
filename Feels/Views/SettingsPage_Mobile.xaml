@@ -69,7 +69,8 @@
 
                         <StackPanel x:Name="WeatherScenePanel">
                             <TextBlock Text="animations" FontSize="24"/>
-                            <TextBlock Text="deactivate home background gradient color animation"
+                            <TextBlock x:Uid="BlockDeactivateBackgroundColor" 
+                                       Text="deactivate home background gradient color animation"
                                        TextWrapping="Wrap"  Opacity=".5"/>
                             <ToggleSwitch x:Name="BackgroundColorAnimationToggle"
                                           Loaded="BackgroundColorAnimationToggle_Loaded"
