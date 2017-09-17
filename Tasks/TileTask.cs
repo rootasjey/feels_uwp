@@ -61,17 +61,27 @@ namespace Tasks {
         public async void Run(IBackgroundTaskInstance taskInstance) {
             StartTask(taskInstance);
 
-            var position = await GetPosition();
-            if (position == null) { EndTask(); return; }
+            var location = Settings.GetFavoriteLocation();
+            string city = location?.Town;
 
-            var coord = position.Coordinate.Point.Position;
-            var city = await GetCityName(coord);
+            if (location == null) {
+                var position = await GetPosition();
+                if (position == null) { EndTask(); return; }
 
-            var forecast = await FetchCurrentWeather(coord.Latitude, coord.Longitude);
+                var coord = position.Coordinate.Point.Position;
+
+                location = new Models.LocationItem() {
+                    Latitude = coord.Latitude,
+                    Longitude = coord.Longitude
+                };
+
+                city = await GetCityName(coord);
+            }
+            
+            var forecast = await FetchCurrentWeather(location.Latitude, location.Longitude);
             TileDesigner.UpdatePrimary(forecast, city);
 
             LogTaskActivity();
-
             EndTask();
         }
 

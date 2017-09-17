@@ -198,14 +198,12 @@ namespace Feels.Views {
                     Longitude = position.Longitude
                 };
 
-                await FetchCurrentWeather(location);
-
             } else {
                 ShowLoadingView();
                 SetCurrentCity();
-                await FetchCurrentWeather(location);
             }
-            
+
+            await FetchCurrentWeather(location);
 
             HideLoadingView();
             PopulateView();
@@ -894,6 +892,12 @@ namespace Feels.Views {
             await dialog.ShowAsync();
             Settings.SaveFirstLaunchPassed();
         }
+
+        private void SetFlyoutWeatherDetailContent(Panel panel) {
+            FlyoutWeatherDetailContent.Children.Clear();
+            FlyoutWeatherDetailContent.Children.Add(panel);
+        }
+
         #endregion others
 
         #region update changelog
@@ -936,11 +940,6 @@ namespace Feels.Views {
 
         #endregion update changelog
 
-        private void SetFlyoutWeatherDetailContent(Panel panel) {
-            FlyoutWeatherDetailContent.Children.Clear();
-            FlyoutWeatherDetailContent.Children.Add(panel);
-        }
-
         #region animations
         private void AnimateDetailsItems() {
             foreach (Grid item in PanelWeatherDetails.Children) {
@@ -957,7 +956,6 @@ namespace Feels.Views {
                 }
             }
         }
-
         #endregion animations
     }
 }

@@ -1,9 +1,11 @@
-﻿using Windows.Storage;
-using Windows.UI.Xaml;
+﻿using System;
+using Windows.Storage;
 using Windows.System.UserProfile;
 using Windows.Devices.Geolocation;
 using DarkSkyApi;
 using Windows.ApplicationModel;
+using Tasks.Models;
+using Newtonsoft.Json;
 
 namespace Tasks.Services {
     public sealed class Settings {
@@ -41,6 +43,24 @@ namespace Tasks.Services {
         private static string AppVersionKey {
             get {
                 return "AppVersion";
+            }
+        }
+
+        private static string SavedLocationsKey {
+            get {
+                return "Savedlocations.json";
+            }
+        }
+
+        private static string FavoriteLocationKey {
+            get {
+                return "FavoriteLocation";
+            }
+        }
+
+        private static string PressureUnit {
+            get {
+                return "PressureUnit";
             }
         }
         #endregion keys
@@ -141,24 +161,23 @@ namespace Tasks.Services {
 
             return Unit.SI;
         }
+
+        public static void SavePressureUnit(string unit) {
+            var settingsValues = ApplicationData.Current.LocalSettings.Values;
+            settingsValues[PressureUnit] = unit;
+        }
+
+        public static string GetPressureUnit() {
+            var settingsValues = ApplicationData.Current.LocalSettings.Values;
+
+            if (settingsValues.ContainsKey(PressureUnit)) {
+                var savedPressureUnit = (string)settingsValues[PressureUnit];
+                return savedPressureUnit;
+            }
+
+            return null;
+        }
         #endregion units
-
-        #region theme
-        public static bool IsApplicationThemeLight() {
-            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-            localSettings.Values.TryGetValue(ThemeKey, out var previousTheme);
-            return ApplicationTheme.Light.ToString() == (string)previousTheme;
-        }
-
-        public static void UpdateAppTheme(ApplicationTheme theme) {
-            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-            localSettings.Values.TryGetValue(ThemeKey, out var previousTheme);
-
-            if ((string)previousTheme == theme.ToString()) return;
-
-            localSettings.Values[ThemeKey] = theme.ToString();
-        }
-        #endregion theme
 
         #region first launch
         public static void SaveFirstLaunchPassed() {
@@ -172,27 +191,17 @@ namespace Tasks.Services {
         }
         #endregion first launch
 
-        #region favorites cities
-        //public static async Task SaveFavoritesAsync(ObservableKeyedCollection favorites, string source) {
-        //    string json = JsonConvert.SerializeObject(favorites);
-        //    StorageFile file =
-        //        await ApplicationData
-        //                .Current
-        //                .LocalFolder
-        //                .CreateFileAsync("favorites-" + source + ".json", CreationCollisionOption.ReplaceExisting);
+        #region locations
+        public static LocationItem GetFavoriteLocation() {
+            StorageFile file = (StorageFile)ApplicationData.Current.LocalFolder.TryGetItemAsync(FavoriteLocationKey).AsTask().AsAsyncOperation().GetResults();
+            if (file == null) return null;
 
-        //    await FileIO.WriteTextAsync(file, json);
-        //}
+            string json = FileIO.ReadTextAsync(file).AsTask().AsAsyncOperation().GetResults();
+            var favoriteLocation = JsonConvert.DeserializeObject<LocationItem>(json);
+            return favoriteLocation;
+        }
 
-        //public static async Task<ObservableKeyedCollection> LoadFavoritesAsync(string source) {
-        //    StorageFile file = (StorageFile)await ApplicationData.Current.LocalFolder.TryGetItemAsync("favorites-" + source + ".json");
-        //    if (file == null) return null;
-
-        //    string json = await FileIO.ReadTextAsync(file);
-        //    ObservableKeyedCollection favorites = JsonConvert.DeserializeObject<ObservableKeyedCollection>(json);
-        //    return favorites;
-        //}
-        #endregion favorites cities
+        #endregion locations
 
         #region appversion
         public static bool IsNewUpdatedLaunch() {
@@ -203,10 +212,10 @@ namespace Tasks.Services {
             if (settingsValues.ContainsKey(AppVersionKey)) {
                 string savedVersion = (string)settingsValues[AppVersionKey];
 
-
                 if (savedVersion == currentVersion) {
                     isNewUpdatedLaunch = false;
                 } else { settingsValues[AppVersionKey] = currentVersion; }
+
             } else { settingsValues[AppVersionKey] = currentVersion; }
 
             return isNewUpdatedLaunch;
