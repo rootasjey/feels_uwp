@@ -142,7 +142,8 @@
         </FlyoutPresenter>
 
         <Pivot x:Name="PagePivot" Grid.Row="1">
-            <PivotItem x:Name="NowPivot" Margin="0,-51,0,0">
+            <PivotItem x:Name="NowPivot" Margin="0,-51,0,0"
+                       RequestedTheme="Dark">
                 <ScrollViewer x:Name="PivotContent">
                     <Grid>
 
@@ -944,10 +945,12 @@
         <CommandBar x:Name="AppBar"
                     Grid.Row="1"
                     Canvas.ZIndex="4"
-                    VerticalAlignment="Bottom" 
+                    Background="Transparent"
+                    VerticalAlignment="Bottom"
+                    RequestedTheme="Light"
                     Opening="AppBar_Opening"
                     Closed="AppBar_Closed"
-                    ClosedDisplayMode="Compact">
+                    ClosedDisplayMode="Minimal">
             <CommandBar.SecondaryCommands>
                 <AppBarButton Label="settings" x:Uid="CmdSettings" Tapped="GoToSettings_Tapped" />
             </CommandBar.SecondaryCommands>
@@ -959,5 +962,6 @@
                           Tapped="CmdRefresh_Tapped"/>
         </CommandBar>
 
+        <Grid x:Name="AppBarFrozenHost" Grid.Row="1" Canvas.ZIndex="3" Height="75" VerticalAlignment="Bottom"/>
     </Grid>
 </Page>

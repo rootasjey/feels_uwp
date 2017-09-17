@@ -4,9 +4,9 @@ using Feels.Models;
 using Feels.Services;
 using Feels.Services.WeatherScene;
 using MahApps.Metro.IconPacks;
+using Microsoft.Graphics.Canvas.Effects;
 using Microsoft.Toolkit.Uwp.UI.Animations;
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
@@ -68,6 +68,8 @@ namespace Feels.Views {
             InitialzeEvents();
             InitializePageData();
 
+            ApplyCommandBarBarFrostedGlass();
+
             ShowUpdateChangelog();
         }
 
@@ -81,15 +83,15 @@ namespace Feels.Views {
                 return;
             }
 
-            Window.Current.Activated += Current_Activated;
-            CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-            coreTitleBar.ExtendViewIntoTitleBar = true;
+            //Window.Current.Activated += Current_Activated;
+            //CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            //coreTitleBar.ExtendViewIntoTitleBar = true;
 
-            TitleBar.Height = coreTitleBar.Height;
-            Window.Current.SetTitleBar(MainTitleBar);
+            //TitleBar.Height = coreTitleBar.Height;
+            //Window.Current.SetTitleBar(MainTitleBar);
             
-            coreTitleBar.IsVisibleChanged += CoreTitleBar_IsVisibleChanged;
-            coreTitleBar.LayoutMetricsChanged += CoreTitleBar_LayoutMetricsChanged;
+            //coreTitleBar.IsVisibleChanged += CoreTitleBar_IsVisibleChanged;
+            //coreTitleBar.LayoutMetricsChanged += CoreTitleBar_LayoutMetricsChanged;
         }
 
         void CoreTitleBar_IsVisibleChanged(CoreApplicationViewTitleBar titleBar, object args) {
@@ -460,9 +462,7 @@ namespace Feels.Views {
 
                 return;
             }
-
-            //if (_LastLocation == null) return;
-            //TownTextBlock.Text = _LastLocation.Town;
+            
             TownTextBlock.Text = location.Town;
         }
 
@@ -470,17 +470,6 @@ namespace Feels.Views {
             if (location == null) return true;
             return string.IsNullOrEmpty(location.Id);
         }
-
-        //private async Task FetchCurrentWeather(BasicGeoposition basicPosition) {
-        //    await _PageDataSource.FetchCurrentWeather(basicPosition.Latitude, basicPosition.Longitude);
-
-        //    if (_PageDataSource.Forecast == null) {
-        //        SafeExit();
-        //        return;
-        //    }
-
-        //    NowPivot.DataContext = _PageDataSource.Forecast.Currently;
-        //}
 
         private async Task FetchCurrentWeather(LocationItem location) {
             await _PageDataSource.FetchCurrentWeather(location.Latitude, location.Longitude);
@@ -660,11 +649,7 @@ namespace Feels.Views {
 
         private void TryAgainButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
             LocationDisabledMessage.Visibility = Visibility.Collapsed;
-            //LocationDisabledMessage.Opacity = 0;
 
-            //foreach (var item in LocationDisabledMessage.Children) {
-            //    item.Opacity = 0;
-            //}
             _ForceDataRefresh = true;
             CleanTheater();
             InitializePageData();
@@ -829,6 +814,65 @@ namespace Feels.Views {
         #endregion events
 
         #region commandbar
+
+        void ApplyCommandBarBarFrostedGlass() {
+            var glassHost = AppBarFrozenHost;
+            var visual = ElementCompositionPreview.GetElementVisual(glassHost);
+            var compositor = visual.Compositor;
+
+            // Create a glass effect, requires Win2D NuGet package
+            var glassEffect = new GaussianBlurEffect {
+                BlurAmount = 10.0f,
+                BorderMode = EffectBorderMode.Hard,
+                Source = new ArithmeticCompositeEffect {
+                    MultiplyAmount = 0,
+                    Source1Amount = 0.5f,
+                    Source2Amount = 0.5f,
+                    Source1 = new CompositionEffectSourceParameter("backdropBrush"),
+                    Source2 = new ColorSourceEffect {
+                        Color = Color.FromArgb(255, 245, 245, 245)
+                    }
+                }
+            };
+
+            //  Create an instance of the effect and set its source to a CompositionBackdropBrush
+            var effectFactory = compositor.CreateEffectFactory(glassEffect);
+            var backdropBrush = compositor.CreateBackdropBrush();
+            var effectBrush = effectFactory.CreateBrush();
+
+            effectBrush.SetSourceParameter("backdropBrush", backdropBrush);
+
+            // Create a Visual to contain the frosted glass effect
+            var glassVisual = compositor.CreateSpriteVisual();
+            glassVisual.Brush = effectBrush;
+
+            // Add the blur as a child of the host in the visual tree
+            ElementCompositionPreview.SetElementChildVisual(glassHost, glassVisual);
+
+            // Make sure size of glass host and glass visual always stay in sync
+            var bindSizeAnimation = compositor.CreateExpressionAnimation("hostVisual.Size");
+            bindSizeAnimation.SetReferenceParameter("hostVisual", visual);
+
+            glassVisual.StartAnimation("Size", bindSizeAnimation);
+
+            glassHost.Offset(0, 50).Start();
+
+            // EVENTS
+            // ------
+            AppBar.Opening += (s, e) => {
+                glassHost.Offset(0, 18).Start();
+            };
+
+            AppBar.Closing += (s, e) => {
+                if (AppBar.ClosedDisplayMode == AppBarClosedDisplayMode.Compact) {
+                    glassHost.Offset(0, 27).Start();
+
+                } else if (AppBar.ClosedDisplayMode == AppBarClosedDisplayMode.Minimal) {
+                    glassHost.Offset(0, 50).Start();
+                }
+            };
+        }
+
         private void AppBar_Closed(object sender, object e) {
             //AppBar.Background = new SolidColorBrush(Colors.Transparent);
         }
