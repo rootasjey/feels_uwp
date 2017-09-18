@@ -27,7 +27,7 @@
             <PivotItem x:Name="PersonalizationPivot" 
                        Header="personalization" 
                        x:Uid="PersonalizationPivot">
-                
+
                 <ScrollViewer VerticalScrollBarVisibility="Hidden"
                               Margin="0,20,0,0">
                     <StackPanel x:Name="PersonalizationContentPanel">
@@ -40,14 +40,14 @@
                                           OffContent="Thème Sombre"
                                           Toggled="ThemeSwitch_Toggled"/>
                         </StackPanel>
-                        
+
                         <StackPanel x:Name="LanguagePanel">
                             <TextBlock Text="language" x:Uid="LanguageLabel" FontSize="24"/>
-                            
+
                             <TextBlock Text="choose displayed language"
                                        x:Uid="LanguageSubLabel"
                                        Opacity=".6"/>
-                            
+
                             <ComboBox x:Name="LanguageSelection"
                                       Loaded="LanguageSelection_Loaded"
                                       SelectionChanged="LanguageSelection_SelectionChanged">
@@ -62,7 +62,7 @@
                             <TextBlock Text="choose temperature units"
                                        x:Uid="UnitsSubLabel"
                                        Opacity=".6"/>
-                            
+
                             <ComboBox x:Name="UnitsCombo"
                                       Width="120"
                                       Margin="0,20"
@@ -102,25 +102,25 @@
                         <StackPanel Margin="0,0,0,40">
                             <TextBlock x:Uid="DynamicTileTitle" 
                                        Text="tuile dynamique" Style="{StaticResource SettingsTitle}"/>
-                            
+
                             <TextBlock x:Uid="DynamicTileLabel" 
                                        Text="mettre à jour la tuile de l'application périodiquement" 
                                             Opacity=".5"
                                             TextWrapping="Wrap"/>
-                            
+
                             <ToggleSwitch x:Name="TileTaskSwitch"
                                           Loaded="TileTaskSwitch_Loaded"
                                           Toggled="TileTaskSwitch_Toggled"/>
 
                             <StackPanel x:Name="TileTaskInfosPanel"
                                         Visibility="Collapsed">
-                                
+
                                 <TextBlock x:Uid="DynamicTileActivity" 
                                            Text="activité de la tuile dynamique"
                                            FontSize="22"
                                            TextWrapping="Wrap"
                                            Opacity=".5"/>
-                                
+
                                 <ComboBox x:Name="TileIntervalUpdate"
                                           x:Uid="TileIntervalUpdate"
                                           Header="period"
@@ -128,7 +128,7 @@
                                           SelectedIndex="2"
                                           Loaded="TileIntervalUpdate_Loaded"
                                           SelectionChanged="TileIntervalUpdate_SelectionChanged">
-                                
+
                                     <ComboBoxItem Content="15 min" x:Uid="ItemFifteenMinutes" Tag="15"/>
                                     <ComboBoxItem Content="half an hour" x:Uid="ItemHalfHour" Tag="30"/>
                                     <ComboBoxItem Content="every hour" x:Uid="ItemHour" Tag="60"/>
@@ -153,7 +153,7 @@
                                                    x:Uid="TaskNotWorkingText"
                                                    TextWrapping="Wrap"
                                                    Opacity=".6"/>
-                                    
+
                                         <Button Content="restart" 
                                                 x:Uid="ButtonRestart"
                                                 Margin="0,10,0,0" 
@@ -187,16 +187,15 @@
                     <TextBlock x:Uid="AboutHeader" Text="à propos"/>
                 </PivotItem.Header>
 
-                <ScrollViewer Margin="0,20,0,0" 
+                <ScrollViewer Margin="0,10,0,0" 
                               VerticalScrollBarVisibility="Hidden">
                     <StackPanel>
                         <TextBlock x:Uid="FeedbackTitle" Text="mon avis" FontSize="24"/>
                         <TextBlock x:Uid="FeedbackLabel" 
                                    Text="suggérer une amélioration ou signaler un problème"
                                    Opacity=".5"
-                                   FontSize="18"
                                    TextWrapping="Wrap"/>
-                        
+
                         <Button x:Uid="FeedbackButton"
                                 x:Name="FeedbackButton" 
                                 Content="envoyer un avis" 
@@ -204,12 +203,11 @@
                                 Click="FeedbackButton_Click"/>
 
                         <TextBlock x:Uid="RatingTitle" Text="notation" FontSize="24"/>
-                        
+
                         <TextBlock x:Uid="RatingLabel" Text="noter l'application sur le Store"
                                    Opacity=".5"
-                                   FontSize="18"
                                    TextWrapping="Wrap"/>
-                        
+
                         <Button x:Uid="RatingButton" 
                                 x:Name="NoteButton" 
                                 Content="noter l'app" 
@@ -219,7 +217,6 @@
                         <TextBlock x:Uid="ContributeTitle" Text="contribuer" FontSize="24"/>
                         <RichTextBlock x:Name="ContributeBox" 
                                        Margin="0,0,0,40"
-                                       FontSize="18"
                                        Opacity=".5">
                             <Paragraph>
                                 <Run x:Uid="ContributeFirstLine" 
@@ -242,7 +239,6 @@
 
                         <TextBlock x:Uid="DataTitle" Text="données" FontSize="24"/>
                         <RichTextBlock x:Name="DataBox"
-                                       FontSize="18"
                                        Opacity=".5"
                                        Margin="0,0,0,40">
                             <Paragraph>
@@ -258,12 +254,109 @@
 
                         <TextBlock x:Uid="ImagesSourceTitle" Text="images" FontSize="24"/>
                         <RichTextBlock x:Name="ImagesBox"
-                                       FontSize="18"
                                        Opacity=".5"
                                        Margin="0,0,0,40">
                             <Paragraph>
                                 <Run x:Uid="ImagesSourceContent" Text="Les images proviennent de"/>
                                 <Hyperlink NavigateUri="https://iconmonstr.com/">iconmonstr</Hyperlink>
+                            </Paragraph>
+                        </RichTextBlock>
+
+                        <!--UPDATE CHANGELOG-->
+                        <RichTextBlock TextWrapping="Wrap" Margin="0,30,0,0">
+                            <Paragraph>
+                                <Span>LAST UPDATE CHANGELOG</Span>
+                            </Paragraph>
+
+                            <Paragraph Margin="0,0,0,24">
+                                <Span FontSize="22" 
+                              FontWeight="Medium" 
+                              Foreground="{ThemeResource SystemControlForegroundAccentBrush}">
+                                    CUSTOM LOCATIONS 🗺
+                                </Span>
+                                <LineBreak/>
+                                <Span>From today, you can add severals locations</Span>
+                                <LineBreak/>
+                                <Span>manually. You can then switch between them</Span>
+                                <LineBreak/>
+                                <Span>on the locations page.</Span>
+                                <LineBreak/>
+                                <Span>In case you always wanted to be anonymous 🕵</Span>
+                            </Paragraph>
+
+                            <Paragraph Margin="0,34">
+                                <Span FontSize="22" 
+                              FontWeight="Medium" 
+                              Foreground="{ThemeResource SystemControlForegroundAccentBrush}">
+                                    HOME NAVIGATION BUTTONS
+                                </Span>
+                                <LineBreak/>
+                                <Span>Navigating on pivot sections with mouse</Span>
+                                <LineBreak/>
+                                <Span>wasn't good before.</Span>
+                                <LineBreak/>
+                                <Span>You'd have to use the top/bottom buttons</Span>
+                                <LineBreak/>
+                                <Span>to go back and foward 😞</Span>
+                                <LineBreak/>
+                                <Span>Starting this update, the buttons are localized</Span>
+                                <LineBreak/>
+                                <Span>on the middle of the screen at the edges</Span>
+                                <LineBreak/>
+                                <Span>when using a mouse :)</Span>
+                            </Paragraph>
+
+                            <Paragraph Margin="0,34">
+                                <Span FontSize="22" 
+                              FontWeight="Medium" 
+                              Foreground="{ThemeResource SystemControlForegroundAccentBrush}">
+                                    MILLIMETERS OF MERCURY
+                                </Span>
+                                <LineBreak/>
+                                <Span>Atmospheric pressure can be displayed in</Span>
+                                <LineBreak/>
+                                <Span>millimeters of mercury.</Span>
+                                <LineBreak/>
+                                <Span>Just tap on the pressure icon to switch unit.</Span>
+                            </Paragraph>
+
+                            <Paragraph Margin="0,34">
+                                <Span FontSize="22" 
+                              FontWeight="Medium" 
+                              Foreground="{ThemeResource SystemControlForegroundAccentBrush}">
+                                    ANIMATIONS SETTINGS
+                                </Span>
+                                <LineBreak/>
+                                <Span>Some animations can be deactivated in settings</Span>
+                                <LineBreak/>
+                                <Span>like the background gradient color on home page.</Span>
+                            </Paragraph>
+
+                            <Paragraph Margin="0,34">
+                                <Span FontSize="22" 
+                              FontWeight="Medium" 
+                              Foreground="{ThemeResource SystemControlForegroundAccentBrush}">
+                                    THEMES
+                                </Span>
+                                <LineBreak/>
+                                <Span>You can switch between dark and light theme.</Span>
+                            </Paragraph>
+
+                            <Paragraph Margin="0,34">
+                                <Span FontSize="22" 
+                              FontWeight="Medium">
+                                    OTHER MINOR CHANGES
+                                </Span>
+                                <LineBreak/>
+                                <Span>• Sunset and Sunrise are now displayed</Span>
+                                <LineBreak/>
+                                <Span>in 24 hours format (easier to read).</Span>
+                                <LineBreak/>
+                                <Span>• Added moonrise and moonset</Span>
+                            </Paragraph>
+
+                            <Paragraph>
+                                <Span>Thanks to Дмитрий for the feedback!</Span>
                             </Paragraph>
                         </RichTextBlock>
                     </StackPanel>
@@ -337,7 +430,7 @@
                                    x:Uid="ContactMeTwitterLabel"
                                    TextWrapping="Wrap"
                                    Margin="0,20,0,0"/>
-                        
+
                         <Button Content="@jeremiecorpinot" Margin="0,10" Tapped="Twitter_Tapped"/>
 
                         <Button x:Uid="ButtonPrivacyPolicyGitHub" 
@@ -348,5 +441,4 @@
             </PivotItem>
         </Pivot>
     </Grid>
-
 </Page>

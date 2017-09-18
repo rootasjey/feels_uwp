@@ -96,44 +96,136 @@
                   PointerExited="PageArrow_PointerExited"
                   Tapped="PageArrowRight_Tapped"/>
 
+        
         <FlyoutPresenter x:Name="UpdateChangeLogFlyout"
                          Visibility="Collapsed"
                          VerticalAlignment="Center"
                          Grid.Row="1"
                          Canvas.ZIndex="2">
-
+            
             <StackPanel ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                        Padding="0,20">
-                <StackPanel Orientation="Horizontal">
-                    <FontIcon Glyph="&#xEB3C;" FontSize="30" Margin="0,0,12,0"/>
-                    <TextBlock Text="September Update" 
-                               FontSize="38"
-                               FontWeight="Normal"
-                               Typography.Capitals="AllSmallCaps"/>
+                        Padding="0,0,0,30">
+
+                <StackPanel Orientation="Horizontal"
+                            Margin="-12,-12"
+                            Padding="12"
+                            Height="90"
+                            Background="{ThemeResource SystemControlHighlightAccentBrush}"
+                            Tapped="CloseChangelogFlyout_Tapped">
+                    <!--<FontIcon Glyph="&#xEB3C;" FontSize="30" Margin="0,0,12,0"/>-->
+                    <StackPanel>
+                        <TextBlock Text="community Update" 
+                                   FontSize="34"
+                                   Foreground="White"
+                                   TextWrapping="Wrap"
+                                   FontWeight="Normal"
+                                   VerticalAlignment="Center"
+                                   Typography.Capitals="AllSmallCaps"/>
+                        
+                        <TextBlock Text="Tap here to close" FontStyle="Italic" Foreground="White" Opacity=".5"/>
+                    </StackPanel>
+                    <TextBlock Text="💏" FontSize="32" VerticalAlignment="Center" Margin="12,0,0,0"/>
                 </StackPanel>
 
                 <TextBlock x:Name="UpdateVersion"
-                           x:Uid="UpdateVersion" Opacity=".5"/>
+                           x:Uid="UpdateVersion" Opacity=".5" Margin="0,24,0,0"/>
 
-                <RichTextBlock TextWrapping="Wrap" Margin="0,20,0,0">
-                    <Paragraph Margin="0,12">
+                <RichTextBlock TextWrapping="Wrap" Margin="0,30,0,0">
+                    <Paragraph Margin="0,0,0,24">
                         <Span FontSize="22" 
                               FontWeight="Medium" 
                               Foreground="{ThemeResource SystemControlForegroundAccentBrush}">
-                            MOON PHASES 🌗
+                            CUSTOM LOCATIONS 🗺
                         </Span>
                         <LineBreak/>
-                        <Span>Now you can see the moon phase </Span>
+                        <Span>From today, you can add severals locations</Span>
                         <LineBreak/>
-                        <Span>in detailed information (at the bottom of the page),</Span>
+                        <Span>manually. You can then switch between them</Span>
                         <LineBreak/>
-                        <Span>and directly at night (at the top).</Span>
+                        <Span> on the locations page.</Span>
+                        <LineBreak/>
+                        <Span>In case you always wanted to be anonymous 🕵</Span>
+                    </Paragraph>
+                    
+                    <Paragraph Margin="0,34">
+                        <Span FontSize="22" 
+                              FontWeight="Medium" 
+                              Foreground="{ThemeResource SystemControlForegroundAccentBrush}">
+                            HOME NAVIGATION BUTTONS
+                        </Span>
+                        <LineBreak/>
+                        <Span>Navigating on pivot sections with mouse </Span>
+                        <LineBreak/>
+                        <Span>wasn't good before.</Span>
+                        <LineBreak/>
+                        <Span>You'd have to use the top/bottom buttons </Span>
+                        <LineBreak/>
+                        <Span>to go back and foward 😞</Span>
+                        <LineBreak/>
+                        <Span>Starting this update, the buttons are localized</Span>
+                        <LineBreak/>
+                        <Span>on the middle of the screen at the edges</Span>
+                        <LineBreak/>
+                        <Span>when using a mouse :)</Span>
+                    </Paragraph>
+
+                    <Paragraph Margin="0,34">
+                        <Span FontSize="22" 
+                              FontWeight="Medium" 
+                              Foreground="{ThemeResource SystemControlForegroundAccentBrush}">
+                            MILLIMETERS OF MERCURY
+                        </Span>
+                        <LineBreak/>
+                        <Span>Atmospheric pressure can be displayed in</Span>
+                        <LineBreak/>
+                        <Span>millimeters of mercury.</Span>
+                        <LineBreak/>
+                        <Span>Just tap on the pressure icon to switch unit.</Span>
+                    </Paragraph>
+
+                    <Paragraph Margin="0,34">
+                        <Span FontSize="22" 
+                              FontWeight="Medium" 
+                              Foreground="{ThemeResource SystemControlForegroundAccentBrush}">
+                            ANIMATIONS SETTINGS
+                        </Span>
+                        <LineBreak/>
+                        <Span>Some animations can be deactivated in settings</Span>
+                        <LineBreak/>
+                        <Span>like the background gradient color on home page.</Span>
+                    </Paragraph>
+
+                    <Paragraph Margin="0,34">
+                        <Span FontSize="22" 
+                              FontWeight="Medium" 
+                              Foreground="{ThemeResource SystemControlForegroundAccentBrush}">
+                            THEMES
+                        </Span>
+                        <LineBreak/>
+                        <Span>You can switch between dark and light theme.</Span>
+                    </Paragraph>
+
+                    <Paragraph Margin="0,34">
+                        <Span FontSize="22" 
+                              FontWeight="Medium">
+                            OTHER MINOR CHANGES
+                        </Span>
+                        <LineBreak/>
+                        <Span>• Sunset and Sunrise are now displayed</Span>
+                        <LineBreak/>
+                        <Span>in 24 hours format (easier to read).</Span>
+                        <LineBreak/>
+                        <Span>• Added moonrise and moonset</Span>
+                    </Paragraph>
+
+                    <Paragraph>
+                        <Span>Thanks to Дмитрий for the feedback!</Span>
                     </Paragraph>
                 </RichTextBlock>
 
                 <Button x:Name="ChangelogDismissButton" 
                         Content="OKAY" 
-                        Margin="0,22,0,0"
+                        Margin="0,42,0,0"
                         Width="100"
                         Height="40"
                         HorizontalAlignment="Left"
@@ -944,8 +1036,6 @@
                     Background="Transparent"
                     VerticalAlignment="Bottom"
                     RequestedTheme="Light"
-                    Opening="AppBar_Opening"
-                    Closed="AppBar_Closed"
                     ClosedDisplayMode="Minimal">
             <CommandBar.SecondaryCommands>
                 <AppBarButton Label="settings" x:Uid="CmdSettings" Tapped="GoToSettings_Tapped" />

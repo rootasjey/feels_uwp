@@ -69,8 +69,7 @@ namespace Feels.Views {
             InitializePageData();
 
             ApplyCommandBarBarFrostedGlass();
-
-            ShowUpdateChangelog();
+            ShowUpdateChangelogIfUpdated();
         }
 
         #region titlebar
@@ -295,7 +294,7 @@ namespace Feels.Views {
             MaxTempValue.Text = maxTemp.ToString();
             MinTempValue.Text = minTemp.ToString();
 
-            SetPressureValue(currentWeather);
+            SetPressureValue(currentWeather, true);
         }
 
         private void AnimateWindDirectionIcons() {
@@ -317,14 +316,18 @@ namespace Feels.Views {
             visual.StartAnimation("RotationAngleInDegrees", animationRotate);
         }
 
-        private void SetPressureValue(CurrentDataPoint currentWeather) {
+        private void SetPressureValue(CurrentDataPoint currentWeather, bool skipAnimation = false) {
             var unit = Settings.GetPressureUnit();
             var pressure = currentWeather.Pressure;
 
             if (unit == null) { unit = GetPressureUnits(); }
             else { pressure *= 0.75006168f; }
 
-            //Pressure.Text = string.Format("{0}{1}", pressure, unit);
+            if (skipAnimation) {
+                Pressure.Text = string.Format("{0}{1}", pressure, unit);
+                return;
+            }
+
             UI.AnimateNumericValue(pressure, Pressure, _UIDispatcher, unit, 100);
         }
 
@@ -702,7 +705,10 @@ namespace Feels.Views {
         }
 
         private void Page_PointerEntered(object sender, PointerRoutedEventArgs ev) {
-            if (App.DeviceType != "Windows.Mobile" && PageArrowLeft.Visibility == Visibility.Collapsed) {
+            if (PageArrowLeft.Visibility == Visibility.Collapsed && 
+                UpdateChangeLogFlyout.Visibility == Visibility.Collapsed && 
+                App.DeviceType != "Windows.Mobile") {
+
                 _LeftArrowAnimationOut?.Stop();
                 _LeftArrowAnimationOut?.Dispose();
                 _RightArrowAnimationOut?.Stop();
@@ -720,7 +726,7 @@ namespace Feels.Views {
         }
 
         private void Page_PointerExited(object sender, PointerRoutedEventArgs ev) {
-            if (App.DeviceType != "Windows.Mobile" && PageArrowLeft.Visibility == Visibility.Visible) {
+            if (PageArrowLeft.Visibility == Visibility.Visible) { /*App.DeviceType != "Windows.Mobile" &&*/
                 _LeftArrowAnimationOut = PageArrowLeft.Fade(0).Offset(-30);
                 _RightArrowAnimationOut = PageArrowRight.Fade(0).Offset(30);
 
@@ -764,6 +770,7 @@ namespace Feels.Views {
                 Text = App.ResourceLoader.GetString("DescriptionPressure"),
                 HorizontalAlignment = HorizontalAlignment.Center,
                 Margin = new Thickness(0, 0, 0, 20),
+                MaxWidth = 170,
                 TextWrapping = TextWrapping.Wrap
             };
 
@@ -873,14 +880,6 @@ namespace Feels.Views {
             };
         }
 
-        private void AppBar_Closed(object sender, object e) {
-            //AppBar.Background = new SolidColorBrush(Colors.Transparent);
-        }
-
-        private void AppBar_Opening(object sender, object e) {
-            //AppBar.Background = new SolidColorBrush(Colors.Black);
-        }
-
         private void GoToSettings_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
             Frame.Navigate(typeof(SettingsPage_Mobile));
         }
@@ -925,7 +924,7 @@ namespace Feels.Views {
         /// <summary>
         /// Show update change log if the app has been updated
         /// </summary>
-        private void ShowUpdateChangelog() {
+        private void ShowUpdateChangelogIfUpdated() {
             if (Settings.IsNewUpdatedLaunch()) {
                 UpdateVersion.Text += string.Format(" {0}", Settings.GetAppVersion());
                 ShowLastUpdateChangelog();
@@ -946,7 +945,7 @@ namespace Feels.Views {
             PagePivot.Blur(10, 500, 500).Start();
         }
 
-        private async void ChangelogDismissButton_Tapped(object sender, TappedRoutedEventArgs e) {
+        private async void HideUpdateChangelog() {
             var x = (float)UpdateChangeLogFlyout.ActualWidth / 2;
             var y = (float)UpdateChangeLogFlyout.ActualHeight / 2;
 
@@ -958,6 +957,13 @@ namespace Feels.Views {
             AppBar.IsEnabled = true;
         }
 
+        private void ChangelogDismissButton_Tapped(object sender, TappedRoutedEventArgs e) {
+            HideUpdateChangelog();
+        }
+
+        private void CloseChangelogFlyout_Tapped(object sender, TappedRoutedEventArgs e) {
+            HideUpdateChangelog();
+        }
 
         #endregion update changelog
 

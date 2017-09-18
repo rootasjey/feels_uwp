@@ -217,7 +217,7 @@
     <value>les images proviennent de</value>
   </data>
   <data name="ImagesSourceTitle.Text" xml:space="preserve">
-    <value>Images</value>
+    <value>images</value>
   </data>
   <data name="LanguageButton.Content" xml:space="preserve">
     <value>Langue</value>
