@@ -234,6 +234,11 @@ namespace Feels.Views {
             location.IsSelected = true;
             _lastLocationSelected = location;
 
+            if (string.IsNullOrEmpty(location.Id)) {
+                Settings.SavePrimaryTileTaskType(Settings._GPSTaskTypeKey);
+
+            } else { Settings.SavePrimaryTileTaskType(Settings._LocationTaskTypeKey); }
+
             await Settings.SaveFavoriteLocation(location);
             await Settings.SaveLocationsAsync(_savedLocations.ToList());
 
@@ -260,23 +265,36 @@ namespace Feels.Views {
             SavedLocationRightTappedFlyout.ShowAt(listItem);
         }
 
+        private void SavedLocation_Loaded(object sender, RoutedEventArgs e) {
+            _delaySavedLocationList += 100;
+
+            var item = (SlidableListItem)sender;
+            item.Offset(0, 50, 0)
+                .Fade(0, 0)
+                .Then()
+                .Offset(0)
+                .Fade(1)
+                .SetDelay(_delaySavedLocationList)
+                .Start();
+        }
         #endregion events
 
         #region others methods
 
-        private void DeleteSavedLocation(LocationItem location) {
+        private async void DeleteSavedLocation(LocationItem location) {
             if (location == null) return;
 
             if (string.IsNullOrEmpty(location.Id)) {
                 return;
             }
 
-            if (location.IsSelected) {
-                Settings.DeleteFavoriteLocation(); // NOTE: wait ?
-            }
-
             _savedLocations.Remove(location);
             Settings.SaveLocationsAsync(_savedLocations.ToList());
+
+            if (location.IsSelected) {
+                await Settings.DeleteFavoriteLocation(); // NOTE: wait ?
+                Settings.SavePrimaryTileTaskType(Settings._GPSTaskTypeKey);
+            }
         }
 
         private async Task<IReadOnlyList<MapLocation>> GetLocationFrom(string query) {
@@ -304,17 +322,5 @@ namespace Feels.Views {
 
         #endregion others methods
 
-        private void SavecLocation_Loaded(object sender, RoutedEventArgs e) {
-            _delaySavedLocationList += 100;
-
-            var item = (SlidableListItem)sender;
-            item.Offset(0, 50,0)
-                .Fade(0,0)
-                .Then()
-                .Offset(0)
-                .Fade(1)
-                .SetDelay(_delaySavedLocationList)
-                .Start();
-        }
     }
 }

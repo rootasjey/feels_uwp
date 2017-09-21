@@ -248,7 +248,7 @@ namespace Feels.Views {
             var weatherCurrent = _PageDataSource.Forecast.Currently;
             var weatherToday = _PageDataSource.Forecast.Daily.Days[0];
 
-            await UI.AnimateSlideIn(WeatherViewContent);
+            WeatherViewContent.AnimateSlideIn();
 
             UI.AnimateNumericValue((int)weatherCurrent.Temperature, Temperature, _UIDispatcher, "°");
             PopulateWeatherView(weatherToday, weatherCurrent);
@@ -256,8 +256,13 @@ namespace Feels.Views {
             SetMoonPhase(weatherToday);
             AnimateWindDirectionIcons();
 
-            DrawScene();
-            UpdateMainTile();
+            _UIDispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+            {
+                DrawScene();
+                UpdateMainTile();
+            });
+            //DrawScene();
+            //UpdateMainTile();
         }
 
         private void PopulateWeatherView(DayDataPoint todayWeather, CurrentDataPoint currentWeather) {

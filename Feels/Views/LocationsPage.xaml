@@ -23,7 +23,7 @@
                 RightLabel="Delete"
                 MouseSlidingEnabled="True"
                 RightCommandRequested="SlidableListItem_RightCommandRequested"
-                Loaded="SavecLocation_Loaded"
+                Loaded="SavedLocation_Loaded"
                 Tapped="LocationSelected_Tapped"
                 RightTapped="SavedLocation_RightTapped">
 

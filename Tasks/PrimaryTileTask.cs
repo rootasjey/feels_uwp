@@ -4,6 +4,7 @@ using System;
 using System.Globalization;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
+using Tasks.Models;
 using Tasks.Services;
 using Windows.ApplicationModel.Background;
 using Windows.Devices.Geolocation;
@@ -11,7 +12,7 @@ using Windows.Services.Maps;
 using Windows.Storage;
 
 namespace Tasks {
-    public sealed class TileTask : IBackgroundTask {
+    public sealed class PrimaryTileTask : IBackgroundTask {
         #region variables
         BackgroundTaskDeferral _deferral;
 
@@ -34,6 +35,31 @@ namespace Tasks {
         private static string _TileTaskActivity {
             get {
                 return "TileUpdaterTaskActivity";
+            }
+        }
+
+        // to delete
+        private static string _TileTaskGeolocalized {
+            get {
+                return "PrimaryTileTask-Geolocalized";
+            }
+        }
+
+        private static string PrimaryTileTaskTypeKey {
+            get {
+                return "PrimaryTileTaskType";
+            }
+        }
+
+        private static string _GPSTaskTypeKey {
+            get {
+                return "gps";
+            }
+        }
+
+        private static string _LocationTaskTypeKey {
+            get {
+                return "location";
             }
         }
 
@@ -61,21 +87,25 @@ namespace Tasks {
         public async void Run(IBackgroundTaskInstance taskInstance) {
             StartTask(taskInstance);
 
-            var location = Settings.GetFavoriteLocation();
-            string city = location?.Town;
+            string city = "";
+            LocationItem location = null;
 
-            if (location == null) {
+            if (GetTaskType() == _GPSTaskTypeKey) {
                 var position = await GetPosition();
                 if (position == null) { EndTask(); return; }
 
                 var coord = position.Coordinate.Point.Position;
 
-                location = new Models.LocationItem() {
+                location = new LocationItem() {
                     Latitude = coord.Latitude,
                     Longitude = coord.Longitude
                 };
 
                 city = await GetCityName(coord);
+
+            } else {
+                location = Settings.GetFavoriteLocation();
+                city = location?.Town;
             }
             
             var forecast = await FetchCurrentWeather(location.Latitude, location.Longitude);
@@ -124,7 +154,7 @@ namespace Tasks {
             return "";
         }
 
-        Language GetLanguage() {
+        private Language GetLanguage() {
             var lang = Settings.GetAppCurrentLanguage();
 
             var culture = new CultureInfo(lang);
@@ -142,6 +172,19 @@ namespace Tasks {
             }
 
             return Language.English;
+        }
+
+        private string GetTaskType() {
+            var taskType = _GPSTaskTypeKey;
+            var settingsValues = ApplicationData.Current.LocalSettings.Values;
+
+            if (settingsValues.ContainsKey(PrimaryTileTaskTypeKey) &&
+                (string)settingsValues[PrimaryTileTaskTypeKey] != "gps") {
+
+                taskType = _LocationTaskTypeKey;
+            }
+
+            return taskType;
         }
 
         private void LogTaskActivity() {

@@ -1,19 +1,21 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
 using Windows.Storage;
 
 namespace Feels.Services {
     public static class BackgroundTasks {
-        #region variables
-        private static string _TileTaskName {
+        #region keys
+
+        private static string _PrimaryTileTaskBaseName {
             get {
-                return "TileTask";
+                return "PrimaryTileTask";
             }
         }
 
-        private static string _TileTaskEntryPoint {
+        private static string _PrimaryTileTaskEntryPoint {
             get {
-                return "Tasks.TileTask";
+                return "Tasks.PrimaryTileTask";
             }
         }
 
@@ -40,7 +42,14 @@ namespace Feels.Services {
                 return "TileUpdaterTaskActivity";
             }
         }
-        #endregion variables
+
+        private static string _TileTaskGeolocalizedName {
+            get {
+                return "Geolocalized";
+            }
+        }
+
+        #endregion keys
 
         #region lockscreen task
         public static bool IsLockscreenTaskActivated() {
@@ -63,35 +72,55 @@ namespace Feels.Services {
         #endregion lockscreen task
 
         #region tile task
-        public static void RegisterTileTask(uint interval) {
-            RegisterBackgroundTask(_TileTaskName, _TileTaskEntryPoint, interval);
+        public static string GetPrimaryTileTaskName() {
+            return _PrimaryTileTaskBaseName;
         }
 
-        public static void UnregisterTileTask() {
-            UnregisterBackgroundTask(_TileTaskName);
+        public static void RegisterPrimaryTileTask(uint interval) {
+            var name = GetPrimaryTileTaskName();
+            RegisterBackgroundTask(name, _PrimaryTileTaskEntryPoint, interval);
+        }
+
+        public static void RegisterPrimaryTileTask() {
+            var name = GetPrimaryTileTaskName();
+            var interval = GetTileTaskInterval();
+
+            RegisterBackgroundTask(name, _PrimaryTileTaskEntryPoint, interval);
+        }
+
+        public static void UnregisterPrimaryTileTask() {
+            string name = GetPrimaryTileTaskName();
+            UnregisterBackgroundTask(name);
         }
 
         public static uint GetTileTaskInterval() {
             var settingsValues = ApplicationData.Current.LocalSettings.Values;
-            return settingsValues.ContainsKey(_TileTaskInterval) ? (uint)settingsValues[_TileTaskInterval] : 60;
+            return settingsValues.ContainsKey(_TileTaskInterval) ? 
+                (uint)settingsValues[_TileTaskInterval] : 60;
         }
 
         public static ApplicationDataCompositeValue GetTileTaskActivity() {
             var settingsValues = ApplicationData.Current.LocalSettings.Values;
-            return settingsValues.ContainsKey(_TileTaskActivity) ? (ApplicationDataCompositeValue)settingsValues[_TileTaskActivity] : null;
+
+            return settingsValues.ContainsKey(_TileTaskActivity) ? 
+                (ApplicationDataCompositeValue)settingsValues[_TileTaskActivity] : null;
         }
 
-        public static bool IsTileTaskActivated() {
+        public static bool IsTileTaskActivated(string taskName) {
             foreach (var task in BackgroundTaskRegistration.AllTasks) {
-                if (task.Value.Name == _TileTaskName) {
+                if (task.Value.Name == taskName) {
                     return true;
                 }
             }
             return false;
         }
 
-        #endregion tile task
+        public static bool IsPrimaryTaskActivated() {
+            var name = GetPrimaryTileTaskName();
+            return IsTileTaskActivated(name);
+        }
 
+        #endregion tile task
 
         #region tasks
         private static async void RegisterBackgroundTask(string taskName, string entryPoint, uint interval = 60) {
@@ -111,6 +140,7 @@ namespace Feels.Services {
                 Name = taskName,
                 TaskEntryPoint = entryPoint
             };
+
             builder.SetTrigger(new TimeTrigger(interval, false));
             BackgroundTaskRegistration taskRegistered = builder.Register();
         }

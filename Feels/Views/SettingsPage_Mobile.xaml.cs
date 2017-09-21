@@ -12,6 +12,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Input;
 
 namespace Feels.Views {
     public sealed partial class SettingsPage_Mobile : Page {
@@ -29,9 +30,10 @@ namespace Feels.Views {
             AnimatePersonalizationPivot();
         }
 
-        private void InitializeVariables() {
-            _ResourcesLoader = new ResourceLoader();
+        private async void InitializeVariables() {
             InitializeUnits();
+            _ResourcesLoader = new ResourceLoader();
+            
         }
 
         void InitializeUnits() {
@@ -78,10 +80,10 @@ namespace Feels.Views {
         }
 
         #region tile task
-        private void UpdateTileTaskSwitcher() {
-            TileTaskSwitch.IsOn = BackgroundTasks.IsTileTaskActivated();
-        }
 
+        private async void UpdateTileTaskSwitcher() {
+            TileTaskSwitch.IsOn = BackgroundTasks.IsPrimaryTaskActivated();
+        }
 
         /// <summary>
         /// Add or remove background task when the toggle changes state
@@ -92,16 +94,32 @@ namespace Feels.Views {
             var toggle = (ToggleSwitch)sender;
 
             if (toggle.IsOn) {
-                BackgroundTasks.RegisterTileTask(GetTileIntervalUpdate());
                 ShowTileTaskActivity();
                 UpdateTileTaskActivityText();
+
+                if (BackgroundTasks.IsPrimaryTaskActivated()) return;
+
+                BackgroundTasks.RegisterPrimaryTileTask(GetTileIntervalUpdate());
+                UpdatePrimaryTaskType();                
+
             } else {
-                BackgroundTasks.UnregisterTileTask();
+                BackgroundTasks.UnregisterPrimaryTileTask();
                 HideTileTaskAcitvity();
             }
         }
 
-        void ShowTileTaskActivity() {
+        private async void UpdatePrimaryTaskType() {
+            var location = await Settings.GetFavoriteLocation();
+
+            if (location == null || string.IsNullOrEmpty(location.Id)) {
+                Settings.SavePrimaryTileTaskType(Settings._GPSTaskTypeKey);
+                return;
+            }
+
+            Settings.SavePrimaryTileTaskType(Settings._LocationTaskTypeKey);
+        }
+
+        private void ShowTileTaskActivity() {
             TileTaskInfosPanel.AnimateSlideIn();
         }
 
@@ -117,8 +135,8 @@ namespace Feels.Views {
         private void TileIntervalUpdate_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (!TileTaskSwitch.IsOn) return;
 
-            BackgroundTasks.UnregisterTileTask();
-            BackgroundTasks.RegisterTileTask(GetTileIntervalUpdate());
+            BackgroundTasks.UnregisterPrimaryTileTask();
+            BackgroundTasks.RegisterPrimaryTileTask(GetTileIntervalUpdate());
         }
 
         private uint GetTileIntervalUpdate() {
@@ -127,9 +145,9 @@ namespace Feels.Views {
             return uint.Parse(value);
         }
 
-        private void RestartTileTask_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
-            BackgroundTasks.UnregisterTileTask();
-            BackgroundTasks.RegisterTileTask(GetTileIntervalUpdate());
+        private void RestartTileTask_Tapped(object sender, TappedRoutedEventArgs e) {
+            BackgroundTasks.UnregisterPrimaryTileTask();
+            BackgroundTasks.RegisterPrimaryTileTask(GetTileIntervalUpdate());
         }
 
         private void TileIntervalUpdate_Loaded(object sender, RoutedEventArgs e) {

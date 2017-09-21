@@ -72,6 +72,24 @@ namespace Feels.Services {
                 return "SceneColorAnimationDeactivated";
             }
         }
+
+        private static string PrimaryTileTaskTypeKey {
+            get {
+                return "PrimaryTileTaskType";
+            }
+        }
+
+        public static string _GPSTaskTypeKey {
+            get {
+                return "gps";
+            }
+        }
+
+        public static string _LocationTaskTypeKey {
+            get {
+                return "location";
+            }
+        }
         #endregion keys
 
         #region position
@@ -275,6 +293,19 @@ namespace Feels.Services {
 
 
         #endregion locations
+
+        #region tasks
+        public static void SavePrimaryTileTaskType(string type) {
+            var localSettingsValues = ApplicationData.Current.LocalSettings.Values;
+            localSettingsValues[PrimaryTileTaskTypeKey] = type;
+        }
+
+        public static string GetPrimaryTileTaskType() {
+            var localSettingsValues = ApplicationData.Current.LocalSettings.Values;
+            return localSettingsValues.ContainsKey(PrimaryTileTaskTypeKey) ? 
+                (string)localSettingsValues[PrimaryTileTaskTypeKey] : _GPSTaskTypeKey;
+        }
+        #endregion tasks
 
         #region animations
         public static void SaveSceneColorAnimationDeactivated(bool status) {

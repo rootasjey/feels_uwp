@@ -110,7 +110,7 @@
     <Compile Include="Models\LocationItem.cs" />
     <Compile Include="Services\Settings.cs" />
     <Compile Include="Services\TileDesigner.cs" />
-    <Compile Include="TileTask.cs" />
+    <Compile Include="PrimaryTileTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
