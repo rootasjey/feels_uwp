@@ -492,4 +492,10 @@
   <data name="BlockTheme.Text" xml:space="preserve">
     <value>Цвет фона приложения</value>
   </data>
+  <data name="Moonrise.Text" xml:space="preserve">
+    <value>До</value>
+  </data>
+  <data name="Moonset.Text" xml:space="preserve">
+    <value>Спал</value>
+  </data>
 </root>

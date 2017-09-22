@@ -492,4 +492,10 @@
   <data name="BlockTheme.Text" xml:space="preserve">
     <value>theme</value>
   </data>
+  <data name="Moonrise.Text" xml:space="preserve">
+    <value>moonrise</value>
+  </data>
+  <data name="Moonset.Text" xml:space="preserve">
+    <value>moonset</value>
+  </data>
 </root>

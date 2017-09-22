@@ -256,13 +256,11 @@ namespace Feels.Views {
             SetMoonPhase(weatherToday);
             AnimateWindDirectionIcons();
 
-            _UIDispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+            var task = _UIDispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
                 DrawScene();
                 UpdateMainTile();
             });
-            //DrawScene();
-            //UpdateMainTile();
         }
 
         private void PopulateWeatherView(DayDataPoint todayWeather, CurrentDataPoint currentWeather) {
@@ -280,8 +278,7 @@ namespace Feels.Views {
 
             WindDirection.Text = string.Format("{0}°", currentWeather.WindBearing);
             WindDirectionIcon
-                .Rotate(currentWeather.WindBearing + 180,
-                (float)WindDirectionIcon.ActualWidth / 2, (float)WindDirection.ActualHeight / 2)
+                .Rotate(currentWeather.WindBearing + 180, 15, 15)
                 .Start();
 
             CloudCover.Text = string.Format("{0}%", currentWeather.CloudCover * 100);
@@ -316,7 +313,7 @@ namespace Feels.Views {
             animationRotate.Direction = Windows.UI.Composition.AnimationDirection.Alternate;
 
             visual.RotationAxis = new Vector3(0, 0, 1);
-            visual.CenterPoint = new Vector3((float)15, (float)15, 0);
+            visual.CenterPoint = new Vector3(15, 15, 0);
 
             visual.StartAnimation("RotationAngleInDegrees", animationRotate);
         }
