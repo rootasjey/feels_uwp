@@ -11,6 +11,7 @@ Minimalistic weather app
 ## features
 
 * Current weather based on geolocalization
+* Add city manually
 * Hourly forecast
 * Daily forecast
 * Live tile
@@ -47,13 +48,12 @@ You can contribute to improve this project by:
 
 * edit the code
 * creating a pull request
-* submitting new ideas / features suggestions 
+* submitting new ideas / features suggestions
 * reporting a bug
 
 ## todo
 
 * Lockscreen background
-* Add city manually
 
 ## platforms
 

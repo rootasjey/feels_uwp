@@ -9,11 +9,20 @@
     x:Class="Feels.Views.HomePage"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <Flyout x:Key="FlyoutWeatherDetail">
+            <Grid x:Name="FlyoutWeatherDetailContent"/>
+        </Flyout>
+    </Page.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+          PointerEntered="Page_PointerEntered"
+          PointerExited="Page_PointerExited">
         <Grid.RowDefinitions>
             <RowDefinition x:Name="TitleBarRow" Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WindowsStates">
                 <VisualState x:Name="MobileState">
@@ -60,44 +69,163 @@
             <Grid Grid.Column="3" x:Name="RightMask" Background="Transparent"/>
         </Grid>
 
+        <!--Mouse Page Navigation-->
+        <FontIcon x:Name="PageArrowLeft" 
+                  Glyph="&#xE00E;" 
+                  FontSize="32" 
+                  Grid.Row="1"
+                  Opacity="0"
+                  Canvas.ZIndex="3"
+                  Visibility="Collapsed"
+                  HorizontalAlignment="Left"
+                  FontFamily="Segoe MDL2 Assets"
+                  PointerEntered="PageArrow_PointerEntered"
+                  PointerExited="PageArrow_PointerExited"
+                  Tapped="PageArrowLeft_Tapped"/>
+
+        <FontIcon x:Name="PageArrowRight" 
+                  Glyph="&#xE00F;" 
+                  FontSize="32" 
+                  Grid.Row="1" 
+                  Opacity="0"
+                  Canvas.ZIndex="3"
+                  Visibility="Collapsed"
+                  HorizontalAlignment="Right" 
+                  FontFamily="Segoe MDL2 Assets"
+                  PointerEntered="PageArrow_PointerEntered"
+                  PointerExited="PageArrow_PointerExited"
+                  Tapped="PageArrowRight_Tapped"/>
+
+        
         <FlyoutPresenter x:Name="UpdateChangeLogFlyout"
                          Visibility="Collapsed"
                          VerticalAlignment="Center"
                          Grid.Row="1"
                          Canvas.ZIndex="2">
-
+            
             <StackPanel ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                        Padding="0,20">
-                <StackPanel Orientation="Horizontal">
-                    <FontIcon Glyph="&#xEB3C;" FontSize="30" Margin="0,0,12,0"/>
-                    <TextBlock Text="September Update" 
-                               FontSize="38"
-                               FontWeight="Normal"
-                               Typography.Capitals="AllSmallCaps"/>
+                        Padding="0,0,0,30">
+
+                <StackPanel Orientation="Horizontal"
+                            Margin="-12,-12"
+                            Padding="12"
+                            Height="90"
+                            Background="{ThemeResource SystemControlHighlightAccentBrush}"
+                            Tapped="CloseChangelogFlyout_Tapped">
+                    <!--<FontIcon Glyph="&#xEB3C;" FontSize="30" Margin="0,0,12,0"/>-->
+                    <StackPanel>
+                        <TextBlock Text="community Update" 
+                                   FontSize="34"
+                                   Foreground="White"
+                                   TextWrapping="Wrap"
+                                   FontWeight="Normal"
+                                   VerticalAlignment="Center"
+                                   Typography.Capitals="AllSmallCaps"/>
+                        
+                        <TextBlock Text="Tap here to close" FontStyle="Italic" Foreground="White" Opacity=".5"/>
+                    </StackPanel>
+                    <TextBlock Text="💏" FontSize="32" VerticalAlignment="Center" Margin="12,0,0,0"/>
                 </StackPanel>
 
                 <TextBlock x:Name="UpdateVersion"
-                           x:Uid="UpdateVersion" Opacity=".5"/>
+                           x:Uid="UpdateVersion" Opacity=".5" Margin="0,24,0,0"/>
 
-                <RichTextBlock TextWrapping="Wrap" Margin="0,20,0,0">
-                    <Paragraph Margin="0,12">
+                <RichTextBlock TextWrapping="Wrap" Margin="0,30,0,0">
+                    <Paragraph Margin="0,0,0,24">
                         <Span FontSize="22" 
                               FontWeight="Medium" 
                               Foreground="{ThemeResource SystemControlForegroundAccentBrush}">
-                            MOON PHASES 🌗
+                            CUSTOM LOCATIONS 🗺
                         </Span>
                         <LineBreak/>
-                        <Span>Now you can see the moon phase </Span>
+                        <Span>From today, you can add severals locations</Span>
                         <LineBreak/>
-                        <Span>in detailed information (at the bottom of the page),</Span>
+                        <Span>manually. You can then switch between them</Span>
                         <LineBreak/>
-                        <Span>and directly at night (at the top).</Span>
+                        <Span> on the locations page.</Span>
+                        <LineBreak/>
+                        <Span>In case you always wanted to be anonymous 🕵</Span>
+                    </Paragraph>
+                    
+                    <Paragraph Margin="0,34">
+                        <Span FontSize="22" 
+                              FontWeight="Medium" 
+                              Foreground="{ThemeResource SystemControlForegroundAccentBrush}">
+                            HOME NAVIGATION BUTTONS
+                        </Span>
+                        <LineBreak/>
+                        <Span>Navigating on pivot sections with mouse </Span>
+                        <LineBreak/>
+                        <Span>wasn't good before.</Span>
+                        <LineBreak/>
+                        <Span>You'd have to use the top/bottom buttons </Span>
+                        <LineBreak/>
+                        <Span>to go back and foward 😞</Span>
+                        <LineBreak/>
+                        <Span>Starting this update, the buttons are localized</Span>
+                        <LineBreak/>
+                        <Span>on the middle of the screen at the edges</Span>
+                        <LineBreak/>
+                        <Span>when using a mouse :)</Span>
+                    </Paragraph>
+
+                    <Paragraph Margin="0,34">
+                        <Span FontSize="22" 
+                              FontWeight="Medium" 
+                              Foreground="{ThemeResource SystemControlForegroundAccentBrush}">
+                            MILLIMETERS OF MERCURY
+                        </Span>
+                        <LineBreak/>
+                        <Span>Atmospheric pressure can be displayed in</Span>
+                        <LineBreak/>
+                        <Span>millimeters of mercury.</Span>
+                        <LineBreak/>
+                        <Span>Just tap on the pressure icon to switch unit.</Span>
+                    </Paragraph>
+
+                    <Paragraph Margin="0,34">
+                        <Span FontSize="22" 
+                              FontWeight="Medium" 
+                              Foreground="{ThemeResource SystemControlForegroundAccentBrush}">
+                            ANIMATIONS SETTINGS
+                        </Span>
+                        <LineBreak/>
+                        <Span>Some animations can be deactivated in settings</Span>
+                        <LineBreak/>
+                        <Span>like the background gradient color on home page.</Span>
+                    </Paragraph>
+
+                    <Paragraph Margin="0,34">
+                        <Span FontSize="22" 
+                              FontWeight="Medium" 
+                              Foreground="{ThemeResource SystemControlForegroundAccentBrush}">
+                            THEMES
+                        </Span>
+                        <LineBreak/>
+                        <Span>You can switch between dark and light theme.</Span>
+                    </Paragraph>
+
+                    <Paragraph Margin="0,34">
+                        <Span FontSize="22" 
+                              FontWeight="Medium">
+                            OTHER MINOR CHANGES
+                        </Span>
+                        <LineBreak/>
+                        <Span>• Sunset and Sunrise are now displayed</Span>
+                        <LineBreak/>
+                        <Span>in 24 hours format (easier to read).</Span>
+                        <LineBreak/>
+                        <Span>• Added moonrise and moonset</Span>
+                    </Paragraph>
+
+                    <Paragraph>
+                        <Span>Thanks to Дмитрий for the feedback!</Span>
                     </Paragraph>
                 </RichTextBlock>
 
                 <Button x:Name="ChangelogDismissButton" 
                         Content="OKAY" 
-                        Margin="0,22,0,0"
+                        Margin="0,42,0,0"
                         Width="100"
                         Height="40"
                         HorizontalAlignment="Left"
@@ -106,7 +234,6 @@
         </FlyoutPresenter>
 
         <Pivot x:Name="PagePivot" Grid.Row="1">
-            
             <PivotItem x:Name="NowPivot" Margin="0,-51,0,0">
                 <ScrollViewer x:Name="PivotContent">
                     <Grid>
@@ -121,10 +248,15 @@
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Center">
                             <BitmapIcon UriSource="/Assets/icon.png" 
-                                        Foreground="White" 
                                         Height="90" Width="90"/>
                             <TextBlock Text="feels" FontSize="60"
+                                       HorizontalAlignment="Center"
                                        Opacity=".5"/>
+                            <TextBlock x:Uid="LoadingStuck" TextWrapping="Wrap"
+                                       FontSize="18"
+                                       Opacity=".7"
+                                       Padding="20,0"
+                                       Text="Sometimes the loading get stucked if you're using GPS for the weather location. Try to close then restart the app if this happens."/>
                         </StackPanel>
 
                         <Grid x:Name="WeatherView" 
@@ -132,66 +264,69 @@
                               HorizontalAlignment="Center"
                               Margin="24,30,24,0"
                               Padding="0,0,0,100"
+                              RequestedTheme="Dark"
                               Visibility="Collapsed">
 
                             <StackPanel x:Name="WeatherViewContent">
+                                <StackPanel x:Name="MainWeatherContent"
+                                            Opacity="1">
+                                    <TextBlock x:Name="TownTextBlock" Text="paris"
+                                                   Typography.Capitals="AllSmallCaps"
+                                                   FontWeight="Bold"
+                                                   FontSize="26"
+                                                   Opacity="1"
+                                                   TextAlignment="Center"/>
 
-                                <TextBlock x:Name="City" Text="paris"
+                                    <TextBlock x:Name="LastTimeUpdate"
+                                               Visibility="Visible"
                                                Typography.Capitals="AllSmallCaps"
-                                               FontWeight="Bold"
-                                               FontSize="26"
-                                               Opacity="1"
+                                               Text="Monday 11:35 AM"
                                                TextAlignment="Center"/>
 
-                                <TextBlock x:Name="LastTimeUpdate"
-                                           Visibility="Visible"
-                                           Typography.Capitals="AllSmallCaps"
-                                           Text="Monday 11:35 AM"
-                                           TextAlignment="Center"
-                                           />
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,265,0,0"
+                                                HorizontalAlignment="Center">
+                                        <!--Margin="0,265,0,0"-->
 
-                                <StackPanel Orientation="Horizontal"
-                                            Margin="0,265,0,0"
-                                            HorizontalAlignment="Center">
-                                    <!--Margin="0,250,0,0"-->
+                                        <TextBlock x:Name="Temperature"
+                                                       Text="42°"
+                                                       Margin="12,0,0,0"
+                                                       FontWeight="SemiBold" 
+                                                       FontSize="80"/>
+                                    </StackPanel>
 
-                                    <TextBlock x:Name="Temperature"
-                                                   Text="42°"
-                                                   Margin="12,0,0,0"
-                                                   FontWeight="SemiBold" 
-                                                   FontSize="80"/>
+                                    <TextBlock x:Name="TempUnit" 
+                                                   Text="celcius"
+                                                   FontSize="22"
+                                                   Visibility="Collapsed"
+                                                   FontWeight="Bold"
+                                                   Opacity=".5"
+                                                   TextAlignment="Center"/>
+
+                                    <TextBlock x:Name="FeelsLike" 
+                                               x:Uid="FeelsLikeText"
+                                               Text="Feels more like "
+                                               FontWeight="Light"
+                                               Opacity=".6"
+                                               HorizontalAlignment="Center"/>
+
+                                    <TextBlock x:Name="Status" 
+                                               Text="Clair" 
+                                               FontWeight="SemiBold"
+                                                Typography.Capitals="AllSmallCaps"
+                                                TextAlignment="Center"
+                                                TextWrapping="Wrap"
+                                                FontSize="26"/>
                                 </StackPanel>
-
-                                <TextBlock x:Name="TempUnit" 
-                                               Text="celcius"
-                                               FontSize="22"
-                                               Visibility="Collapsed"
-                                               FontWeight="Bold"
-                                               Opacity=".5"
-                                               TextAlignment="Center"/>
-
-                                <TextBlock x:Name="FeelsLike" 
-                                           x:Uid="FeelsLikeText"
-                                           Text="Feels more like "
-                                           FontWeight="Light"
-                                           Opacity=".6"
-                                           HorizontalAlignment="Center"/>
-
-                                <TextBlock x:Name="Status" 
-                                           Text="Clair" 
-                                           FontWeight="SemiBold"
-                                            Typography.Capitals="AllSmallCaps"
-                                            TextAlignment="Center"
-                                            TextWrapping="Wrap"
-                                            FontSize="26"/>
-
+                                
                                 <StackPanel x:Name="PanelWeatherDetails"
+                                            MinWidth="270"
                                             Margin="0,90,0,0">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="30*"/>
-                                            <ColumnDefinition Width="30*"/>
-                                            <ColumnDefinition Width="30*"/>
+                                            <ColumnDefinition Width="40*"/>
+                                            <ColumnDefinition Width="40*"/>
+                                            <ColumnDefinition Width="40*"/>
                                         </Grid.ColumnDefinitions>
 
                                         <StackPanel x:Name="PanelMinTemp">
@@ -252,9 +387,9 @@
 
                                     <Grid Margin="0,40,0,0" Visibility="Visible">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="30*"/>
-                                            <ColumnDefinition Width="30*"/>
-                                            <ColumnDefinition Width="30*"/>
+                                            <ColumnDefinition Width="40*"/>
+                                            <ColumnDefinition Width="40*"/>
+                                            <ColumnDefinition Width="40*"/>
                                         </Grid.ColumnDefinitions>
 
                                         <StackPanel x:Name="PanelHumidity">
@@ -315,7 +450,7 @@
                                         </StackPanel>
                                     </Grid>
 
-                                    <Grid Margin="0,40,0,0">
+                                    <Grid Margin="0,40,0,0" Visibility="Visible">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="30*"/>
                                             <ColumnDefinition Width="30*"/>
@@ -340,8 +475,28 @@
                                                        HorizontalAlignment="Center"/>
                                         </StackPanel>
 
-                                        <StackPanel x:Name="PanelCloudCover"
+                                        <StackPanel x:Name="PanelWindDirection"
                                                     Grid.Column="1">
+                                            <BitmapIcon x:Name="WindDirectionIcon" 
+                                                        UriSource="/Assets/Icons/wind_direction.png"
+                                                        Height="30" Width="30"
+                                                        Margin="0,0,0,10"/>
+
+                                            <TextBlock x:Uid="WindDirection" 
+                                                       Text="wind direction"
+                                                       Opacity=".5"
+                                                       FontSize="14"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Center"/>
+                                            <TextBlock x:Name="WindDirection" 
+                                                       Text="16"
+                                                       FontSize="16"
+                                                       FontWeight="SemiBold"
+                                                       HorizontalAlignment="Center"/>
+                                        </StackPanel>
+
+                                        <StackPanel x:Name="PanelCloudCover"
+                                                    Grid.Column="2">
 
                                             <BitmapIcon UriSource="/Assets/Icons/cloudy.png"
                                                         Height="30" Width="30"
@@ -360,8 +515,58 @@
                                                        HorizontalAlignment="Center"/>
                                         </StackPanel>
 
+                                        
+                                    </Grid>
+
+                                    <Grid Margin="0,40,0,0" Visibility="Visible">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="40*"/>
+                                            <ColumnDefinition Width="40*"/>
+                                            <ColumnDefinition Width="40*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel x:Name="PanelMoonrise"
+                                                    Grid.Column="0">
+
+                                            <BitmapIcon UriSource="/Assets/Icons/moon_rise.png"
+                                                        Height="30" Width="30"
+                                                        Margin="0,0,0,10"/>
+
+                                            <TextBlock x:Uid="Moonrise" 
+                                                       Text="moonrise"
+                                                       Opacity=".5"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Center"/>
+                                            <TextBlock x:Name="MoonriseTime" 
+                                                       Text="16"
+                                                       FontSize="20"
+                                                       FontWeight="SemiBold"
+                                                       HorizontalAlignment="Center"/>
+                                        </StackPanel>
+
+                                        <StackPanel x:Name="PanelMoonset"
+                                                    Grid.Column="1">
+
+                                            <BitmapIcon UriSource="/Assets/Icons/moon_set.png"
+                                                        Height="30" Width="30"
+                                                        Margin="0,0,0,10"/>
+
+                                            <TextBlock x:Uid="Moonset" 
+                                                       Text="moonset"
+                                                       Opacity=".5"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Center"/>
+                                            <TextBlock x:Name="MoonsetTime" 
+                                                       Text="16"
+                                                       FontSize="20"
+                                                       FontWeight="SemiBold"
+                                                       HorizontalAlignment="Center"/>
+                                        </StackPanel>
+
                                         <StackPanel x:Name="PanelPressure"
-                                                    Grid.Column="2">
+                                                    Grid.Column="2"
+                                                    FlyoutBase.AttachedFlyout="{StaticResource FlyoutWeatherDetail}"
+                                                    Tapped="PanelPressure_Tapped">
 
                                             <BitmapIcon UriSource="/Assets/Icons/pressure.png"
                                                         Height="30" Width="30"
@@ -379,7 +584,7 @@
                                                        HorizontalAlignment="Center"/>
                                         </StackPanel>
                                     </Grid>
-
+                                    
                                     <Grid Margin="0,40,0,0">
                                         <!--<Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="30*"/>
@@ -406,31 +611,6 @@
                                                        HorizontalAlignment="Center"/>
                                         </StackPanel>
                                     </Grid>
-                                </StackPanel>
-
-                                
-                                <!--Buttons Navigation-->
-                                <StackPanel Margin="0,50,0,0">
-                                    <Button Margin="0,0,0,0">
-                                        <TextBlock x:Name="CurrentToHourlyButton" 
-                                                   x:Uid="SwypeRightToHourly"
-                                                   Text="swype right to see hourly forecast"
-                                                   TextWrapping="Wrap"
-                                                   Typography.Capitals="SmallCaps"
-                                                   FontWeight="Bold"
-                                                   Tapped="CurrentToHourlyButton_Tapped"/>
-                                    </Button>
-
-                                    <Button Margin="0,5,0,0"
-                                                HorizontalAlignment="Center">
-                                        <TextBlock x:Name="CurrentToDailyButton"
-                                                   x:Uid="SwypeLeftToHourly"
-                                                   Text="swype left to see daily forecast"
-                                                   TextWrapping="Wrap"
-                                                   Typography.Capitals="SmallCaps"
-                                                   FontWeight="Bold"
-                                                   Tapped="CurrentToDailyButton_Tapped"/>
-                                    </Button>
                                 </StackPanel>
                             </StackPanel>
                         </Grid>
@@ -472,25 +652,47 @@
                                       Glyph="&#xEB4A;" 
                                       FontSize="60" 
                                       Foreground="{ThemeResource SystemControlHighlightAccentBrush}"/>
-                            <TextBlock x:Name="LocFailedText"
+                            <TextBlock x:Name="LocationFailedText"
+                                       x:Uid="LocationFailedText"
                                        TextAlignment="Center"
                                        Text="Seems like you aren't on Earth. Please check your location settings or your internet connection"
-                                       FontSize="24" 
+                                       FontSize="20" 
+                                       FontWeight="SemiBold"
                                        Opacity=".7"
                                        TextWrapping="Wrap"/>
-                            <Button x:Name="LocationSettingsButton" Content="location settings" 
+                            <Button x:Name="LocationSettingsButton"
+                                    x:Uid="LocationSettingsButton"
+                                    Content="location settings" 
                                     MinWidth="150" 
                                     Margin="0,20,0,10" 
                                     Tapped="LocationSettingsButton_Tapped"
                                     HorizontalAlignment="Center"/>
 
                             <Button x:Name="TryAgainButton"
+                                    x:Uid="TryAgainButton"
                                     Content="Try Again"
                                     MinWidth="150"
                                     Foreground="White"
                                     Background="{ThemeResource SystemControlHighlightAccentBrush}"
                                     Tapped="TryAgainButton_Tapped"
                                     HorizontalAlignment="Center"/>
+
+                            <Rectangle Width="200" Fill="{ThemeResource SystemControlHighlightAccentBrush}" 
+                                       Height="2" Margin="0,40"/>
+                            
+                            <TextBlock x:Uid="BlockDontUseGPS"
+                                       Margin="0,0,0,10"
+                                       Text="If you don't want to use your GPS location, you can add manually locations"
+                                       FontSize="18"
+                                       HorizontalAlignment="Center"
+                                       FontWeight="Light"
+                                       TextWrapping="Wrap"/>
+                            <Button x:Uid="ButtonAddLocationManually" 
+                                    Content="add location manually" 
+                                    HorizontalAlignment="Center"
+                                    Foreground="White"
+                                    Background="{ThemeResource SystemControlHighlightAccentBrush}"
+                                    Tapped="AddLocationManually_Tapped"/>
                         </StackPanel>
 
                         <Maps:MapControl x:Name="PageMapControl" 
@@ -529,53 +731,6 @@
                                 <UserControl>
                                     <StackPanel Padding="30,42,30,0" 
                                                 Background="{ThemeResource SystemControlHighlightAccentBrush}">
-
-                                        <VisualStateManager.VisualStateGroups>
-                                            <VisualStateGroup x:Name="HourlyHeaderStates">
-                                                <VisualState x:Name="MobileHourlyHeader">
-                                                    <VisualState.StateTriggers>
-                                                        <AdaptiveTrigger MinWindowWidth="0"/>
-                                                    </VisualState.StateTriggers>
-                                                    <VisualState.Setters>
-                                                        <Setter Target="PanelHourlyNavigation.Visibility" Value="Collapsed"/>
-                                                        <Setter Target="HourlySummary.Margin" Value="0,-40,0,0"/>
-                                                    </VisualState.Setters>
-                                                </VisualState>
-
-                                                <VisualState x:Name="DesktopHourlyHeader">
-                                                    <VisualState.StateTriggers>
-                                                        <AdaptiveTrigger MinWindowWidth="500"/>
-                                                    </VisualState.StateTriggers>
-                                                    <VisualState.Setters>
-                                                        <Setter Target="PanelHourlyNavigation.Visibility" Value="Visible"/>
-                                                        <Setter Target="HourlySummary.Margin" Value="0"/>
-                                                    </VisualState.Setters>
-                                                </VisualState>
-                                            </VisualStateGroup>
-                                        </VisualStateManager.VisualStateGroups>
-
-                                        <StackPanel x:Name="PanelHourlyNavigation"
-                                                    Orientation="Horizontal"
-                                                    HorizontalAlignment="Left">
-                                            <Button>
-                                                <TextBlock x:Name="HourlyToCurrentButton"
-                                                           x:Uid="CurrentForecastButton"
-                                                           Text="current forecast"
-                                                           Typography.Capitals="SmallCaps"
-                                                           FontWeight="Bold"
-                                                           Tapped="HourlyToCurrentButton_Tapped"/>
-                                            </Button>
-
-                                            <Button Margin="10,0,0,0"
-                                                        HorizontalAlignment="Center">
-                                                <TextBlock x:Name="DailyForecastButton"
-                                                           x:Uid="DailyForecastButton"
-                                                           Text="daily forecast"
-                                                           Typography.Capitals="SmallCaps"
-                                                           FontWeight="Bold"
-                                                           Tapped="CurrentToDailyButton_Tapped"/>
-                                            </Button>
-                                        </StackPanel>
 
                                         <TextBlock x:Name="HourlySummary" 
                                                    Text="Summary"
@@ -642,7 +797,6 @@
                                                     Height="30"
                                                     Width="30"
                                                     VerticalAlignment="Center"
-                                                    Foreground="White"
                                                     Grid.Column="1"
                                                     />
 
@@ -700,56 +854,6 @@
                                 <UserControl>
                                     <StackPanel Padding="30,42,20,0"
                                             Background="{ThemeResource SystemControlHighlightAccentBrush}">
-
-                                        <VisualStateManager.VisualStateGroups>
-                                            <VisualStateGroup x:Name="DailyHeaderStates">
-                                                <VisualState x:Name="MobileDailyHeader">
-                                                    <VisualState.StateTriggers>
-                                                        <AdaptiveTrigger MinWindowWidth="0"/>
-                                                    </VisualState.StateTriggers>
-                                                    <VisualState.Setters>
-                                                        <Setter Target="PanelDailyNavigation.Visibility" Value="Collapsed"/>
-                                                        <Setter Target="DailySummary.Margin" Value="0,-40,0,0"/>
-                                                    </VisualState.Setters>
-                                                </VisualState>
-
-                                                <VisualState x:Name="DesktopDailyHeader">
-                                                    <VisualState.StateTriggers>
-                                                        <AdaptiveTrigger MinWindowWidth="500"/>
-                                                    </VisualState.StateTriggers>
-                                                    <VisualState.Setters>
-                                                        <Setter Target="PanelDailyNavigation.Visibility" Value="Visible"/>
-                                                        <Setter Target="DailySummary.Margin" Value="0"/>
-                                                    </VisualState.Setters>
-                                                </VisualState>
-                                            </VisualStateGroup>
-                                        </VisualStateManager.VisualStateGroups>
-
-                                        <StackPanel x:Name="PanelDailyNavigation" 
-                                                    Margin="0,0,0,0"
-                                                    Grid.Row="0"
-                                                    Padding="0,0,0,0"
-                                                    Orientation="Horizontal"
-                                                    HorizontalAlignment="Left">
-                                            <Button Margin="0,0,0,0">
-                                                <TextBlock
-                                                    x:Uid="HourlyForecastButton"
-                                                    Text="hourly forecast"
-                                                    Typography.Capitals="SmallCaps"
-                                                    FontWeight="Bold"
-                                                    Tapped="CurrentToHourlyButton_Tapped"/>
-                                            </Button>
-
-                                            <Button Margin="10,0,0,0"
-                                                        HorizontalAlignment="Center">
-                                                <TextBlock
-                                                        x:Uid="CurrentForecastButton"
-                                                        Text="current forecast"
-                                                        Typography.Capitals="SmallCaps"
-                                                        FontWeight="Bold"
-                                                        Tapped="HourlyToCurrentButton_Tapped"/>
-                                            </Button>
-                                        </StackPanel>
 
                                         <TextBlock x:Name="DailySummary" 
                                                    Text="Summary" Grid.Row="1" 
@@ -824,7 +928,6 @@
                                                     Height="30"
                                                     Width="30"
                                                     VerticalAlignment="Center"
-                                                    Foreground="White"
                                                     Grid.Column="1"
                                                     />
 
@@ -883,7 +986,6 @@
                                                     Height="30"
                                                     Width="30"
                                                     VerticalAlignment="Center"
-                                                    Foreground="White"
                                                     Grid.Column="0"
                                                     />
 
@@ -930,18 +1032,22 @@
 
         <CommandBar x:Name="AppBar"
                     Grid.Row="1"
+                    Canvas.ZIndex="4"
                     Background="Transparent"
-                    VerticalAlignment="Bottom" 
-                    Opening="AppBar_Opening"
-                    Closed="AppBar_Closed"
+                    VerticalAlignment="Bottom"
+                    RequestedTheme="Light"
                     ClosedDisplayMode="Minimal">
             <CommandBar.SecondaryCommands>
                 <AppBarButton Label="settings" x:Uid="CmdSettings" Tapped="GoToSettings_Tapped" />
             </CommandBar.SecondaryCommands>
+            <AppBarButton x:Name="CmdLocations" x:Uid="CmdLocations"
+                          Label="locations" Icon="Map"
+                          Tapped="CmdLocations_Tapped"/>
             <AppBarButton x:Name="CmdRefresh" x:Uid="CmdRefresh"
                           Label="refresh" Icon="Refresh" 
                           Tapped="CmdRefresh_Tapped"/>
         </CommandBar>
 
+        <Grid x:Name="AppBarFrozenHost" Grid.Row="1" Canvas.ZIndex="3" Height="75" VerticalAlignment="Bottom"/>
     </Grid>
 </Page>

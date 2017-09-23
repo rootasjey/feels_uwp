@@ -1,9 +1,14 @@
-﻿using Windows.Storage;
+﻿using System;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.System.UserProfile;
 using Windows.Devices.Geolocation;
 using DarkSkyApi;
 using Windows.ApplicationModel;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Feels.Models;
+using Newtonsoft.Json;
 
 namespace Feels.Services {
     public class Settings {
@@ -41,6 +46,48 @@ namespace Feels.Services {
         private static string AppVersionKey {
             get {
                 return "AppVersion";
+            }
+        }
+
+        private static string SavedLocationsKey {
+            get {
+                return "Savedlocations.json";
+            }
+        }
+
+        private static string FavoriteLocationKey {
+            get {
+                return "FavoriteLocation";
+            }
+        }
+
+        private static string PressureUnitKey {
+            get {
+                return "PressureUnit";
+            }
+        }
+
+        private static string SceneColorAnimationDeactivatedKey {
+            get {
+                return "SceneColorAnimationDeactivated";
+            }
+        }
+
+        private static string PrimaryTileTaskTypeKey {
+            get {
+                return "PrimaryTileTaskType";
+            }
+        }
+
+        public static string _GPSTaskTypeKey {
+            get {
+                return "gps";
+            }
+        }
+
+        public static string _LocationTaskTypeKey {
+            get {
+                return "location";
             }
         }
         #endregion keys
@@ -146,6 +193,22 @@ namespace Feels.Services {
 
             return Unit.SI;
         }
+
+        public static void SavePressureUnit(string unit) {
+            var settingsValues = ApplicationData.Current.LocalSettings.Values;
+            settingsValues[PressureUnitKey] = unit;
+        }
+
+        public static string GetPressureUnit() {
+            var settingsValues = ApplicationData.Current.LocalSettings.Values;
+
+            if (settingsValues.ContainsKey(PressureUnitKey)) {
+                var savedPressureUnit = (string)settingsValues[PressureUnitKey];
+                return savedPressureUnit;
+            }
+
+            return null;
+        }
         #endregion units
 
         #region theme
@@ -178,27 +241,85 @@ namespace Feels.Services {
         }
         #endregion first launch
 
-        #region favorites cities
-        //public static async Task SaveFavoritesAsync(ObservableKeyedCollection favorites, string source) {
-        //    string json = JsonConvert.SerializeObject(favorites);
-        //    StorageFile file =
-        //        await ApplicationData
-        //                .Current
-        //                .LocalFolder
-        //                .CreateFileAsync("favorites-" + source + ".json", CreationCollisionOption.ReplaceExisting);
+        #region locations
+        public static async Task SaveLocationsAsync(List<LocationItem> locations) {
+            string json = JsonConvert.SerializeObject(locations);
 
-        //    await FileIO.WriteTextAsync(file, json);
-        //}
+            StorageFile file =
+                await ApplicationData
+                        .Current
+                        .LocalFolder
+                        .CreateFileAsync(SavedLocationsKey, CreationCollisionOption.ReplaceExisting);
 
-        //public static async Task<ObservableKeyedCollection> LoadFavoritesAsync(string source) {
-        //    StorageFile file = (StorageFile)await ApplicationData.Current.LocalFolder.TryGetItemAsync("favorites-" + source + ".json");
-        //    if (file == null) return null;
+            await FileIO.WriteTextAsync(file, json);
+        }
 
-        //    string json = await FileIO.ReadTextAsync(file);
-        //    ObservableKeyedCollection favorites = JsonConvert.DeserializeObject<ObservableKeyedCollection>(json);
-        //    return favorites;
-        //}
-        #endregion favorites cities
+        public static async Task<List<LocationItem>> GetSavedLocationAsync() {
+            StorageFile file = (StorageFile)await ApplicationData.Current.LocalFolder.TryGetItemAsync(SavedLocationsKey);
+            if (file == null) return null;
+
+            string json = await FileIO.ReadTextAsync(file);
+            var savedLocationList = JsonConvert.DeserializeObject<List<LocationItem>>(json);
+            return savedLocationList;
+        }
+
+        public static async Task SaveFavoriteLocation(LocationItem location) {
+            string serializedLocation = JsonConvert.SerializeObject(location);
+
+            StorageFile file =
+                await ApplicationData
+                        .Current
+                        .LocalFolder
+                        .CreateFileAsync(FavoriteLocationKey, CreationCollisionOption.ReplaceExisting);
+
+            await FileIO.WriteTextAsync(file, serializedLocation);
+        }
+
+        public static async Task<LocationItem> GetFavoriteLocation() {
+            StorageFile file = (StorageFile)await ApplicationData.Current.LocalFolder.TryGetItemAsync(FavoriteLocationKey);
+            if (file == null) return null;
+
+            string json = await FileIO.ReadTextAsync(file);
+            var favoriteLocation = JsonConvert.DeserializeObject<LocationItem>(json);
+            return favoriteLocation;
+        }
+
+        public static async Task DeleteFavoriteLocation() {
+            StorageFile file = (StorageFile)await ApplicationData.Current.LocalFolder.TryGetItemAsync(FavoriteLocationKey);
+            if (file == null) return;
+
+            await file.DeleteAsync();
+        }
+
+
+        #endregion locations
+
+        #region tasks
+        public static void SavePrimaryTileTaskType(string type) {
+            var localSettingsValues = ApplicationData.Current.LocalSettings.Values;
+            localSettingsValues[PrimaryTileTaskTypeKey] = type;
+        }
+
+        public static string GetPrimaryTileTaskType() {
+            var localSettingsValues = ApplicationData.Current.LocalSettings.Values;
+            return localSettingsValues.ContainsKey(PrimaryTileTaskTypeKey) ? 
+                (string)localSettingsValues[PrimaryTileTaskTypeKey] : _GPSTaskTypeKey;
+        }
+        #endregion tasks
+
+        #region animations
+        public static void SaveSceneColorAnimationDeactivated(bool status) {
+            var localSettings = ApplicationData.Current.LocalSettings;
+            localSettings.Values[SceneColorAnimationDeactivatedKey] = status;
+        }
+
+        public static bool IsSceneColorAnimationDeactivated() {
+            var settingsValues = ApplicationData.Current.LocalSettings.Values;
+
+            return settingsValues.ContainsKey(SceneColorAnimationDeactivatedKey) ?
+                (bool)settingsValues[SceneColorAnimationDeactivatedKey] : false;
+        }
+        #endregion animation
 
         #region appversion
         public static bool IsNewUpdatedLaunch() {

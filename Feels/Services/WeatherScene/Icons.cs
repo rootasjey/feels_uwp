@@ -233,7 +233,7 @@ namespace Feels.Services.WeatherScene {
 
             var _animation = _compositor.CreateVector2KeyFrameAnimation();
             //_animation.InsertKeyFrame(1f, new System.Numerics.Vector2(-coord, coord));
-            _animation.InsertKeyFrame(1f, new Vector2(0, (float)size.Height));
+            _animation.InsertKeyFrame(1f, new Vector2(0, (float)(size.Height + 300)));
             _animation.Duration = TimeSpan.FromSeconds(duration);
             _animation.DelayTime = TimeSpan.FromSeconds(delay);
             _animation.IterationBehavior = AnimationIterationBehavior.Forever;

@@ -106,10 +106,12 @@
     <Compile Include="Composition\ManagedSurface.cs" />
     <Compile Include="Composition\TextDrawer.cs" />
     <Compile Include="Converters\LocalizedDay.cs" />
+    <Compile Include="Converters\LocationSelectedIcon.cs" />
     <Compile Include="Converters\SimpleTemperature.cs" />
     <Compile Include="Converters\TimeParser.cs" />
     <Compile Include="Converters\WeatherIcon.cs" />
     <Compile Include="Data\SourceModel.cs" />
+    <Compile Include="Models\LocationItem.cs" />
     <Compile Include="Models\WeatherUnit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BackgroundTasks.cs" />
@@ -128,8 +130,8 @@
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\LocalizationPage.xaml.cs">
-      <DependentUpon>LocalizationPage.xaml</DependentUpon>
+    <Compile Include="Views\LocationsPage.xaml.cs">
+      <DependentUpon>LocationsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsPage_Mobile.xaml.cs">
       <DependentUpon>SettingsPage_Mobile.xaml</DependentUpon>
@@ -157,6 +159,8 @@
     <Content Include="Assets\Icons\dark_cloud.png" />
     <Content Include="Assets\Icons\fog.png" />
     <Content Include="Assets\Icons\moon.png" />
+    <Content Include="Assets\Icons\moon_rise.png" />
+    <Content Include="Assets\Icons\moon_set.png" />
     <Content Include="Assets\Icons\partycloudy_day.png" />
     <Content Include="Assets\Icons\partycloudy_night.png" />
     <Content Include="Assets\Icons\precip_proba.png" />
@@ -171,7 +175,7 @@
     <Content Include="Assets\Icons\thermo_up.png" />
     <Content Include="Assets\Icons\uv.png" />
     <Content Include="Assets\Icons\wind.png" />
-    <Content Include="Assets\Icons\wind0.png" />
+    <Content Include="Assets\Icons\wind_direction.png" />
     <Content Include="Assets\LargeTile.scale-100.png" />
     <Content Include="Assets\LargeTile.scale-125.png" />
     <Content Include="Assets\LargeTile.scale-150.png" />
@@ -241,7 +245,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\LocalizationPage.xaml">
+    <Page Include="Views\LocationsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,0 +1,176 @@
+﻿<Page
+    x:Class="Feels.Views.LocationsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:Map="using:Windows.Services.Maps"
+    xmlns:Models="using:Feels.Models"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <DataTemplate x:Key="LocationItem" x:DataType="Models:LocationItem">
+            <controls:SlidableListItem 
+                x:Uid="LocationListItem"
+                HorizontalAlignment="Stretch"
+                ActivationWidth="100"
+                IsLeftCommandEnabled="False"
+                IsRightCommandEnabled="True"
+                RightBackground="OrangeRed"
+                RightForeground="White"
+                RightIcon="Delete"
+                RightLabel="Delete"
+                MouseSlidingEnabled="True"
+                RightCommandRequested="SlidableListItem_RightCommandRequested"
+                Loaded="SavedLocation_Loaded"
+                Tapped="LocationSelected_Tapped"
+                RightTapped="SavedLocation_RightTapped">
+
+                <Grid MinHeight="80">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="70"/>
+                    </Grid.ColumnDefinitions>
+
+                    <FontIcon FontSize="32" Glyph="{x:Bind IsSelected, Converter={StaticResource LocationSelectedIcon}, Mode=OneWay}"/>
+                    <TextBlock Text="{x:Bind Name}" 
+                               FontSize="24" 
+                               VerticalAlignment="Center"
+                               Padding="12,0,0,0"
+                               TextWrapping="Wrap"
+                               Grid.Column="1" 
+                               FontWeight="SemiLight"/>
+                    <TextBlock FontSize="18" Grid.Column="2"/>
+                </Grid>
+            </controls:SlidableListItem>
+        </DataTemplate>
+
+        <MenuFlyout x:Name="SavedLocationRightTappedFlyout">
+            <MenuFlyoutItem x:Name="CmdDeleteSavedLocation"
+                            x:Uid="CmdDeleteSavedLocation"
+                            Text="Delete"
+                            Tapped="CmdDeleteSavedLocation_Tapped"/>
+        </MenuFlyout>
+    </Page.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Name="PageTitle"
+                   x:Uid="TitleLocations"
+                   Text="my locations"
+                   FontSize="42" 
+                   FontWeight="SemiBold"
+                   Typography.Capitals="SmallCaps"
+                   Padding="60,12"/>
+
+        <Grid x:Name="PageMainContent"
+              Grid.Row="1">
+
+            <Grid x:Name="PageLocationContent">
+                <Grid x:Name="LoadingView" Visibility="Visible">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock x:Uid="LoadingLocationsBlock" 
+                                   Text="loading cities" FontSize="24" FontWeight="Normal"/>
+                        <ProgressBar IsIndeterminate="True"/>
+                    </StackPanel>
+                </Grid>
+
+                <ListView x:Name="SavedLocationsListView"
+                          Margin="0,24,0,0"
+                          ItemTemplate="{StaticResource LocationItem}"
+                          Visibility="Visible">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                            <Setter Property="Margin" Value="0,1"></Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+            </Grid>
+            
+            <Grid x:Name="SearchLocationPanel" 
+                  Padding="50,12" Visibility="Collapsed"
+                  DataContext="{x:Bind _foundLocations}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <TextBox x:Name="SearchLocationBox" Margin="12,0"
+                         KeyUp="SearchLocationBox_KeyUp"/>
+
+                <ListView x:Name="FoundLocationsListView" Grid.Row="1" Margin="0,24,0,0" Padding="0,0,0,40">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="Margin" Value="0,1"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="Map:MapLocation">
+                            <Grid Tapped="AddNewLocation_Tapped" HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="40"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <StackPanel Padding="0,12">
+                                    <TextBlock x:Name="City" 
+                                               Text="{x:Bind DisplayName}" 
+                                               FontSize="26" 
+                                               FontWeight="SemiBold"
+                                               TextWrapping="Wrap"/>
+                                    <TextBlock x:Name="Country" 
+                                               Text="{x:Bind Address.FormattedAddress}" 
+                                               FontSize="18" 
+                                               FontWeight="Light"/>
+                                </StackPanel>
+
+                                <FontIcon Grid.Column="1" Glyph="&#xE109;" FontSize="30"/>
+                            </Grid>                            
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <StackPanel x:Name="EmptyViewFoundLocations"
+                            Grid.Row="1"
+                            Margin="0,-60,0,0"
+                            Visibility="Collapsed"
+                            VerticalAlignment="Center">
+                    
+                    <FontIcon Glyph="&#xE00C;" FontSize="42"/>
+
+                    <TextBlock x:Uid="NoLocationFoundBlock" 
+                               Text="Sorry, there's no result for your query. Try something else."
+                               FontSize="24"
+                               FontWeight="Light"
+                               HorizontalAlignment="Center"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <CommandBar x:Name="PageCommandBar"
+                    Grid.Row="1"
+                    VerticalAlignment="Bottom">
+            <AppBarButton x:Name="CmdCancelAddCity"
+                          x:Uid="CmdCancel"
+                          Label="cancel"
+                          Icon="Cancel"
+                          Visibility="Collapsed"
+                          Tapped="CmdCancelAddCity_Tapped"/>
+            
+            <AppBarButton x:Name="CmdAddNewCity"
+                          x:Uid="CmdAddNewCity"
+                          Label="add new"
+                          Icon="Add"
+                          Tapped="CmdAddNewCity_Tapped"/>
+        </CommandBar>
+    </Grid>
+</Page>

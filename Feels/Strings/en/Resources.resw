@@ -162,12 +162,6 @@
   <data name="ContributeTitle.Text" xml:space="preserve">
     <value>contribute</value>
   </data>
-  <data name="CurrentForecastButton.Text" xml:space="preserve">
-    <value>current forecast</value>
-  </data>
-  <data name="DailyForecastButton.Text" xml:space="preserve">
-    <value>daily forecast</value>
-  </data>
   <data name="Dark.Text" xml:space="preserve">
     <value>dark</value>
   </data>
@@ -218,9 +212,6 @@
   </data>
   <data name="hail" xml:space="preserve">
     <value>hail</value>
-  </data>
-  <data name="HourlyForecastButton.Text" xml:space="preserve">
-    <value>hourly forecast</value>
   </data>
   <data name="ImagesSourceContent.Text" xml:space="preserve">
     <value>pictures are from</value>
@@ -388,16 +379,16 @@
     <value>-We don't store your personal information at all</value>
   </data>
   <data name="CloudCover.Text" xml:space="preserve">
-    <value>cloud cover</value>
+    <value>cover</value>
   </data>
   <data name="Highest.Text" xml:space="preserve">
-    <value>highest</value>
+    <value>high</value>
   </data>
   <data name="Humidity.Text" xml:space="preserve">
     <value>humidity</value>
   </data>
   <data name="Lowest.Text" xml:space="preserve">
-    <value>lowest</value>
+    <value>low</value>
   </data>
   <data name="Pressure.Text" xml:space="preserve">
     <value>pressure</value>
@@ -412,7 +403,7 @@
     <value>sunset</value>
   </data>
   <data name="WindSpeed.Text" xml:space="preserve">
-    <value>wind speed</value>
+    <value>speed</value>
   </data>
   <data name="UpdateVersion.Text" xml:space="preserve">
     <value>Update</value>
@@ -443,5 +434,68 @@
   </data>
   <data name="MoonPhaseWaxingGibbous" xml:space="preserve">
     <value>waxing gibbous</value>
+  </data>
+  <data name="CmdLocations.Label" xml:space="preserve">
+    <value>locations</value>
+  </data>
+  <data name="CmdAddNewCity.Label" xml:space="preserve">
+    <value>add new</value>
+  </data>
+  <data name="CmdCancel.Label" xml:space="preserve">
+    <value>cancel</value>
+  </data>
+  <data name="TitleLocations.Text" xml:space="preserve">
+    <value>my locations</value>
+  </data>
+  <data name="MyCurrentPosition" xml:space="preserve">
+    <value>My current position</value>
+  </data>
+  <data name="LoadingLocationsBlock.Text" xml:space="preserve">
+    <value>loading locations</value>
+  </data>
+  <data name="LocationFailedText.Text" xml:space="preserve">
+    <value>Seems like you aren't on Earth. Please check your location settings or your internet connection</value>
+  </data>
+  <data name="LocationListItem.RightLabel" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="LocationSettingsButton.Content" xml:space="preserve">
+    <value>location settings</value>
+  </data>
+  <data name="NoLocationFoundBlock.Text" xml:space="preserve">
+    <value>Sorry, there's no result for your query. Try something else.</value>
+  </data>
+  <data name="TryAgainButton.Content" xml:space="preserve">
+    <value>try again</value>
+  </data>
+  <data name="CmdDeleteSavedLocation.Text" xml:space="preserve">
+    <value>delete</value>
+  </data>
+  <data name="WindDirection.Text" xml:space="preserve">
+    <value>direction</value>
+  </data>
+  <data name="LoadingStuck.Text" xml:space="preserve">
+    <value>Sometimes the loading get stucked if you're using GPS for the weather location. Try to close then restart the app if this happens.</value>
+  </data>
+  <data name="DescriptionPressure" xml:space="preserve">
+    <value>The sea-level air pressure.</value>
+  </data>
+  <data name="BlockDeactivateBackgroundColor.Text" xml:space="preserve">
+    <value>deactivate home background gradient color animation</value>
+  </data>
+  <data name="BlockDontUseGPS.Text" xml:space="preserve">
+    <value>If you don't want to use your GPS location, you can add manually locations</value>
+  </data>
+  <data name="ButtonAddLocationManually.Content" xml:space="preserve">
+    <value>add location manually</value>
+  </data>
+  <data name="BlockTheme.Text" xml:space="preserve">
+    <value>theme</value>
+  </data>
+  <data name="Moonrise.Text" xml:space="preserve">
+    <value>moonrise</value>
+  </data>
+  <data name="Moonset.Text" xml:space="preserve">
+    <value>moonset</value>
   </data>
 </root>

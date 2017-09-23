@@ -162,12 +162,6 @@
   <data name="ContributeTitle.Text" xml:space="preserve">
     <value>contribuer</value>
   </data>
-  <data name="CurrentForecastButton.Text" xml:space="preserve">
-    <value>météo actuelle</value>
-  </data>
-  <data name="DailyForecastButton.Text" xml:space="preserve">
-    <value>météo journalière</value>
-  </data>
   <data name="Dark.Text" xml:space="preserve">
     <value>sombre</value>
   </data>
@@ -219,14 +213,11 @@
   <data name="hail" xml:space="preserve">
     <value>grèle</value>
   </data>
-  <data name="HourlyForecastButton.Text" xml:space="preserve">
-    <value>météo horaire</value>
-  </data>
   <data name="ImagesSourceContent.Text" xml:space="preserve">
     <value>les images proviennent de</value>
   </data>
   <data name="ImagesSourceTitle.Text" xml:space="preserve">
-    <value>Images</value>
+    <value>images</value>
   </data>
   <data name="LanguageButton.Content" xml:space="preserve">
     <value>Langue</value>
@@ -412,7 +403,7 @@
     <value>couché</value>
   </data>
   <data name="WindSpeed.Text" xml:space="preserve">
-    <value>vent</value>
+    <value>vitesse</value>
   </data>
   <data name="UpdateVersion.Text" xml:space="preserve">
     <value>Mise à jour</value>
@@ -443,5 +434,68 @@
   </data>
   <data name="MoonPhaseWaxingGibbous" xml:space="preserve">
     <value>lune gibbeuse croissante</value>
+  </data>
+  <data name="CmdLocations.Label" xml:space="preserve">
+    <value>lieux</value>
+  </data>
+  <data name="CmdAddNewCity.Label" xml:space="preserve">
+    <value>ajouter</value>
+  </data>
+  <data name="CmdCancel.Label" xml:space="preserve">
+    <value>annuler</value>
+  </data>
+  <data name="TitleLocations.Text" xml:space="preserve">
+    <value>mes lieux</value>
+  </data>
+  <data name="MyCurrentPosition" xml:space="preserve">
+    <value>Ma position actuelle</value>
+  </data>
+  <data name="LoadingLocationsBlock.Text" xml:space="preserve">
+    <value>chargement des lieux</value>
+  </data>
+  <data name="LocationFailedText.Text" xml:space="preserve">
+    <value>Vous ne semblez pas avoir les pieds au sol. Veuillez vérifier vos paramètres de localisation ainsi que votre connexion internet.</value>
+  </data>
+  <data name="LocationListItem.RightLabel" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="LocationSettingsButton.Content" xml:space="preserve">
+    <value>paramètres de localisation</value>
+  </data>
+  <data name="NoLocationFoundBlock.Text" xml:space="preserve">
+    <value>Désolé, il n'y a aucun résultat pour ces termes de recherche. Essayez autre chose.</value>
+  </data>
+  <data name="TryAgainButton.Content" xml:space="preserve">
+    <value>essayer à nouveau</value>
+  </data>
+  <data name="CmdDeleteSavedLocation.Text" xml:space="preserve">
+    <value>supprimer</value>
+  </data>
+  <data name="WindDirection.Text" xml:space="preserve">
+    <value>direction</value>
+  </data>
+  <data name="LoadingStuck.Text" xml:space="preserve">
+    <value>Si vous utilisez la géolocalisation (GPS) pour afficher la météo, il se peut que le chargement se fige. Essayez de redémarrer l'application dans ce cas.</value>
+  </data>
+  <data name="DescriptionPressure" xml:space="preserve">
+    <value>La pression atmosphérique moyenne au niveau de la mer.</value>
+  </data>
+  <data name="BlockDeactivateBackgroundColor.Text" xml:space="preserve">
+    <value>désactiver l'animation de la couleur de l'arrière plan</value>
+  </data>
+  <data name="BlockDontUseGPS.Text" xml:space="preserve">
+    <value>Si vous ne souhaitez pas utiliser votre GPS, vous pouvez ajouter un nouveau lieu manuellement</value>
+  </data>
+  <data name="ButtonAddLocationManually.Content" xml:space="preserve">
+    <value>ajouter un lieu manuellement</value>
+  </data>
+  <data name="BlockTheme.Text" xml:space="preserve">
+    <value>thème</value>
+  </data>
+  <data name="Moonrise.Text" xml:space="preserve">
+    <value>levé</value>
+  </data>
+  <data name="Moonset.Text" xml:space="preserve">
+    <value>couché</value>
   </data>
 </root>

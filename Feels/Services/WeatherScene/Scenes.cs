@@ -1,14 +1,10 @@
 ﻿using System;
-using Windows.UI;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
 using DarkSkyApi.Models;
 using Windows.Foundation;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.ViewManagement;
 using Windows.Graphics.Display;
-using Windows.UI.Composition;
-using System.Collections.Generic;
 using System.Numerics;
 
 namespace Feels.Services.WeatherScene {
@@ -21,12 +17,16 @@ namespace Feels.Services.WeatherScene {
         static bool _IsDay { get; set; }
         #endregion variables
 
-        public static Grid CreateNew(CurrentDataPoint current, DayDataPoint day) {
+        public static Grid CreateNew(CurrentDataPoint current, DayDataPoint day, bool deactivateBackgroundColorAnimation = false) {
             InitializeVariables(day);
 
             var scene = new Grid();
             scene = Backgrounds.PaintBackground(scene, current, day);
-            scene = Backgrounds.AnimateBackgroundColor(scene, current.Icon, _screenSize);
+
+            if (!deactivateBackgroundColorAnimation) {
+                scene = Backgrounds.AnimateBackgroundColor(scene, current.Icon, _screenSize);
+            }
+            
             scene = AddAnimationsOn(scene, current.Icon);
             scene = Icons.AddWeatherIconCondition(scene, current, day, _IsDay);
 
@@ -87,7 +87,7 @@ namespace Feels.Services.WeatherScene {
                 default:
                     break;
             }
-            
+
             scene.Children.Add(animationsScene);
             return scene;
         }
@@ -96,9 +96,9 @@ namespace Feels.Services.WeatherScene {
             var container = new Canvas();
             var rand = new Random();
 
-            for (int i = 0; i < 25; i++) {
+            for (int i = 0; i < 35; i++) {
                 var x = rand.Next(0, (int)_screenSize.Width);
-                var duration = rand.Next(2, 10);
+                var duration = rand.Next(3, 8);
                 var delay = rand.Next(0, 10);
 
                 var line = Icons.CreateLine(x, duration, delay, _screenSize);

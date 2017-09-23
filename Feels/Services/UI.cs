@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -195,6 +196,7 @@ namespace Feels.Services {
             }
         }
 
+        // NOTE: Can be simplified
         public static async Task AnimateSlideIn(this Panel view) {
             view.Opacity = 0;
             view.Visibility = Visibility.Visible;
@@ -218,11 +220,61 @@ namespace Feels.Services {
                 var delay = 0;
                 foreach (var child in children) {
                     delay += 200;
-                    child.Fade((float)opacities[index], 1000, delay)
+
+                    child.Fade(0,0)
+                        .Then()
+                        .Fade((float)opacities[index], 1000, delay)
                          .Offset(0, 0, 1000, delay)
                          .Start();
+
                     index++;
                 }
+            }
+        }
+
+        public static async void AnimateNumericValue(int targetValue, TextBlock block, CoreDispatcher dispatcher, string unit = "", int baseDelay = 1000) {
+            var max = targetValue;
+            var curr = 0;
+            var step = max > 0 ? 1 : -1;
+            
+            var div = Math.Abs(max - curr);
+            var delay = baseDelay / div;
+
+            while (max != curr) {
+                await Task.Delay(delay).ContinueWith(async _ => {
+                    curr += step;
+                    div = Math.Abs(max - curr) == 0 ? 1 : Math.Abs(max - curr);
+                    delay = baseDelay / div;
+
+                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                        block.Text = string.Format("{0}{1}", curr, unit);
+                    });
+                });
+            }
+        }
+
+        public static async void AnimateNumericValue(float targetValue, TextBlock block, CoreDispatcher dispatcher, string unit = "", int baseDelay = 1000) {
+            var max = (int)targetValue;
+            var curr = 0;
+            var step = max > 0 ? 1 : -1;
+            var div = Math.Abs(max - curr);
+            var delay = baseDelay / div;
+
+            float fractionalPortion = targetValue - (float)Math.Truncate(targetValue);
+            var currFloat = fractionalPortion;
+
+            while (curr < max) {
+                await Task.Delay(delay).ContinueWith(async _ => {
+                    curr += step;
+                    div = Math.Abs(max - curr) == 0 ? 1 : Math.Abs(max - curr);
+                    delay = baseDelay / div;
+
+                    currFloat += step;
+
+                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                        block.Text = string.Format("{0}{1}", currFloat, unit);
+                    });
+                });
             }
         }
     }

@@ -105,7 +105,7 @@ namespace Tasks.Services {
 
             switch (speed) {
                 default:
-                    path = "Assets/TileIcons/wind0.png";
+                    path = "Assets/TileIcons/wind_direction.png";
                     break;
             }
 
@@ -443,7 +443,7 @@ namespace Tasks.Services {
                                         HintTextStacking = AdaptiveSubgroupTextStacking.Bottom,
                                         Children = {
                                             new AdaptiveImage() {
-                                                Source = "Assets/Icons/wind0.png",
+                                                Source = "Assets/Icons/wind_direction.png",
                                                 HintRemoveMargin = true
                                             }
                                         }

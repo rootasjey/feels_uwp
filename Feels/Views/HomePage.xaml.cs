@@ -1,14 +1,15 @@
-﻿using Feels.Data;
+﻿using DarkSkyApi.Models;
+using Feels.Data;
+using Feels.Models;
 using Feels.Services;
 using Feels.Services.WeatherScene;
 using MahApps.Metro.IconPacks;
+using Microsoft.Graphics.Canvas.Effects;
 using Microsoft.Toolkit.Uwp.UI.Animations;
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
-using Windows.ApplicationModel.Resources;
 using Windows.Devices.Geolocation;
 using Windows.Services.Maps;
 using Windows.System;
@@ -19,6 +20,7 @@ using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
@@ -27,26 +29,36 @@ using Windows.UI.Xaml.Shapes;
 namespace Feels.Views {
     public sealed partial class HomePage : Page {
         #region variables
-        private SourceModel PageDataSource { get; set; }
+
+        private SourceModel _PageDataSource { get; set; }
 
         CoreDispatcher _UIDispatcher { get; set; }
 
         private int _AnimationDelayHourForcast { get; set; }
 
-        private int _AnimationDelayDailyForecast { get; set; } 
+        private int _AnimationDelayDailyForecast { get; set; }
+
+        private int _DelayDetailItem { get; set; }
 
         static DateTime _LastFetchedTime { get; set; }
 
         static BasicGeoposition _LastPosition { get; set; }
 
+        private static LocationItem _LastLocation { get; set; }
+
         public static bool _ForceDataRefresh { get; set; }
 
         // Composition
-        private Compositor _compositor { get; set; }
+        private Compositor _Compositor { get; set; }
+
         private Visual _EarthVisual { get; set; }
+
         private Visual _PinEarthVisual { get; set; }
 
-        private ResourceLoader _ResourcesLoader { get; set; }
+        private AnimationSet _LeftArrowAnimationOut { get; set; }
+
+        private AnimationSet _RightArrowAnimationOut { get; set; }
+
         #endregion variables
 
         public HomePage() {
@@ -56,27 +68,29 @@ namespace Feels.Views {
             InitialzeEvents();
             InitializePageData();
 
-            ShowUpdateChangelog();
+            ApplyCommandBarBarFrostedGlass();
+            ShowUpdateChangelogIfUpdated();
         }
 
         #region titlebar
-        async void InitializeTitleBar() {
+        private void InitializeTitleBar() {
             App.DeviceType = Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily;
+
             if (App.DeviceType == "Windows.Mobile") {
                 var statusBar = StatusBar.GetForCurrentView();
-                await statusBar.HideAsync();
+                statusBar.HideAsync();
                 return;
             }
 
-            Window.Current.Activated += Current_Activated;
-            CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-            coreTitleBar.ExtendViewIntoTitleBar = true;
+            //Window.Current.Activated += Current_Activated;
+            //CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            //coreTitleBar.ExtendViewIntoTitleBar = true;
 
-            TitleBar.Height = coreTitleBar.Height;
-            Window.Current.SetTitleBar(MainTitleBar);
+            //TitleBar.Height = coreTitleBar.Height;
+            //Window.Current.SetTitleBar(MainTitleBar);
             
-            coreTitleBar.IsVisibleChanged += CoreTitleBar_IsVisibleChanged;
-            coreTitleBar.LayoutMetricsChanged += CoreTitleBar_LayoutMetricsChanged;
+            //coreTitleBar.IsVisibleChanged += CoreTitleBar_IsVisibleChanged;
+            //coreTitleBar.LayoutMetricsChanged += CoreTitleBar_LayoutMetricsChanged;
         }
 
         void CoreTitleBar_IsVisibleChanged(CoreApplicationViewTitleBar titleBar, object args) {
@@ -101,74 +115,41 @@ namespace Feels.Views {
         #endregion titlebar
 
         #region data
+
         private void InitializeVariables() {
-            PageDataSource = App.DataSource;
+            _PageDataSource = App.DataSource;
             _UIDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
-            _ResourcesLoader = new ResourceLoader();
         }
 
-        async void InitializePageData() {
-            if (PageDataSource.Forecast != null 
-                && _ForceDataRefresh == false) {
+        private async void InitializePageData() {
+            LoadLastFetchedData();
+            
+            if (await MustRefreshData()) {
+                CleanTheater();
+                FetchNewData();
+            }
+        }
 
+        /// <summary>
+        /// Load old data before checking if refresh must be made
+        /// so the app seems fast.
+        /// </summary>
+        private void LoadLastFetchedData() {
+            if (_PageDataSource.Forecast != null && _ForceDataRefresh == false) {
                 HideSplashView();
                 HideLoadingView();
-                GetCurrentCity(_LastPosition);
-                PopulateView();
-            }
-
-            if (!await MustRefreshData()) {
-                return;
-            }
-
-            CleanTheater();
-            FetchNewData();
-
-            async void FetchNewData()
-            {
-                var granted = await GetLocationPermission();
-                if (!granted) { ShowNoAccessView(); return; }
-
-                ShowLoadingView();
-
-                var position = await GetPosition();
-                GetCurrentCity(position);
-
-                await FetchCurrentLocation(position);
-
-                HideLoadingView();
+                SetCurrentCity();
                 PopulateView();
             }
         }
 
-        void InitialzeEvents() {
-            Application.Current.Resuming += App_Resuming;
-        }
-
-        private void App_Resuming(object sender, object e) {
-            var task = _UIDispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                InitializePageData();
-            });
-        }
-
-        void PopulateView() {
-            PopulateFirstPage();
-            BindHourlyListData();
-            BindDailyListData();
-
-            //ShowBetaMessageAsync();
-        }
-
-        void SafeExit() {
-            ShowEmptyView();
-        }
-
-        void ShowEmptyView() {
-            ShowNoAccessView();
-        }
-
-        async Task<bool> MustRefreshData() {
-            if (PageDataSource.Forecast == null) return true;
+        /// <summary>
+        /// This test may take some seconds (~10sec) 
+        /// because it has to retrieve GPS location, then fetch data.
+        /// </summary>
+        /// <returns>True if data must be refreshed.</returns>
+        private async Task<bool> MustRefreshData() {
+            if (_PageDataSource.Forecast == null) return true;
 
             if (_ForceDataRefresh) {
                 _ForceDataRefresh = false;
@@ -177,6 +158,10 @@ namespace Feels.Views {
 
             if (DateTime.Now.Hour - _LastFetchedTime.Hour > 0) {
                 return true;
+            }
+
+            if (await Settings.GetFavoriteLocation() != null) {
+                return false;
             }
 
             var geo = new Geolocator();
@@ -195,155 +180,239 @@ namespace Feels.Views {
 
             return false;
         }
-        
-        async void PopulateFirstPage() {
-            if (PageDataSource.Forecast == null) return;
+
+        private async void FetchNewData() {
+            var location = await Settings.GetFavoriteLocation();
+
+            if (location == null || string.IsNullOrEmpty(location.Id)) {
+                var granted = await GetLocationPermission();
+
+                if (!granted) {
+                    ShowNoAccessView();
+                    return;
+                }
+
+                ShowLoadingView();
+
+                var position = await GetPosition();
+
+                SetCurrentCity();
+
+                location = new LocationItem() {
+                    Latitude = position.Latitude,
+                    Longitude = position.Longitude
+                };
+
+            } else {
+                ShowLoadingView();
+                SetCurrentCity();
+            }
+
+            await FetchCurrentWeather(location);
+
+            HideLoadingView();
+            PopulateView();
+        }
+
+        private void InitialzeEvents() {
+            Application.Current.Resuming += App_Resuming;
+        }
+
+        private void App_Resuming(object sender, object e) {
+            var task = _UIDispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                InitializePageData();
+            });
+        }
+
+        private void PopulateView() {
+            PopulateFirstPage();
+            BindHourlyListData();
+            BindDailyListData();
+
+            //ShowBetaMessageAsync();
+        }
+
+        private void SafeExit() {
+            ShowEmptyView();
+        }
+
+        private void ShowEmptyView() {
+            ShowNoAccessView();
+        }
+
+        private async void PopulateFirstPage() {
+            if (_PageDataSource.Forecast == null) return;
 
             WeatherView.Visibility = Visibility.Visible;
 
-            var weatherCurrent = PageDataSource.Forecast.Currently;
-            var weatherToday = PageDataSource.Forecast.Daily.Days[0];
+            var weatherCurrent = _PageDataSource.Forecast.Currently;
+            var weatherToday = _PageDataSource.Forecast.Daily.Days[0];
 
-            await AnimateSlideIn(WeatherViewContent);
-            AnimateTemperature();
+            WeatherViewContent.AnimateSlideIn();
 
-            FillInData();
-            DrawScene();
+            UI.AnimateNumericValue((int)weatherCurrent.Temperature, Temperature, _UIDispatcher, "°");
+            PopulateWeatherView(weatherToday, weatherCurrent);
+            AnimateDetailsItems();
+            SetMoonPhase(weatherToday);
+            AnimateWindDirectionIcons();
 
-            UpdateMainTile();
-
-            async void AnimateTemperature()
+            var task = _UIDispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
-                int temperature = (int)weatherCurrent.Temperature;
+                DrawScene();
+                UpdateMainTile();
+            });
+        }
 
-                var max = temperature;
-                var curr = 0;
-                var step = max > 0 ? 1 : -1;
-                var div = Math.Abs(max - curr);
-                var delay = 1000 / div;
+        private void PopulateWeatherView(DayDataPoint todayWeather, CurrentDataPoint currentWeather) {
+            Status.Text = currentWeather.Summary;
+            FeelsLike.Text += string.Format(" {0}°{1}", currentWeather.ApparentTemperature, Settings.GetTemperatureUnit());
+            PrecipProbaValue.Text = string.Format("{0}%", todayWeather.PrecipitationProbability * 100);
+            HumidityValue.Text = string.Format("{0}%", currentWeather.Humidity * 100);
 
-                while (max != curr) {
-                    await Task.Delay(delay).ContinueWith(async _ => {
-                        curr += step;
-                        div = Math.Abs(max - curr) == 0 ? 1 : Math.Abs(max - curr);
-                        delay = 1000 / div;
+            SunriseTime.Text = todayWeather.SunriseTime.ToLocalTime().ToString("HH:mm");
+            SunsetTime.Text = todayWeather.SunsetTime.ToLocalTime().ToString("HH:mm");
+            MoonriseTime.Text = todayWeather.SunsetTime.ToLocalTime().ToString("HH:mm");
+            MoonsetTime.Text = todayWeather.SunriseTime.ToLocalTime().ToString("HH:mm");
 
-                        await _UIDispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                            Temperature.Text = string.Format("{0}°", curr);
-                        });
-                    });
-                }
+            WindSpeed.Text = string.Format("{0}{1}", currentWeather.WindSpeed, GetWindSpeedUnits());
+
+            WindDirection.Text = string.Format("{0}°", currentWeather.WindBearing);
+            WindDirectionIcon
+                .Rotate(currentWeather.WindBearing + 180, 15, 15)
+                .Start();
+
+            CloudCover.Text = string.Format("{0}%", currentWeather.CloudCover * 100);
+            
+
+            LastTimeUpdate.Text = DateTime.Now.ToLocalTime().ToString("dddd HH:mm");
+
+            if (_PageDataSource.Forecast.Daily.Days == null ||
+                _PageDataSource.Forecast.Daily.Days.Count == 0) return;
+
+            var currentDay = _PageDataSource.Forecast.Daily.Days[0];
+            var maxTemp = (int)currentDay.MaxTemperature;
+            var minTemp = (int)currentDay.MinTemperature;
+
+            MaxTempValue.Text = maxTemp.ToString();
+            MinTempValue.Text = minTemp.ToString();
+
+            SetPressureValue(currentWeather, true);
+        }
+
+        private void AnimateWindDirectionIcons() {
+            var baseAngle = 0;
+
+            var visual = ElementCompositionPreview.GetElementVisual(WindDirectionIcon);
+            var compositor = visual.Compositor;
+
+            var animationRotate = compositor.CreateScalarKeyFrameAnimation();
+            animationRotate.InsertKeyFrame(0f, baseAngle);
+            animationRotate.InsertKeyFrame(1f, baseAngle + 20);
+            animationRotate.Duration = TimeSpan.FromSeconds(3);
+            animationRotate.IterationBehavior = AnimationIterationBehavior.Forever;
+            animationRotate.Direction = Windows.UI.Composition.AnimationDirection.Alternate;
+
+            visual.RotationAxis = new Vector3(0, 0, 1);
+            visual.CenterPoint = new Vector3(15, 15, 0);
+
+            visual.StartAnimation("RotationAngleInDegrees", animationRotate);
+        }
+
+        private void SetPressureValue(CurrentDataPoint currentWeather, bool skipAnimation = false) {
+            var unit = Settings.GetPressureUnit();
+            var pressure = currentWeather.Pressure;
+
+            if (unit == null) { unit = GetPressureUnits(); }
+            else { pressure *= 0.75006168f; }
+
+            if (skipAnimation) {
+                Pressure.Text = string.Format("{0}{1}", pressure, unit);
+                return;
             }
 
-            void FillInData()
-            {
-                Status.Text = weatherCurrent.Summary;
-                FeelsLike.Text += string.Format(" {0}°{1}", weatherCurrent.ApparentTemperature, Settings.GetTemperatureUnit());
-                PrecipProbaValue.Text = string.Format("{0}%", weatherToday.PrecipitationProbability * 100);
-                HumidityValue.Text = string.Format("{0}%", weatherCurrent.Humidity * 100);
-                SunriseTime.Text = weatherToday.SunriseTime.ToLocalTime().ToString("hh:mm");
-                SunsetTime.Text = weatherToday.SunsetTime.ToLocalTime().ToString("hh:mm");
+            UI.AnimateNumericValue(pressure, Pressure, _UIDispatcher, unit, 100);
+        }
 
-                WindSpeed.Text = string.Format("{0}{1}", weatherCurrent.WindSpeed, GetWindSpeedUnits());
-                CloudCover.Text = string.Format("{0}%", weatherCurrent.CloudCover * 100);
-                Pressure.Text = string.Format("{0}{1}", weatherCurrent.Pressure, GetPressureUnits());
+        private void SetMoonPhase(DayDataPoint weatherToday) {
+            var moonPhase = weatherToday.MoonPhase;
 
-                LastTimeUpdate.Text = DateTime.Now.ToLocalTime().ToString("dddd HH:mm");
+            var iconMoon = new PackIconModern() {
+                Height = 32,
+                Width = 32,
+            };
 
-                if (PageDataSource.Forecast.Daily.Days == null ||
-                    PageDataSource.Forecast.Daily.Days.Count == 0) return;
+            if (moonPhase == 0) {
+                MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseNewMoon");
+                iconMoon.Kind = PackIconModernKind.MoonNew;
 
-                var currentDay = PageDataSource.Forecast.Daily.Days[0];
-                var maxTemp = (int)currentDay.MaxTemperature;
-                var minTemp = (int)currentDay.MinTemperature;
+                MoonPhaseIconContainer.Children.Add(iconMoon);
 
-                MaxTempValue.Text = maxTemp.ToString();
-                MinTempValue.Text = minTemp.ToString();
+            } else if (moonPhase > 0 && moonPhase < .25) {
+                MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseWaxingCrescent");
+                iconMoon.Kind = PackIconModernKind.MoonWaxingCrescent;
 
-                SetMoonPhase();
-            }
+                MoonPhaseIconContainer.Children.Add(iconMoon);
 
-            void SetMoonPhase() {
-                var moonPhase = weatherToday.MoonPhase;
+            } else if (moonPhase == .25) {
+                MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseFirstQuarter");
+                iconMoon.Kind = PackIconModernKind.MoonFirstQuarter;
 
-                var iconMoon = new PackIconModern() {
-                    Height = 32,
-                    Width = 32,
+                MoonPhaseIconContainer.Children.Add(iconMoon);
+
+            } else if (moonPhase > .25 && moonPhase < .5) {
+                MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseWaxingGibbous");
+                iconMoon.Kind = PackIconModernKind.MoonWaxingGibbous;
+
+                MoonPhaseIconContainer.Children.Add(iconMoon);
+
+            } else if (moonPhase == .5) {
+                MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseFullMoon");
+
+                var fullMoon = new Ellipse() {
+                    Height = 30,
+                    Width = 30,
+                    Fill = new SolidColorBrush(Colors.White)
                 };
-                
-                if (moonPhase == 0) {
-                    MoonPhaseValue.Text = _ResourcesLoader.GetString("MoonPhaseNewMoon");
-                    iconMoon.Kind = PackIconModernKind.MoonNew;
 
-                    MoonPhaseIconContainer.Children.Add(iconMoon);
+                MoonPhaseIconContainer.Children.Add(fullMoon);
 
-                } else if (moonPhase > 0 && moonPhase < .25) {
-                    MoonPhaseValue.Text = _ResourcesLoader.GetString("MoonPhaseWaxingCrescent");
-                    iconMoon.Kind = PackIconModernKind.MoonWaxingCrescent;
+            } else if (moonPhase > .5 && moonPhase < .75) {
+                MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseWaningGibbous");
+                iconMoon.Kind = PackIconModernKind.MoonWaningGibbous;
 
-                    MoonPhaseIconContainer.Children.Add(iconMoon);
+                MoonPhaseIconContainer.Children.Add(iconMoon);
 
-                } else if (moonPhase == .25) {
-                    MoonPhaseValue.Text = _ResourcesLoader.GetString("MoonPhaseFirstQuarter");
-                    iconMoon.Kind = PackIconModernKind.MoonFirstQuarter;
+            } else if (moonPhase == .75) {
+                MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseThirdQuarter");
+                iconMoon.Kind = PackIconModernKind.MoonThirdQuarter;
 
-                    MoonPhaseIconContainer.Children.Add(iconMoon);
+                MoonPhaseIconContainer.Children.Add(iconMoon);
 
-                } else if (moonPhase > .25 && moonPhase < .5) {
-                    MoonPhaseValue.Text = _ResourcesLoader.GetString("MoonPhaseWaxingGibbous");
-                    iconMoon.Kind = PackIconModernKind.MoonWaxingGibbous;
+            } else { // moonPhase > .75
+                MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseWaningCrescent");
+                iconMoon.Kind = PackIconModernKind.MoonWaxingCrescent;
 
-                    MoonPhaseIconContainer.Children.Add(iconMoon);
-
-                } else if (moonPhase == .5) {
-                    MoonPhaseValue.Text = _ResourcesLoader.GetString("MoonPhaseFullMoon");
-
-                    var fullMoon = new Ellipse() {
-                        Height = 30,
-                        Width = 30,
-                        Fill = new SolidColorBrush(Colors.White)
-                    };
-
-                    MoonPhaseIconContainer.Children.Add(fullMoon);
-
-                } else if (moonPhase > .5 && moonPhase < .75) {
-                    MoonPhaseValue.Text = _ResourcesLoader.GetString("MoonPhaseWaningGibbous");
-                    iconMoon.Kind = PackIconModernKind.MoonWaningGibbous;
-
-                    MoonPhaseIconContainer.Children.Add(iconMoon);
-
-                } else if (moonPhase == .75) {
-                    MoonPhaseValue.Text = _ResourcesLoader.GetString("MoonPhaseThirdQuarter");
-                    iconMoon.Kind = PackIconModernKind.MoonThirdQuarter;
-                    
-                    MoonPhaseIconContainer.Children.Add(iconMoon);
-
-                } else { // moonPhase > .75
-                    MoonPhaseValue.Text = _ResourcesLoader.GetString("MoonPhaseWaningCrescent");
-                    iconMoon.Kind = PackIconModernKind.MoonWaxingCrescent;
-
-                    MoonPhaseIconContainer.Children.Add(iconMoon);
-                }
+                MoonPhaseIconContainer.Children.Add(iconMoon);
             }
         }
 
-        void HideSplashView() {
+        private void HideSplashView() {
             SplashView.Visibility = Visibility.Collapsed;
         }
 
-        void BindHourlyListData() {
-            if (PageDataSource.Forecast == null) return;
-            HourlyList.ItemsSource = PageDataSource.Forecast.Hourly.Hours;
-            HourlySummary.Text = PageDataSource.Forecast.Hourly.Summary;
+        private void BindHourlyListData() {
+            if (_PageDataSource.Forecast == null) return;
+            HourlyList.ItemsSource = _PageDataSource.Forecast.Hourly.Hours;
+            HourlySummary.Text = _PageDataSource.Forecast.Hourly.Summary;
         }
 
-        void BindDailyListData() {
-            if (PageDataSource.Forecast == null) return;
-            DailyList.ItemsSource = PageDataSource.Forecast.Daily.Days;
-            DailySummary.Text = PageDataSource.Forecast.Daily.Summary;
+        private void BindDailyListData() {
+            if (_PageDataSource.Forecast == null) return;
+            DailyList.ItemsSource = _PageDataSource.Forecast.Daily.Days;
+            DailySummary.Text = _PageDataSource.Forecast.Daily.Summary;
         }
 
-        void ResetOpacity(Panel view) {
+        private void ResetOpacity(Panel view) {
             view.Opacity = 0;
             var children = view.Children;
 
@@ -352,13 +421,19 @@ namespace Feels.Views {
             }
         }
 
-        void ShowNoAccessView() {
-            AnimateSlideIn(LocationDisabledMessage);
+        private void ShowNoAccessView() {
+            Theater.Visibility = Visibility.Collapsed;
+            SplashView.Visibility = Visibility.Collapsed;
+            WeatherView.Visibility = Visibility.Collapsed;
+
+            UI.AnimateSlideIn(LocationDisabledMessage);
         }
+
         #endregion data
 
         #region location
-        async Task<bool> GetLocationPermission() {
+
+        private async Task<bool> GetLocationPermission() {
             var accessStatus = await Geolocator.RequestAccessAsync();
 
             switch (accessStatus) {
@@ -373,33 +448,48 @@ namespace Feels.Views {
             }
         }
 
-        async void GetCurrentCity(BasicGeoposition position) {
-            Geopoint pointToReverseGeocode = new Geopoint(position);
+        private async void SetCurrentCity() {
+            var location = await Settings.GetFavoriteLocation();
 
-            // Reverse geocode the specified geographic location.
-            MapLocationFinderResult result =
-                await MapLocationFinder.FindLocationsAtAsync(pointToReverseGeocode);
+            if (UseGPSLocation(location)) {
+                Geopoint pointToReverseGeocode = new Geopoint(_LastPosition);
 
-            // If the query returns results, display the name of the town
-            // contained in the address of the first result.
-            if (result.Status == MapLocationFinderStatus.Success) {
-                if (result.Locations.Count == 0) return;
-                City.Text = result.Locations[0].Address.Town;
+                // Reverse geocode the specified geographic location.
+                MapLocationFinderResult result =
+                    await MapLocationFinder.FindLocationsAtAsync(pointToReverseGeocode);
+
+                // If the query returns results, display the name of the town
+                // contained in the address of the first result.
+                if (result.Status == MapLocationFinderStatus.Success) {
+                    if (result.Locations.Count == 0) return;
+                    TownTextBlock.Text = result.Locations[0].Address.Town;
+                }
+
+                return;
             }
+            
+            TownTextBlock.Text = location.Town;
         }
 
-        async Task FetchCurrentLocation(BasicGeoposition basicPosition) {
-            await PageDataSource.FetchCurrentWeather(basicPosition.Latitude, basicPosition.Longitude);
+        private bool UseGPSLocation(LocationItem location) {
+            if (location == null) return true;
+            return string.IsNullOrEmpty(location.Id);
+        }
 
-            if (PageDataSource.Forecast == null) {
+        private async Task FetchCurrentWeather(LocationItem location) {
+            await _PageDataSource.FetchCurrentWeather(location.Latitude, location.Longitude);
+
+            _LastFetchedTime = DateTime.Now;
+
+            if (_PageDataSource.Forecast == null) {
                 SafeExit();
                 return;
             }
 
-            NowPivot.DataContext = PageDataSource.Forecast.Currently;
+            NowPivot.DataContext = _PageDataSource.Forecast.Currently;
         }
 
-        async Task<BasicGeoposition> GetPosition() {
+        private async Task<BasicGeoposition> GetPosition() {
             var locator = new Geolocator();
             var positionToReturn = new BasicGeoposition();
 
@@ -416,7 +506,7 @@ namespace Feels.Views {
                     Settings.SavePosition(positionToReturn);
                 }
 
-                _LastFetchedTime = DateTime.Now;
+                //_LastFetchedTime = DateTime.Now;
                 _LastPosition = positionToReturn;
 
                 return positionToReturn;
@@ -477,7 +567,7 @@ namespace Feels.Views {
             StartEarthRotation();
             StartPinEarthOffsetAnimation();
 
-            AnimateSlideIn(LoadingView);
+            UI.AnimateSlideIn(LoadingView);
         }
 
         void HideLoadingView() {
@@ -497,7 +587,7 @@ namespace Feels.Views {
             animationRotate.InsertKeyFrame(1f, 20f);
             animationRotate.Duration = TimeSpan.FromSeconds(10);
             animationRotate.IterationBehavior = AnimationIterationBehavior.Forever;
-            animationRotate.Direction = AnimationDirection.Alternate;
+            animationRotate.Direction = Windows.UI.Composition.AnimationDirection.Alternate;
 
             visual.RotationAxis = new Vector3(0, 0, 1);
             visual.CenterPoint = new Vector3((float)EarthIcon.Height / 2, (float)EarthIcon.Width / 2, 0);
@@ -505,7 +595,7 @@ namespace Feels.Views {
             visual.StartAnimation("RotationAngle", animationRotate);
 
             _EarthVisual = visual;
-            _compositor = compositor;
+            _Compositor = compositor;
         }
 
         void StopEarthRotation() {
@@ -516,11 +606,11 @@ namespace Feels.Views {
             var visual = ElementCompositionPreview.GetElementVisual(PinEarthIcon);
             ElementCompositionPreview.SetIsTranslationEnabled(PinEarthIcon, true);
 
-            var animationOffset = _compositor.CreateScalarKeyFrameAnimation();
+            var animationOffset = _Compositor.CreateScalarKeyFrameAnimation();
             animationOffset.InsertKeyFrame(0f, 0);
             animationOffset.InsertKeyFrame(1f, 20);
             animationOffset.Duration = TimeSpan.FromSeconds(3);
-            animationOffset.Direction = AnimationDirection.Alternate;
+            animationOffset.Direction = Windows.UI.Composition.AnimationDirection.Alternate;
             animationOffset.IterationBehavior = AnimationIterationBehavior.Forever;
 
             visual.StartAnimation("Translation.y", animationOffset);
@@ -535,10 +625,12 @@ namespace Feels.Views {
         #endregion loading view
 
         #region scene theater
-        async void DrawScene() {
+
+        private async void DrawScene() {
             var scene = Scenes.CreateNew(
-                PageDataSource.Forecast.Currently, 
-                PageDataSource.Forecast.Daily.Days[0]);
+                _PageDataSource.Forecast.Currently, 
+                _PageDataSource.Forecast.Daily.Days[0],
+                Settings.IsSceneColorAnimationDeactivated());
 
             Theater.Children.Add(scene);
 
@@ -547,63 +639,27 @@ namespace Feels.Views {
             scene.Fade(1, 1000).Offset(0, 0, 1000).Start();
         }
 
-        async Task AnimateSlideIn(Panel view) {
-            view.Opacity = 0;
-            view.Visibility = Visibility.Visible;
-
-            List<double> opacities = new List<double>();
-
-            var children = view.Children;
-            foreach (var child in children) {
-                opacities.Add(child.Opacity);
-                child.Opacity = 0;
-                await child.Offset(0, 20, 0).StartAsync();
-            }
-
-            view.Opacity = 1;
-
-            AnimateView();
-
-            void AnimateView()
-            {
-                int index = 0;
-                var delay = 0;
-                foreach (var child in children) {
-                    delay += 200;
-                    child.Fade((float)opacities[index], 1000, delay)
-                         .Offset(0, 0, 1000, delay)
-                         .Start();
-                    index++;
-                }
-            }
-        }
-
-        void CleanTheater() {
+        private void CleanTheater() {
             Theater.Children.Clear();
             Theater.Fade(0).Start();
         }
+
         #endregion scene theater
 
         #region buttons
+
         private async void LocationSettingsButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
             bool result = await Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-location"));
         }
 
         private void TryAgainButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
+            LocationDisabledMessage.Visibility = Visibility.Collapsed;
+
+            _ForceDataRefresh = true;
+            CleanTheater();
             InitializePageData();
         }
-
-        private void CurrentToHourlyButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
-            PagePivot.SelectedIndex = 1;
-        }
-
-        private void CurrentToDailyButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
-            PagePivot.SelectedIndex = 2;
-        }
-
-        private void HourlyToCurrentButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
-            PagePivot.SelectedIndex = 0;
-        }
+        
         private void HourlySummary_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
             HourlyList.ScrollToIndex(0);
         }
@@ -611,9 +667,11 @@ namespace Feels.Views {
         private void DailySummary_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
             DailyList.ScrollToIndex(0);
         }
+
         #endregion buttons
 
         #region events
+
         private async void HourForecast_Loaded(object sender, RoutedEventArgs e) {
             var panel = (Grid)sender;
 
@@ -637,15 +695,191 @@ namespace Feels.Views {
                         .Offset(0, 0, 500, _AnimationDelayDailyForecast)
                         .StartAsync();
         }
-        #endregion events
 
-        #region appbar
-        private void AppBar_Closed(object sender, object e) {
-            AppBar.Background = new SolidColorBrush(Colors.Transparent);
+        private void PageArrow_PointerEntered(object sender, PointerRoutedEventArgs e) {
+            var arrow = (FontIcon)sender;
+            arrow.Fade(1).Start();
         }
 
-        private void AppBar_Opening(object sender, object e) {
-            AppBar.Background = new SolidColorBrush(Colors.Black);
+        private void PageArrow_PointerExited(object sender, PointerRoutedEventArgs e) {
+            var arrow = (FontIcon)sender;
+            arrow.Fade(.5f).Start();
+        }
+
+        private void Page_PointerEntered(object sender, PointerRoutedEventArgs ev) {
+            if (PageArrowLeft.Visibility == Visibility.Collapsed && 
+                UpdateChangeLogFlyout.Visibility == Visibility.Collapsed && 
+                App.DeviceType != "Windows.Mobile") {
+
+                _LeftArrowAnimationOut?.Stop();
+                _LeftArrowAnimationOut?.Dispose();
+                _RightArrowAnimationOut?.Stop();
+                _RightArrowAnimationOut?.Dispose();
+
+                _LeftArrowAnimationOut = null;
+                _RightArrowAnimationOut = null;
+
+                PageArrowLeft.Visibility = Visibility.Visible;
+                PageArrowRight.Visibility = Visibility.Visible;
+
+                PageArrowLeft.Fade(.5f).Offset(0).Start();
+                PageArrowRight.Fade(.5f).Offset(0).Start();
+            }
+        }
+
+        private void Page_PointerExited(object sender, PointerRoutedEventArgs ev) {
+            if (PageArrowLeft.Visibility == Visibility.Visible) { /*App.DeviceType != "Windows.Mobile" &&*/
+                _LeftArrowAnimationOut = PageArrowLeft.Fade(0).Offset(-30);
+                _RightArrowAnimationOut = PageArrowRight.Fade(0).Offset(30);
+
+                _LeftArrowAnimationOut.Completed += (s, e) => {
+                    PageArrowLeft.Visibility = Visibility.Collapsed;
+                };
+
+                _RightArrowAnimationOut.Completed += (s, e) => {
+                    PageArrowRight.Visibility = Visibility.Collapsed;
+                };
+
+                _LeftArrowAnimationOut.Start();
+                _RightArrowAnimationOut.Start();
+            }
+        }
+
+        private void PageArrowLeft_Tapped(object sender, TappedRoutedEventArgs e) {
+            if (PagePivot.SelectedIndex == 0) {
+                PagePivot.SelectedIndex = PagePivot.Items.Count - 1;
+                return;
+            }
+
+            PagePivot.SelectedIndex -= 1;
+        }
+
+        private void PageArrowRight_Tapped(object sender, TappedRoutedEventArgs e) {
+            if (PagePivot.SelectedIndex == PagePivot.Items.Count - 1) {
+                PagePivot.SelectedIndex = 0;
+                return;
+            }
+
+            PagePivot.SelectedIndex += 1;
+        }
+
+        private void PanelPressure_Tapped(object sender, TappedRoutedEventArgs ev) {
+            var savedUnit = Settings.GetPressureUnit();
+            var baseUnit = GetPressureUnits();
+            var millibars = "millibars";
+
+            var description = new TextBlock() {
+                Text = App.ResourceLoader.GetString("DescriptionPressure"),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Margin = new Thickness(0, 0, 0, 20),
+                MaxWidth = 170,
+                TextWrapping = TextWrapping.Wrap
+            };
+
+            var unitsChooser = new ComboBox() {
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
+
+            var baseUnitItem = new ComboBoxItem() {
+                Content = "Hectopascal",
+                Tag = "hpa"
+            };
+
+            var mercuryUnit = new ComboBoxItem() {
+                Content = "Millimeter of mercury",
+                Tag = "mmHg"
+            };
+
+            if (baseUnit == millibars) {
+                baseUnitItem.Content = millibars;
+                Tag = millibars;
+            }
+
+            unitsChooser.Items.Add(baseUnitItem);
+            unitsChooser.Items.Add(mercuryUnit);
+
+            unitsChooser.SelectedIndex = 0;
+
+            if (savedUnit != null) {
+                unitsChooser.SelectedIndex = 1;
+            }
+
+            unitsChooser.SelectionChanged += (s, e) => {
+                var unit = (string)((ComboBoxItem)unitsChooser.SelectedItem).Tag;
+
+                if (unit == "mmHg") { Settings.SavePressureUnit(unit); } else { Settings.SavePressureUnit(null); }
+
+                SetPressureValue(_PageDataSource.Forecast.Currently);
+            };
+
+            var panel = new StackPanel();
+            panel.Children.Add(description);
+            panel.Children.Add(unitsChooser);
+
+            SetFlyoutWeatherDetailContent(panel);
+            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
+        }
+
+        #endregion events
+
+        #region commandbar
+
+        void ApplyCommandBarBarFrostedGlass() {
+            var glassHost = AppBarFrozenHost;
+            var visual = ElementCompositionPreview.GetElementVisual(glassHost);
+            var compositor = visual.Compositor;
+
+            // Create a glass effect, requires Win2D NuGet package
+            var glassEffect = new GaussianBlurEffect {
+                BlurAmount = 10.0f,
+                BorderMode = EffectBorderMode.Hard,
+                Source = new ArithmeticCompositeEffect {
+                    MultiplyAmount = 0,
+                    Source1Amount = 0.5f,
+                    Source2Amount = 0.5f,
+                    Source1 = new CompositionEffectSourceParameter("backdropBrush"),
+                    Source2 = new ColorSourceEffect {
+                        Color = Color.FromArgb(255, 245, 245, 245)
+                    }
+                }
+            };
+
+            //  Create an instance of the effect and set its source to a CompositionBackdropBrush
+            var effectFactory = compositor.CreateEffectFactory(glassEffect);
+            var backdropBrush = compositor.CreateBackdropBrush();
+            var effectBrush = effectFactory.CreateBrush();
+
+            effectBrush.SetSourceParameter("backdropBrush", backdropBrush);
+
+            // Create a Visual to contain the frosted glass effect
+            var glassVisual = compositor.CreateSpriteVisual();
+            glassVisual.Brush = effectBrush;
+
+            // Add the blur as a child of the host in the visual tree
+            ElementCompositionPreview.SetElementChildVisual(glassHost, glassVisual);
+
+            // Make sure size of glass host and glass visual always stay in sync
+            var bindSizeAnimation = compositor.CreateExpressionAnimation("hostVisual.Size");
+            bindSizeAnimation.SetReferenceParameter("hostVisual", visual);
+
+            glassVisual.StartAnimation("Size", bindSizeAnimation);
+
+            glassHost.Offset(0, 50).Start();
+
+            // EVENTS
+            // ------
+            AppBar.Opening += (s, e) => {
+                glassHost.Offset(0, 18).Start();
+            };
+
+            AppBar.Closing += (s, e) => {
+                if (AppBar.ClosedDisplayMode == AppBarClosedDisplayMode.Compact) {
+                    glassHost.Offset(0, 27).Start();
+
+                } else if (AppBar.ClosedDisplayMode == AppBarClosedDisplayMode.Minimal) {
+                    glassHost.Offset(0, 50).Start();
+                }
+            };
         }
 
         private void GoToSettings_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
@@ -657,7 +891,12 @@ namespace Feels.Views {
             CleanTheater();
             InitializePageData();
         }
-        #endregion appbar
+
+        private void CmdLocations_Tapped(object sender, TappedRoutedEventArgs e) {
+            Frame.Navigate(typeof(LocationsPage));
+        }
+
+        #endregion commandbar
 
         #region others
         void UpdateMainTile() {
@@ -675,13 +914,19 @@ namespace Feels.Views {
             await dialog.ShowAsync();
             Settings.SaveFirstLaunchPassed();
         }
+
+        private void SetFlyoutWeatherDetailContent(Panel panel) {
+            FlyoutWeatherDetailContent.Children.Clear();
+            FlyoutWeatherDetailContent.Children.Add(panel);
+        }
+
         #endregion others
 
         #region update changelog
         /// <summary>
         /// Show update change log if the app has been updated
         /// </summary>
-        private void ShowUpdateChangelog() {
+        private void ShowUpdateChangelogIfUpdated() {
             if (Settings.IsNewUpdatedLaunch()) {
                 UpdateVersion.Text += string.Format(" {0}", Settings.GetAppVersion());
                 ShowLastUpdateChangelog();
@@ -702,7 +947,7 @@ namespace Feels.Views {
             PagePivot.Blur(10, 500, 500).Start();
         }
 
-        private async void ChangelogDismissButton_Tapped(object sender, TappedRoutedEventArgs e) {
+        private async void HideUpdateChangelog() {
             var x = (float)UpdateChangeLogFlyout.ActualWidth / 2;
             var y = (float)UpdateChangeLogFlyout.ActualHeight / 2;
 
@@ -714,6 +959,36 @@ namespace Feels.Views {
             AppBar.IsEnabled = true;
         }
 
+        private void ChangelogDismissButton_Tapped(object sender, TappedRoutedEventArgs e) {
+            HideUpdateChangelog();
+        }
+
+        private void CloseChangelogFlyout_Tapped(object sender, TappedRoutedEventArgs e) {
+            HideUpdateChangelog();
+        }
+
         #endregion update changelog
+
+        #region animations
+        private void AnimateDetailsItems() {
+            foreach (Grid item in PanelWeatherDetails.Children) {
+                foreach (StackPanel pan in item.Children) {
+                    _DelayDetailItem += 100;
+
+                    pan.Fade(0, 0)
+                        .Scale(.5f, .5f, 15, 15, 0)
+                        .Then()
+                        .Fade(1)
+                        .Scale(1, 1, 15, 15)
+                        .SetDelay(_DelayDetailItem)
+                        .Start();
+                }
+            }
+        }
+        #endregion animations
+
+        private void AddLocationManually_Tapped(object sender, TappedRoutedEventArgs e) {
+            Frame.Navigate(typeof(LocationsPage));
+        }
     }
 }
