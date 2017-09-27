@@ -193,12 +193,30 @@ namespace Tasks.Services {
 
         #region locations
         public static LocationItem GetFavoriteLocation() {
-            StorageFile file = (StorageFile)ApplicationData.Current.LocalFolder.TryGetItemAsync(FavoriteLocationKey).AsTask().AsAsyncOperation().GetResults();
+            StorageFile file = (StorageFile)ApplicationData.Current.LocalFolder
+                .TryGetItemAsync(FavoriteLocationKey)
+                .AsTask()
+                .AsAsyncOperation().
+                GetResults();
+
             if (file == null) return null;
 
             string json = FileIO.ReadTextAsync(file).AsTask().AsAsyncOperation().GetResults();
             var favoriteLocation = JsonConvert.DeserializeObject<LocationItem>(json);
             return favoriteLocation;
+        }
+
+        public static LocationItem GetLocation(string name) {
+            StorageFile file = (StorageFile)ApplicationData.Current.LocalFolder
+                .TryGetItemAsync(name)
+                .AsTask()
+                .AsAsyncOperation().
+                GetResults();
+
+            if (file == null) return null;
+
+            string json = FileIO.ReadTextAsync(file).AsTask().AsAsyncOperation().GetResults();
+            return JsonConvert.DeserializeObject<LocationItem>(json);
         }
 
         #endregion locations

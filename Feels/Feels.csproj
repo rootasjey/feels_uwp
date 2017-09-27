@@ -105,18 +105,21 @@
     <Compile Include="Composition\ImageLoader.cs" />
     <Compile Include="Composition\ManagedSurface.cs" />
     <Compile Include="Composition\TextDrawer.cs" />
+    <Compile Include="Converters\AddonImage.cs" />
     <Compile Include="Converters\LocalizedDay.cs" />
     <Compile Include="Converters\LocationSelectedIcon.cs" />
     <Compile Include="Converters\SimpleTemperature.cs" />
     <Compile Include="Converters\TimeParser.cs" />
     <Compile Include="Converters\WeatherIcon.cs" />
     <Compile Include="Data\SourceModel.cs" />
+    <Compile Include="Models\AddOn.cs" />
     <Compile Include="Models\LocationItem.cs" />
     <Compile Include="Models\WeatherUnit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BackgroundTasks.cs" />
     <Compile Include="Services\DataTransfer.cs" />
     <Compile Include="Services\Events.cs" />
+    <Compile Include="Services\InAppPurchases.cs" />
     <Compile Include="Services\WeatherScene\Animations.cs" />
     <Compile Include="Services\WeatherScene\Backgrounds.cs" />
     <Compile Include="Services\WeatherScene\Icons.cs" />
@@ -127,6 +130,9 @@
     <Compile Include="Services\UI.cs" />
     <Compile Include="Services\Wallpaper.cs" />
     <Compile Include="Services\WeatherScene\Visuals.cs" />
+    <Compile Include="Views\AchievementsPage.xaml.cs">
+      <DependentUpon>AchievementsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
@@ -241,6 +247,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Views\AchievementsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\HomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

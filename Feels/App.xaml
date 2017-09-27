@@ -11,6 +11,7 @@
         <converters:TimeParser x:Name="TimeParser"/>
         <converters:LocalizedDay x:Name="LocalizedDay"/>
         <converters:LocationSelectedIcon x:Name="LocationSelectedIcon"/>
+        <converters:AddonImage x:Name="AddonImage"/>
 
         <Style x:Key="ListViewItemFill" TargetType="ListViewItem">
             <Setter Property="HorizontalAlignment" Value="Stretch"/>

@@ -14,18 +14,26 @@ namespace Feels.Data {
 
         private const string _APIKey = "57281e87e833689d3150c587198f04c6";
 
-        public async Task FetchCurrentWeather(double lat, double lon) {
+        public async Task FetchCurrentForecast(double latitude, double longitude) {
             if (!NetworkInterface.GetIsNetworkAvailable()) { return; }
             if (Client == null) Client = new DarkSkyService(_APIKey);
 
             var lang = GetLanguage();
             var unit = Settings.GetUnit();
 
-            Forecast = await Client.GetWeatherDataAsync(lat, lon, unit, lang);
-
+            Forecast = await Client.GetWeatherDataAsync(latitude, longitude, unit, lang);
         }
 
-        Language GetLanguage() {
+        public async Task<Forecast> GetCurrentForecast(double latitude, double longitude) {
+            if (!NetworkInterface.GetIsNetworkAvailable()) { return null; }
+            if (Client == null) Client = new DarkSkyService(_APIKey);
+
+            var lang = GetLanguage();
+            var unit = Settings.GetUnit();
+            return await Client.GetWeatherDataAsync(latitude, longitude, unit, lang);
+        }
+
+        private Language GetLanguage() {
             var lang = Settings.GetAppCurrentLanguage();
 
             var culture = new CultureInfo(lang);

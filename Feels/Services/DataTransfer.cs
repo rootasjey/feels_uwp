@@ -29,21 +29,10 @@ namespace Feels.Services {
             //}
 
             DataRequest request = e.Request;
-            request.Data.Properties.Title = "Citations 365";
-            request.Data.Properties.Description = "Share a quote";
+            request.Data.Properties.Title = "Feels";
+            request.Data.Properties.Description = "Share the weather conditions";
             //request.Data.SetText(text);
         }
-
-        //public static void Copy(Quote quote) {
-        //    DataPackage dataPackage = new DataPackage() {
-        //        RequestedOperation = DataPackageOperation.Copy
-        //    };
-
-        //    dataPackage.SetText(quote.Content + " - " + quote.Author);
-        //    Clipboard.SetContent(dataPackage);
-
-        //    ShowShareCompleted();
-        //}
 
         public static void ShowShareCompleted() {
             ShowLocalToast("Data copied!");

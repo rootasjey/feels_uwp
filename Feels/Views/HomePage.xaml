@@ -49,7 +49,7 @@
               Background="Transparent" 
               Grid.Row="0" 
               Canvas.ZIndex="2"
-              Margin="0,0,0,-36">
+              Margin="0,0,0,-37">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
@@ -240,8 +240,7 @@
 
                         <Grid x:Name="Theater" 
                               Visibility="Visible" 
-                              Opacity="0">
-                        </Grid>
+                              Opacity="0"/>
 
                         <StackPanel x:Name="SplashView"
                                     Visibility="Visible"
@@ -1039,6 +1038,7 @@
                     ClosedDisplayMode="Minimal">
             <CommandBar.SecondaryCommands>
                 <AppBarButton Label="settings" x:Uid="CmdSettings" Tapped="GoToSettings_Tapped" />
+                <AppBarButton Label="achievements" Tapped="GoToAchievements_Tapped"/>
             </CommandBar.SecondaryCommands>
             <AppBarButton x:Name="CmdLocations" x:Uid="CmdLocations"
                           Label="locations" Icon="Map"

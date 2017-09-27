@@ -15,6 +15,7 @@ using System.Linq;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Media.Animation;
+using Windows.ApplicationModel.Core;
 
 namespace Feels.Views {
     public sealed partial class LocationsPage : Page {
@@ -61,10 +62,51 @@ namespace Feels.Views {
 
         #endregion navigation
 
+        #region titlebar
+        private void InitializeTitleBar() {
+            App.DeviceType = Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily;
+
+            if (App.DeviceType == "Windows.Mobile") {
+                return;
+            }
+
+            Window.Current.Activated += Current_Activated;
+            CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            coreTitleBar.ExtendViewIntoTitleBar = true;
+
+            TitleBar.Height = coreTitleBar.Height;
+            Window.Current.SetTitleBar(MainTitleBar);
+
+            coreTitleBar.IsVisibleChanged += CoreTitleBar_IsVisibleChanged;
+            coreTitleBar.LayoutMetricsChanged += CoreTitleBar_LayoutMetricsChanged;
+        }
+
+        void CoreTitleBar_IsVisibleChanged(CoreApplicationViewTitleBar titleBar, object args) {
+            TitleBar.Visibility = titleBar.IsVisible ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args) {
+            TitleBar.Height = sender.Height;
+            RightMask.Width = sender.SystemOverlayRightInset;
+        }
+
+        private void Current_Activated(object sender, WindowActivatedEventArgs e) {
+            if (e.WindowActivationState != CoreWindowActivationState.Deactivated) {
+                //BackButtonGrid.Visibility = Visibility.Visible;
+                MainTitleBar.Opacity = 1;
+            } else {
+                //BackButtonGrid.Visibility = Visibility.Collapsed;
+                MainTitleBar.Opacity = 0.5;
+            }
+        }
+
+        #endregion titlebar
+
         public LocationsPage() {
             InitializeComponent();
             InitializeVariables();
             InitializePageAnimation();
+            InitializeTitleBar();
             LoadData();
         }
 
@@ -262,7 +304,66 @@ namespace Feels.Views {
             var location = (LocationItem)listItem.DataContext;
 
             _lastLocationSelected = location;
+
+            if (string.IsNullOrEmpty(location.Id)) return;
+
+            var isPinned = TileDesigner.IsSecondaryTilePinned(location);
+
+            if (isPinned) {
+                CmdUnpinLocation.Visibility = Visibility.Visible;
+                CmdPinLocation.Visibility = Visibility.Collapsed;
+            } else {
+                CmdUnpinLocation.Visibility = Visibility.Collapsed;
+                CmdPinLocation.Visibility = Visibility.Visible;
+            }
+
             SavedLocationRightTappedFlyout.ShowAt(listItem);
+        }
+
+        private void CmdPinLocation_Tapped(object sender, TappedRoutedEventArgs e) {
+            var flyout = (MenuFlyoutItem)sender;
+            var location = (LocationItem)flyout.DataContext;
+            PinLocationOnStart(location);
+        }
+
+        private void CmdUnpinLocation_Tapped(object sender, TappedRoutedEventArgs e) {
+            var flyout = (MenuFlyoutItem)sender;
+            var location = (LocationItem)flyout.DataContext;
+            UnpinLocationOnStart(location);
+        }
+
+        private async void UnpinLocationOnStart(LocationItem location) {
+            // 1.Unpin
+            var locationId = TileDesigner.ConvertLocationNameToTileId(location.Name);
+            var isUnpinned = await TileDesigner.UnpinSecondaryTile(locationId);
+
+            if (!isUnpinned) { return; }
+
+            // 2.Delte task config
+            Settings.DeleteSecondaryTaskLocation(locationId);
+
+            // 3.Unregister task
+            BackgroundTasks.UnregisterSecondaryTileTask(locationId);
+        }
+
+        private async void PinLocationOnStart(LocationItem location) {
+            // 1.Ask for pin
+            var locationId = TileDesigner.ConvertLocationNameToTileId(location.Name);
+            var isPined = await TileDesigner.PinSecondaryTile(location);
+
+            if (!isPined) { return; }
+
+            CmdPinLocation.Text = App.ResourceLoader.GetString("Unpin");
+
+            // 2.Register task config            
+            Settings.SaveSecondaryTaskLocation(locationId, location);
+
+            // 3.Register task
+            BackgroundTasks.RegisterSecondaryTileTask(locationId);
+
+            // 4.Update the tile
+            var forecast = await App.DataSource.GetCurrentForecast(location.Latitude, location.Longitude);
+            TileDesigner.UpdateSecondary(locationId, forecast, location);
         }
 
         private void SavedLocation_Loaded(object sender, RoutedEventArgs e) {
@@ -319,6 +420,7 @@ namespace Feels.Views {
                 location.IsSelected = false;
             }
         }
+
 
         #endregion others methods
 

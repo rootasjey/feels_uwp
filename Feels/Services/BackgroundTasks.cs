@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Feels.Models;
+using System;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
 using Windows.Storage;
@@ -16,6 +17,12 @@ namespace Feels.Services {
         private static string _PrimaryTileTaskEntryPoint {
             get {
                 return "Tasks.PrimaryTileTask";
+            }
+        }
+
+        private static string _SecondaryTileTaskEntryPoint {
+            get {
+                return "Tasks.SecondaryTileTask";
             }
         }
 
@@ -118,6 +125,19 @@ namespace Feels.Services {
         public static bool IsPrimaryTaskActivated() {
             var name = GetPrimaryTileTaskName();
             return IsTileTaskActivated(name);
+        }
+
+        public static void RegisterSecondaryTileTask(string locationName) {
+            var taskName = TileDesigner.ConvertLocationNameToTileId(locationName);
+            RegisterBackgroundTask(taskName, _SecondaryTileTaskEntryPoint);
+        }
+
+        public static void RegisterSecondaryTileTask(LocationItem location) {
+            RegisterSecondaryTileTask(location.Name);
+        }
+
+        public static void UnregisterSecondaryTileTask(string taskName) {
+            UnregisterBackgroundTask(taskName);
         }
 
         #endregion tile task

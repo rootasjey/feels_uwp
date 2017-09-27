@@ -305,6 +305,25 @@ namespace Feels.Services {
             return localSettingsValues.ContainsKey(PrimaryTileTaskTypeKey) ? 
                 (string)localSettingsValues[PrimaryTileTaskTypeKey] : _GPSTaskTypeKey;
         }
+
+        public static async Task SaveSecondaryTaskLocation(string locationId, LocationItem location) {
+            string serializedLocation = JsonConvert.SerializeObject(location);
+
+            StorageFile file =
+                await ApplicationData
+                        .Current
+                        .LocalFolder
+                        .CreateFileAsync(locationId, CreationCollisionOption.ReplaceExisting);
+
+            await FileIO.WriteTextAsync(file, serializedLocation);
+        }
+
+        public static async Task DeleteSecondaryTaskLocation(string locationId) {
+            StorageFile file = (StorageFile)await ApplicationData.Current.LocalFolder.TryGetItemAsync(locationId);
+            if (file == null) return;
+
+            await file.DeleteAsync();
+        }
         #endregion tasks
 
         #region animations

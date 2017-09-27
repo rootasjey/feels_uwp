@@ -108,6 +108,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Models\LocationItem.cs" />
+    <Compile Include="SecondaryTileTask.cs" />
     <Compile Include="Services\Settings.cs" />
     <Compile Include="Services\TileDesigner.cs" />
     <Compile Include="PrimaryTileTask.cs" />

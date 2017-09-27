@@ -1,4 +1,5 @@
 ﻿using DarkSkyApi.Models;
+using Feels.Models;
 using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.Globalization;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 using Windows.Services.Maps;
 using Windows.UI.Notifications;
+using Windows.UI.StartScreen;
 
 namespace Feels.Services {
     public class TileDesigner {
@@ -17,10 +19,75 @@ namespace Feels.Services {
             tileUpdater.Clear();
             tileUpdater.EnableNotificationQueue(true);
 
-            tileUpdater.Update(await CreateTileCurrent(data.Forecast, position)); // current
-            tileUpdater.Update(CreateTileCurrentDetails(data.Forecast));// detailed infos current
-            tileUpdater.Update(CreateTileHourly(data.Forecast.Hourly)); // hourly
-            tileUpdater.Update(CreateTileDaily(data.Forecast.Daily));   // daily
+            var town = await GetLocation(position);
+
+            tileUpdater.Update(CreateTileCurrent(data.Forecast, town));
+            tileUpdater.Update(CreateTileCurrentDetails(data.Forecast));
+            tileUpdater.Update(CreateTileHourly(data.Forecast.Hourly));
+            tileUpdater.Update(CreateTileDaily(data.Forecast.Daily));
+        }
+
+        public static void UpdateSecondary(string tileId, 
+            Forecast forecast, LocationItem location) {
+
+            if (forecast == null) return;
+
+            var tileUpdater = TileUpdateManager.CreateTileUpdaterForSecondaryTile(tileId);
+            tileUpdater.Clear();
+            tileUpdater.EnableNotificationQueue(true);
+
+            var town = location.Name;
+
+            tileUpdater.Update(CreateTileCurrent(forecast, town));
+            tileUpdater.Update(CreateTileCurrentDetails(forecast));
+            tileUpdater.Update(CreateTileHourly(forecast.Hourly));
+            tileUpdater.Update(CreateTileDaily(forecast.Daily));
+        }
+
+        public static async Task<bool> PinSecondaryTile(LocationItem location) {
+            var id = ConvertLocationNameToTileId(location.Name);
+            var displayName = location.Name;
+            var activationArguments = id;
+            var uriSquare150x150Logo = new Uri("ms-appx:///Assets/Square150x150Logo.scale-100.png");
+            var desiredSize = TileSize.Square150x150;
+
+            var tile = new SecondaryTile(id, displayName, activationArguments, uriSquare150x150Logo, desiredSize);
+
+            tile.VisualElements.ShowNameOnSquare150x150Logo = false;
+            tile.VisualElements.Square310x310Logo = new Uri("ms-appx:///Assets/LargeTile.scale-100.png");
+            tile.VisualElements.Wide310x150Logo = new Uri("ms-appx:///Assets/Wide310x150Logo.scale-100.png");
+
+            var isPineed =  await tile.RequestCreateAsync();
+
+            if (!isPineed) return false;
+            return true;
+        }
+
+        public static async Task<bool> UnpinSecondaryTile(LocationItem location) {
+            var id = ConvertLocationNameToTileId(location.Name);
+            return await UnpinSecondaryTile(id);
+        }
+
+        public static async Task<bool> UnpinSecondaryTile(string locationId) {
+            var tile = new SecondaryTile(locationId);
+            return await tile.RequestDeleteAsync();
+        }
+
+        public static string ConvertLocationNameToTileId(string locationName) {
+            return locationName.Replace(" ", "").Replace(",", ".");
+        }
+
+        public static string ConvertTileIdToLocationName(string tileId) {
+            return tileId.Replace(".", ", ");
+        }
+
+        public static bool IsSecondaryTilePinned(LocationItem location) {
+            return IsSecondaryTileExist(location.Name);
+        }
+
+        public static bool IsSecondaryTileExist(string locationName) {
+            var tileId = ConvertLocationNameToTileId(locationName);
+            return SecondaryTile.Exists(tileId);
         }
 
         // ------------------
@@ -129,10 +196,10 @@ namespace Feels.Services {
         // ---------------
         // TILES CREATIONS
         // ---------------
-        static async Task<TileNotification> CreateTileCurrent(Forecast forecast, BasicGeoposition position) {
+        private static TileNotification CreateTileCurrent(Forecast forecast, string town) {
             var currentWeather = forecast.Currently;
             var condition = currentWeather.Icon;
-            var location = await GetLocation(position);
+            //var town = await GetLocation(position);
             var currentTemperature = GetTemperature(forecast.Currently.ApparentTemperature);
             var maxTemperature = GetTemperature(forecast.Daily.Days[0].ApparentMaxTemperature);
             var minTemperature = GetTemperature(forecast.Daily.Days[0].ApparentMinTemperature);
@@ -153,7 +220,7 @@ namespace Feels.Services {
             string GetDetailedStatus()
             {
                 string formatedText = string.Format("{0} {1} ({2}/{3}) {4}", 
-                    location, currentTemperature, minTemperature, maxTemperature, forecast.Currently.Summary);
+                    town, currentTemperature, minTemperature, maxTemperature, forecast.Currently.Summary);
                 return formatedText;
             }
 
@@ -176,7 +243,7 @@ namespace Feels.Services {
                     Content = new TileBindingContentAdaptive() {
                         Children = {
                             new AdaptiveText() {
-                                Text = location.ToUpper(),
+                                Text = town.ToUpper(),
                                 HintAlign = AdaptiveTextAlign.Center,
                                 HintStyle = AdaptiveTextStyle.Body
                             },
@@ -268,7 +335,7 @@ namespace Feels.Services {
                                                 HintStyle = AdaptiveTextStyle.Body
                                             },
                                             new AdaptiveText() {
-                                                Text = location,
+                                                Text = town,
                                                 HintStyle = AdaptiveTextStyle.BaseSubtle
                                             }
                                         }
@@ -322,7 +389,7 @@ namespace Feels.Services {
                                                 HintStyle = AdaptiveTextStyle.Body
                                             },
                                             new AdaptiveText() {
-                                                Text = location,
+                                                Text = town,
                                                 HintStyle = AdaptiveTextStyle.BaseSubtle
                                             }
                                         }

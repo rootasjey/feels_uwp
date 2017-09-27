@@ -498,4 +498,16 @@
   <data name="Moonset.Text" xml:space="preserve">
     <value>couché</value>
   </data>
+  <data name="CmdPinLocation.Text" xml:space="preserve">
+    <value>épingler</value>
+  </data>
+  <data name="CmdUnpinLocation.Text" xml:space="preserve">
+    <value>désépingler</value>
+  </data>
+  <data name="Unpin" xml:space="preserve">
+    <value>désépingler</value>
+  </data>
+  <data name="Pin" xml:space="preserve">
+    <value>Epingler</value>
+  </data>
 </root>

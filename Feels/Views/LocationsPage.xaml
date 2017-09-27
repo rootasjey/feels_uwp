@@ -52,25 +52,62 @@
                             x:Uid="CmdDeleteSavedLocation"
                             Text="Delete"
                             Tapped="CmdDeleteSavedLocation_Tapped"/>
+
+            <MenuFlyoutItem x:Name="CmdPinLocation"
+                            x:Uid="CmdPinLocation"
+                            Text="Pin"
+                            Tapped="CmdPinLocation_Tapped"/>
+
+            <MenuFlyoutItem x:Name="CmdUnpinLocation"
+                            x:Uid="CmdUnpinLocation"
+                            Text="Unpin"
+                            Visibility="Collapsed"
+                            Tapped="CmdUnpinLocation_Tapped"/>
         </MenuFlyout>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="70"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <Grid x:Name="TitleBar" 
+              Background="Transparent" 
+              Grid.Row="0" 
+              Canvas.ZIndex="2"
+              Margin="0,0,0,-37">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid x:Name="BackButtonGrid" VerticalAlignment="Top"
+                  Visibility="Collapsed">
+                <Button x:Name="BackButton" Background="Transparent">
+                    <FontIcon Glyph="&#xE096;" Foreground="White"/>
+                </Button>
+            </Grid>
+            <Grid Grid.Column="1" x:Name="MainTitleBar" Background="Transparent">
+                <TextBlock Text="Feels" VerticalAlignment="Top"
+                           Visibility="Visible"
+                            FontSize="12" FontFamily="Segoe UI" FontWeight="Normal" Margin="10,0"/>
+            </Grid>
+            <Grid Grid.Column="3" x:Name="RightMask" Background="Transparent"/>
+        </Grid>
+
         <TextBlock x:Name="PageTitle"
                    x:Uid="TitleLocations"
                    Text="my locations"
-                   FontSize="42" 
+                   Grid.Row="1"
+                   FontSize="42"
                    FontWeight="SemiBold"
                    Typography.Capitals="SmallCaps"
                    Padding="60,12"/>
 
         <Grid x:Name="PageMainContent"
-              Grid.Row="1">
+              Grid.Row="2">
 
             <Grid x:Name="PageLocationContent">
                 <Grid x:Name="LoadingView" Visibility="Visible">
@@ -157,7 +194,7 @@
         </Grid>
 
         <CommandBar x:Name="PageCommandBar"
-                    Grid.Row="1"
+                    Grid.Row="2"
                     VerticalAlignment="Bottom">
             <AppBarButton x:Name="CmdCancelAddCity"
                           x:Uid="CmdCancel"

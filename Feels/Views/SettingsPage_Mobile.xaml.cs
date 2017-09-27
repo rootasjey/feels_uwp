@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Input;
+using Windows.ApplicationModel.Core;
 
 namespace Feels.Views {
     public sealed partial class SettingsPage_Mobile : Page {
@@ -22,11 +23,49 @@ namespace Feels.Views {
         ResourceLoader _ResourcesLoader;
         #endregion variables
 
+
+        #region titlebar
+        private void InitializeTitleBar() {
+            App.DeviceType = Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily;
+
+            if (App.DeviceType == "Windows.Mobile") {
+                return;
+            }
+
+            Window.Current.Activated += Current_Activated;
+            CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            coreTitleBar.ExtendViewIntoTitleBar = true;
+
+            TitleBar.Height = coreTitleBar.Height;
+            Window.Current.SetTitleBar(MainTitleBar);
+
+            coreTitleBar.IsVisibleChanged += CoreTitleBar_IsVisibleChanged;
+            coreTitleBar.LayoutMetricsChanged += CoreTitleBar_LayoutMetricsChanged;
+        }
+
+        void CoreTitleBar_IsVisibleChanged(CoreApplicationViewTitleBar titleBar, object args) {
+            TitleBar.Visibility = titleBar.IsVisible ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args) {
+            TitleBar.Height = sender.Height;
+            RightMask.Width = sender.SystemOverlayRightInset;
+        }
+
+        private void Current_Activated(object sender, WindowActivatedEventArgs e) {
+            if (e.WindowActivationState != CoreWindowActivationState.Deactivated) {
+                MainTitleBar.Opacity = 1;
+            } else {
+                MainTitleBar.Opacity = 0.5;
+            }
+        }
+        #endregion titlebar
+
         public SettingsPage_Mobile() {
             InitializeComponent();
             InitializeVariables();
+            InitializeTitleBar();
             SetUpPageAnimation();
-            //UpdateSelectedLanguage();
             AnimatePersonalizationPivot();
         }
 

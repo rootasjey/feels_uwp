@@ -2,27 +2,38 @@
 using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.Globalization;
-using System.Threading.Tasks;
-using Windows.Devices.Geolocation;
 using Windows.UI.Notifications;
 
 namespace Tasks.Services {
     public sealed class TileDesigner {
-        private static string BingMapsKey = "AEKtGCjDSo2UnEvMVxOh~iS-cB5ZHhjZiIJ9RgGtVgw~AkzS_JYlIhjskoO8ziK63GAJmtcF7U_t4Gni6nBb-MncX6-iw8ldj_NgnmUIzMPY";
-
-        public static void UpdatePrimary(object rawForecast, object city) {
+        public static void UpdatePrimary(object rawForecast, string town) {
             if (rawForecast == null) return;
             var forecast = (Forecast)rawForecast;
-            var location = (string)city;
 
             var tileUpdater = TileUpdateManager.CreateTileUpdaterForApplication();
             tileUpdater.Clear();
             tileUpdater.EnableNotificationQueue(true);
 
-            tileUpdater.Update(CreateTileCurrent(forecast, location));       // current
-            tileUpdater.Update(CreateTileCurrentDetails(forecast));// detailed infos current
-            tileUpdater.Update(CreateTileHourly(forecast.Hourly)); // hourly
-            tileUpdater.Update(CreateTileDaily(forecast.Daily));   // daily
+            tileUpdater.Update(CreateTileCurrent(forecast, town));      // current
+            tileUpdater.Update(CreateTileCurrentDetails(forecast));     // detailed infos current
+            tileUpdater.Update(CreateTileHourly(forecast.Hourly));      // hourly
+            tileUpdater.Update(CreateTileDaily(forecast.Daily));        // daily
+        }
+
+        public static void UpdateSecondary(string tileId,
+            object rawForecast, string town) {
+
+            if (rawForecast == null) return;
+            var forecast = (Forecast)rawForecast;
+
+            var tileUpdater = TileUpdateManager.CreateTileUpdaterForSecondaryTile(tileId);
+            tileUpdater.Clear();
+            tileUpdater.EnableNotificationQueue(true);
+
+            tileUpdater.Update(CreateTileCurrent(forecast, town));
+            tileUpdater.Update(CreateTileCurrentDetails(forecast));
+            tileUpdater.Update(CreateTileHourly(forecast.Hourly));
+            tileUpdater.Update(CreateTileDaily(forecast.Daily));
         }
 
         // ------------------

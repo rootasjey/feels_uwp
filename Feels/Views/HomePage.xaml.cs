@@ -8,6 +8,7 @@ using Microsoft.Graphics.Canvas.Effects;
 using Microsoft.Toolkit.Uwp.UI.Animations;
 using System;
 using System.Numerics;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Devices.Geolocation;
@@ -82,15 +83,15 @@ namespace Feels.Views {
                 return;
             }
 
-            //Window.Current.Activated += Current_Activated;
-            //CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-            //coreTitleBar.ExtendViewIntoTitleBar = true;
+            Window.Current.Activated += Current_Activated;
+            CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            coreTitleBar.ExtendViewIntoTitleBar = true;
 
-            //TitleBar.Height = coreTitleBar.Height;
-            //Window.Current.SetTitleBar(MainTitleBar);
-            
-            //coreTitleBar.IsVisibleChanged += CoreTitleBar_IsVisibleChanged;
-            //coreTitleBar.LayoutMetricsChanged += CoreTitleBar_LayoutMetricsChanged;
+            TitleBar.Height = coreTitleBar.Height;
+            Window.Current.SetTitleBar(MainTitleBar);
+
+            coreTitleBar.IsVisibleChanged += CoreTitleBar_IsVisibleChanged;
+            coreTitleBar.LayoutMetricsChanged += CoreTitleBar_LayoutMetricsChanged;
         }
 
         void CoreTitleBar_IsVisibleChanged(CoreApplicationViewTitleBar titleBar, object args) {
@@ -240,7 +241,7 @@ namespace Feels.Views {
             ShowNoAccessView();
         }
 
-        private async void PopulateFirstPage() {
+        private void PopulateFirstPage() {
             if (_PageDataSource.Forecast == null) return;
 
             WeatherView.Visibility = Visibility.Visible;
@@ -256,11 +257,17 @@ namespace Feels.Views {
             SetMoonPhase(weatherToday);
             AnimateWindDirectionIcons();
 
-            var task = _UIDispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
-            {
-                DrawScene();
-                UpdateMainTile();
-            });
+            DrawScene();
+            UpdateMainTile();
+
+            //var autoEvent = new AutoResetEvent(true);
+
+            //var deffered = new Timer(async (object state) => {
+            //    await _UIDispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+            //        DrawScene();
+            //        UpdateMainTile();
+            //    });
+            //}, autoEvent, 500, Timeout.Infinite);
         }
 
         private void PopulateWeatherView(DayDataPoint todayWeather, CurrentDataPoint currentWeather) {
@@ -477,7 +484,7 @@ namespace Feels.Views {
         }
 
         private async Task FetchCurrentWeather(LocationItem location) {
-            await _PageDataSource.FetchCurrentWeather(location.Latitude, location.Longitude);
+            await _PageDataSource.FetchCurrentForecast(location.Latitude, location.Longitude);
 
             _LastFetchedTime = DateTime.Now;
 
@@ -635,8 +642,8 @@ namespace Feels.Views {
             Theater.Children.Add(scene);
 
             await scene.Fade(0, 0).Offset(0, 200, 0).StartAsync();
-            Theater.Fade(1, 1000).Start();
-            scene.Fade(1, 1000).Offset(0, 0, 1000).Start();
+            Theater.Fade(1, 1000, 1000).Start();
+            scene.Fade(1, 1000).Offset(0, 0, 1000).SetDelay(1000).Start();
         }
 
         private void CleanTheater() {
@@ -989,6 +996,10 @@ namespace Feels.Views {
 
         private void AddLocationManually_Tapped(object sender, TappedRoutedEventArgs e) {
             Frame.Navigate(typeof(LocationsPage));
+        }
+
+        private void GoToAchievements_Tapped(object sender, TappedRoutedEventArgs e) {
+            Frame.Navigate(typeof(AchievementsPage));
         }
     }
 }

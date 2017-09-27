@@ -12,7 +12,7 @@ using Windows.Services.Maps;
 using Windows.Storage;
 
 namespace Tasks {
-    public sealed class PrimaryTileTask : IBackgroundTask {
+    public sealed class SecondaryTileTask : IBackgroundTask {
         #region variables
         BackgroundTaskDeferral _deferral;
 
@@ -59,34 +59,19 @@ namespace Tasks {
         #endregion variables
 
         #region lifecycle
+
         public async void Run(IBackgroundTaskInstance taskInstance) {
             StartTask(taskInstance);
 
-            string city = "";
-            LocationItem location = null;
+            // 1.Get LocatonItem from storage (json)
+            var location = Settings.GetLocation(taskInstance.Task.Name);
+            if (location == null) { EndTask(); return; }
 
-            if (GetTaskType() == _GPSTaskTypeKey) {
-                var position = await GetPosition();
-                if (position == null) { EndTask(); return; }
+            // 2.Fetch current weather
+            var forecast = await FetchCurrentForecast(location.Latitude, location.Longitude);
 
-                var coord = position.Coordinate.Point.Position;
-
-                location = new LocationItem() {
-                    Latitude = coord.Latitude,
-                    Longitude = coord.Longitude
-                };
-
-                city = await GetCityName(coord);
-
-            } else {
-                location = Settings.GetFavoriteLocation();
-                city = location?.Town;
-            }
-            
-            var forecast = await FetchCurrentWeather(location.Latitude, location.Longitude);
-            TileDesigner.UpdatePrimary(forecast, city);
-
-            LogTaskActivity();
+            // 3.Update secondary tile
+            TileDesigner.UpdateSecondary(taskInstance.Task.Name, forecast, location.Town);
             EndTask();
         }
 
@@ -98,17 +83,17 @@ namespace Tasks {
         private void EndTask() {
             _deferral.Complete();
         }
-        
+
         private void OnCanceled(IBackgroundTaskInstance sender, BackgroundTaskCancellationReason reason) {
             _cancelRequested = true;
-            LogTaskError(reason);
+            //LogTaskError(reason);
         }
 
         #endregion lifecycle
 
         #region data
 
-        private async Task<Forecast> FetchCurrentWeather(double lat, double lon) {
+        private async Task<Forecast> FetchCurrentForecast(double lat, double lon) {
             if (!NetworkInterface.GetIsNetworkAvailable()) { return null; }
 
             var unit = (Unit)Settings.GetUnit();
