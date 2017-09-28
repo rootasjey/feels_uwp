@@ -169,10 +169,10 @@
     <value>темная</value>
   </data>
   <data name="DataContent1.Text" xml:space="preserve">
-    <value>Данные о погоде мы получаем из</value>
+    <value>данные поступают из</value>
   </data>
   <data name="DataContent2.Text" xml:space="preserve">
-    <value>и приложение не имеет отношения к поставщику проноза погоды</value>
+    <value>и этот app не имеет связи с </value>
   </data>
   <data name="DataTitle.Text" xml:space="preserve">
     <value>Источник</value>
@@ -196,7 +196,7 @@
     <value>Обратная связь</value>
   </data>
   <data name="FeedbackLabel.Text" xml:space="preserve">
-    <value>Предложить идею или сообщить об ошибке</value>
+    <value>предложить улучшение или сигнал об ошибке по электронной почте</value>
   </data>
   <data name="FeedbackTitle.Text" xml:space="preserve">
     <value>Напишите</value>
@@ -343,7 +343,7 @@
     <value>Вы моете связаться со мной (на английском) по этому адресу:</value>
   </data>
   <data name="ContactMeTwitterLabel.Text" xml:space="preserve">
-    <value>Также вы можете найти меня в Twitter: @jeremiecorpinot</value>
+    <value>Также вы можете найти меня в Twitter</value>
   </data>
   <data name="LocationInformationLabel.Text" xml:space="preserve">
     <value>Местоположение</value>
@@ -509,5 +509,29 @@
   </data>
   <data name="Pin" xml:space="preserve">
     <value>pin</value>
+  </data>
+  <data name="AnimationsLabel.Text" xml:space="preserve">
+    <value>анимация</value>
+  </data>
+  <data name="FeedbackPivot.Header" xml:space="preserve">
+    <value>Обратная связь</value>
+  </data>
+  <data name="ThanksMade.Text" xml:space="preserve">
+    <value>Это приложение было достигнуто благодаря</value>
+  </data>
+  <data name="APICallMadeLabel.Text" xml:space="preserve">
+    <value>Вызовы API, сделанные сегодня</value>
+  </data>
+  <data name="WhyDonate1.Text" xml:space="preserve">
+    <value>Жертвуя, вы способствует развитию чувствует.</value>
+  </data>
+  <data name="WhyDonate2.Text" xml:space="preserve">
+    <value>Чувствует себя использует API-интерфейс DarkSky, который свободен только для первых 1000 звонков.</value>
+  </data>
+  <data name="WhyDonate3.Text" xml:space="preserve">
+    <value>Так, чтобы для меня продолжать разработку приложения и сделать его расти, я буду нужна ваша помощь.</value>
+  </data>
+  <data name="WhyDonateTitle.Text" xml:space="preserve">
+    <value>Зачем жертвовать?</value>
   </data>
 </root>

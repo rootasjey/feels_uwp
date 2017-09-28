@@ -15,11 +15,10 @@
                     <ColumnDefinition Width="90"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="70"/>
-                    <!--<ColumnDefinition Width="30"/>-->
                 </Grid.ColumnDefinitions>
 
-                <Image Source="{x:Bind Images, Converter={StaticResource AddonImage}}"
-                       Height="50" Width="50"/>
+                <BitmapIcon UriSource="{x:Bind Images, Converter={StaticResource AddonImage}}"
+                            Height="50" Width="50"/>
 
                 <StackPanel x:Name="AddOnDescription" Grid.Column="1">
                     <TextBlock Text="{x:Bind Title}" FontSize="22" FontWeight="SemiBold" TextWrapping="Wrap"/>
@@ -32,12 +31,15 @@
                            FontWeight="Bold"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>
-
-                <!--<FontIcon Glyph="&#xE109;" FontSize="20" Grid.Column="3"
-                          VerticalAlignment="Center"
-                          HorizontalAlignment="Center"/>-->
             </Grid>
         </DataTemplate>
+
+        <Style x:Key="TextStyle1" TargetType="TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Opacity" Value=".6"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+        </Style>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -75,7 +77,8 @@
               Grid.Row="1">
             
             <Pivot x:Name="PagePivot"
-               Grid.Row="1">
+                   SelectionChanged="PagePivot_SelectionChanged"
+                   Grid.Row="1">
                 <PivotItem x:Name="AchievementsPivot"
                        Header="achievements">
                     <Grid>
@@ -103,28 +106,34 @@
                        Header="why?">
                     <Grid>
                         <StackPanel>
-                            <TextBlock Text="why donate ?" 
+                            <TextBlock x:Uid="WhyDonateTitle" 
+                                       Text="why donate ?"
                                        FontWeight="Light"
                                        FontSize="44"
                                        Margin="0,0,0,12"
                                        Typography.Capitals="SmallCaps"
                                        TextWrapping="Wrap"/>
-                            <TextBlock Text="By donating, you're contributing to the development of Feels."
-                                       FontSize="20"
-                                       FontWeight="SemiLight"
-                                       Opacity=".6"
-                                       TextWrapping="Wrap"/>
-                            <TextBlock Text="Feels uses DarkSky API which is free only for the first 1000 calls (one call is made basically everytime you request weather data)."
+                            <TextBlock x:Uid="WhyDonate1" 
+                                       Text="By donating, you're contributing to the development of Feels."
+                                       Style="{StaticResource TextStyle1}"/>
+                            <TextBlock x:Uid="WhyDonate2" 
+                                       Text="Feels uses DarkSky API which is free only for the first 1000 calls (one call is made basically everytime you request weather data)."
                                        Margin="0,10"
+                                       Style="{StaticResource TextStyle1}"/>
+                            <TextBlock x:Uid="WhyDonate3" 
+                                       Text="So in order for me to continue developing the app and make it growing, I'll need your help."
+                                       Style="{StaticResource TextStyle1}"/>
+
+                            <TextBlock x:Uid="APICallMadeLabel" 
+                                       Text="API calls made today"
                                        FontSize="20"
-                                       FontWeight="SemiLight"
-                                       Opacity=".6"
-                                       TextWrapping="Wrap"/>
-                            <TextBlock Text="So in order for me to continue developing the app and make it growing, I'll need your help."
-                                       FontSize="20"
-                                       FontWeight="SemiLight"
-                                       Opacity=".6"
-                                       TextWrapping="Wrap"/>
+                                       HorizontalAlignment="Center"
+                                       Margin="0,70,0,0"/>
+                            <TextBlock x:Name="APICallsMadeValue" Text="0/1000" 
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Center"/>
+                            <ProgressBar x:Name="ProgressAPICalls" Maximum="1000" 
+                                         Margin="0,20" IsIndeterminate="False"/>
                         </StackPanel>
                     </Grid>
                 </PivotItem>

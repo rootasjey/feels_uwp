@@ -10,8 +10,9 @@
     <Page.Resources>
         <Style x:Key="SettingsTitle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="24"/>
-            <Setter Property="FontWeight" Value="SemiLight"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Typography.Capitals" Value="SmallCaps"/>
         </Style>
 
         <Style x:Key="StackPanelStyle" TargetType="StackPanel">
@@ -61,8 +62,10 @@
                 <ScrollViewer VerticalScrollBarVisibility="Hidden"
                               Margin="0,20,0,0">
                     <StackPanel x:Name="PersonalizationContentPanel">
-                        <StackPanel x:Name="ThemePanel" Margin="0,0,0,20">
-                            <TextBlock x:Uid="BlockTheme" Text="thème" FontSize="24"/>
+                        <StackPanel x:Name="ThemePanel" Margin="0,0,0,24">
+                            <TextBlock x:Uid="BlockTheme" 
+                                       Text="thème"                                       
+                                       Style="{StaticResource SettingsTitle}"/>
                             <ToggleSwitch x:Name="ThemeSwitch"
                                           x:Uid="ThemeSwitch"
                                           Loaded="ThemeSwitch_Loaded"
@@ -71,8 +74,9 @@
                                           Toggled="ThemeSwitch_Toggled"/>
                         </StackPanel>
 
-                        <StackPanel x:Name="LanguagePanel">
-                            <TextBlock Text="language" x:Uid="LanguageLabel" FontSize="24"/>
+                        <StackPanel x:Name="LanguagePanel" Margin="0,0,0,24">
+                            <TextBlock Text="language" x:Uid="LanguageLabel" 
+                                       Style="{StaticResource SettingsTitle}"/>
 
                             <TextBlock Text="choose displayed language"
                                        x:Uid="LanguageSubLabel"
@@ -87,15 +91,16 @@
                             </ComboBox>
                         </StackPanel>
 
-                        <StackPanel x:Name="UnitsPanel" Margin="0,20">
-                            <TextBlock Text="units" x:Uid="UnitsText" FontSize="24"/>
+                        <StackPanel x:Name="UnitsPanel" Margin="0,0,0,24">
+                            <TextBlock Text="units" 
+                                       x:Uid="UnitsText" 
+                                       Style="{StaticResource SettingsTitle}"/>
                             <TextBlock Text="choose temperature units"
                                        x:Uid="UnitsSubLabel"
                                        Opacity=".6"/>
 
                             <ComboBox x:Name="UnitsCombo"
                                       Width="120"
-                                      Margin="0,20"
                                       ItemsSource="{x:Bind Units}"
                                       Loaded="UnitsCombo_Loaded"
                                       SelectionChanged="UnitsCombo_SelectionChanged">
@@ -108,7 +113,9 @@
                         </StackPanel>
 
                         <StackPanel x:Name="WeatherScenePanel">
-                            <TextBlock Text="animations" FontSize="24"/>
+                            <TextBlock Text="animations"
+                                       x:Uid="AnimationsLabel"
+                                       Style="{StaticResource SettingsTitle}"/>
                             <TextBlock x:Uid="BlockDeactivateBackgroundColor" 
                                        Text="deactivate home background gradient color animation"
                                        TextWrapping="Wrap"  Opacity=".5"/>
@@ -131,18 +138,20 @@
                     <StackPanel>
                         <StackPanel Margin="0,0,0,40">
                             <TextBlock x:Uid="DynamicTileTitle" 
-                                       Text="tuile dynamique" Style="{StaticResource SettingsTitle}"/>
+                                       Text="tuile dynamique"
+                                       Style="{StaticResource SettingsTitle}"/>
 
                             <TextBlock x:Uid="DynamicTileLabel" 
                                        Text="mettre à jour la tuile de l'application périodiquement" 
-                                            Opacity=".5"
-                                            TextWrapping="Wrap"/>
+                                        Opacity=".5"
+                                        TextWrapping="Wrap"/>
 
                             <ToggleSwitch x:Name="TileTaskSwitch"
                                           Loaded="TileTaskSwitch_Loaded"
                                           Toggled="TileTaskSwitch_Toggled"/>
 
                             <StackPanel x:Name="TileTaskInfosPanel"
+                                        Margin="0,24,0,0"
                                         Visibility="Collapsed">
 
                                 <TextBlock x:Uid="DynamicTileActivity" 
@@ -212,183 +221,69 @@
                 </ScrollViewer>
             </PivotItem>
 
-            <PivotItem x:Name="AboutPivot">
-                <PivotItem.Header>
-                    <TextBlock x:Uid="AboutHeader" Text="à propos"/>
-                </PivotItem.Header>
+            <PivotItem x:Name="FeedbackPivot"
+                       x:Uid="FeedbackPivot"
+                       Header="feedback">
 
                 <ScrollViewer Margin="0,10,0,0" 
                               VerticalScrollBarVisibility="Hidden">
                     <StackPanel>
-                        <TextBlock x:Uid="FeedbackTitle" Text="mon avis" FontSize="24"/>
-                        <TextBlock x:Uid="FeedbackLabel" 
-                                   Text="suggérer une amélioration ou signaler un problème"
+                        <StackPanel Margin="0,0,0,24">
+                            <TextBlock x:Uid="FeedbackTitle" Text="mon avis"
+                                       Style="{StaticResource SettingsTitle}"/>
+                            <TextBlock x:Uid="FeedbackLabel" 
+                                       Text="suggérer une amélioration ou signaler un problème par email"
+                                       Opacity=".5"
+                                       TextWrapping="Wrap"/>
+
+                            <Button x:Uid="FeedbackButton"
+                                    x:Name="FeedbackButton" 
+                                    Content="envoyer un email" 
+                                    Margin="0,12,0,0" 
+                                    Click="FeedbackButton_Click"/>
+                        </StackPanel>
+
+                        <StackPanel Margin="0,0,0,24">
+                            <TextBlock x:Uid="RatingTitle" Text="notation"
+                                   Style="{StaticResource SettingsTitle}"/>
+
+                            <TextBlock x:Uid="RatingLabel" Text="noter l'application sur le Store"
                                    Opacity=".5"
                                    TextWrapping="Wrap"/>
 
-                        <Button x:Uid="FeedbackButton"
-                                x:Name="FeedbackButton" 
-                                Content="envoyer un avis" 
-                                Margin="0,12,0,40" 
-                                Click="FeedbackButton_Click"/>
-
-                        <TextBlock x:Uid="RatingTitle" Text="notation" FontSize="24"/>
-
-                        <TextBlock x:Uid="RatingLabel" Text="noter l'application sur le Store"
-                                   Opacity=".5"
-                                   TextWrapping="Wrap"/>
-
-                        <Button x:Uid="RatingButton" 
+                            <Button x:Uid="RatingButton" 
                                 x:Name="NoteButton" 
-                                Content="noter l'app" 
-                                Margin="0,12,0,40" 
+                                Content="noter l'application" 
+                                Margin="0,12,0,0" 
                                 Click="NoteButton_Click"/>
+                        </StackPanel>
 
-                        <TextBlock x:Uid="ContributeTitle" Text="contribuer" FontSize="24"/>
-                        <RichTextBlock x:Name="ContributeBox" 
+                        <StackPanel Margin="0,0,0,24" Visibility="Collapsed">
+                            <TextBlock x:Uid="ContributeTitle" Text="contribuer"
+                                   Style="{StaticResource SettingsTitle}"/>
+                            <RichTextBlock x:Name="ContributeBox" 
                                        Margin="0,0,0,40"
                                        Opacity=".5">
-                            <Paragraph>
-                                <Run x:Uid="ContributeFirstLine" 
+                                <Paragraph>
+                                    <Run x:Uid="ContributeFirstLine" 
                                      Text="Ce projet est open source et vous pouvez y contribuer de plusieurs manières:"/>
-                                <LineBreak/>
-                                <Run x:Uid="ContributeSecondLine" Text="- signaler un bug"/>
-                                <LineBreak/>
-                                <Run x:Uid="ContributeThirdLine" Text="- suggérer une fonctionnalité"/>
-                                <LineBreak/>
-                                <Run x:Uid="ContributeFourthLine" Text="- éditer le code de l'application"/>
-                                <LineBreak/>
-                                <LineBreak/>
-                                <Run x:Uid="ContributeFifthLine" Text="Visitez le lien suivant pour plus d'informations"/>
-                                <Hyperlink NavigateUri="https://github.com/rootasjey/citations365">
-                                    <Run x:Uid="GithubRepository" Text="répertoire GitHub"/>
-                                </Hyperlink>
-                                <Run x:Uid="ContributeSixthLine" Text="et venez participer à ce projet :)"/>
-                            </Paragraph>
-                        </RichTextBlock>
+                                    <LineBreak/>
+                                    <Run x:Uid="ContributeSecondLine" Text="- signaler un bug"/>
+                                    <LineBreak/>
+                                    <Run x:Uid="ContributeThirdLine" Text="- suggérer une fonctionnalité"/>
+                                    <LineBreak/>
+                                    <Run x:Uid="ContributeFourthLine" Text="- éditer le code de l'application"/>
+                                    <LineBreak/>
+                                    <LineBreak/>
+                                    <Run x:Uid="ContributeFifthLine" Text="Visitez le lien suivant pour plus d'informations"/>
+                                    <Hyperlink NavigateUri="https://github.com/rootasjey/citations365">
+                                        <Run x:Uid="GithubRepository" Text="répertoire GitHub"/>
+                                    </Hyperlink>
+                                    <Run x:Uid="ContributeSixthLine" Text="et venez participer à ce projet :)"/>
+                                </Paragraph>
+                            </RichTextBlock>
 
-                        <TextBlock x:Uid="DataTitle" Text="données" FontSize="24"/>
-                        <RichTextBlock x:Name="DataBox"
-                                       Opacity=".5"
-                                       Margin="0,0,0,40">
-                            <Paragraph>
-                                <Run x:Uid="DataContent1" Text="Les données météo viennent du site"/>
-                                <Hyperlink NavigateUri="https://darksky.net/">Darksky</Hyperlink>
-                                <Run x:Uid="DataContent2" Text="et cette application n'est aucunement liée au site."/>
-                                <LineBreak/>
-                                <Hyperlink NavigateUri="https://darksky.net/poweredby/">
-                                    <Run Text="Powered by Dark Sky"/>
-                                </Hyperlink>
-                            </Paragraph>
-                        </RichTextBlock>
-
-                        <TextBlock x:Uid="ImagesSourceTitle" Text="images" FontSize="24"/>
-                        <RichTextBlock x:Name="ImagesBox"
-                                       Opacity=".5"
-                                       Margin="0,0,0,40">
-                            <Paragraph>
-                                <Run x:Uid="ImagesSourceContent" Text="Les images proviennent de"/>
-                                <Hyperlink NavigateUri="https://iconmonstr.com/">iconmonstr</Hyperlink>
-                            </Paragraph>
-                        </RichTextBlock>
-
-                        <!--UPDATE CHANGELOG-->
-                        <RichTextBlock TextWrapping="Wrap" Margin="0,30,0,0">
-                            <Paragraph>
-                                <Span>LAST UPDATE CHANGELOG</Span>
-                            </Paragraph>
-
-                            <Paragraph Margin="0,0,0,24">
-                                <Span FontSize="22" 
-                              FontWeight="Medium" 
-                              Foreground="{ThemeResource SystemControlForegroundAccentBrush}">
-                                    CUSTOM LOCATIONS 🗺
-                                </Span>
-                                <LineBreak/>
-                                <Span>From today, you can add severals locations</Span>
-                                <LineBreak/>
-                                <Span>manually. You can then switch between them</Span>
-                                <LineBreak/>
-                                <Span>on the locations page.</Span>
-                                <LineBreak/>
-                                <Span>In case you always wanted to be anonymous 🕵</Span>
-                            </Paragraph>
-
-                            <Paragraph Margin="0,34">
-                                <Span FontSize="22" 
-                              FontWeight="Medium" 
-                              Foreground="{ThemeResource SystemControlForegroundAccentBrush}">
-                                    HOME NAVIGATION BUTTONS
-                                </Span>
-                                <LineBreak/>
-                                <Span>Navigating on pivot sections with mouse</Span>
-                                <LineBreak/>
-                                <Span>wasn't good before.</Span>
-                                <LineBreak/>
-                                <Span>You'd have to use the top/bottom buttons</Span>
-                                <LineBreak/>
-                                <Span>to go back and foward 😞</Span>
-                                <LineBreak/>
-                                <Span>Starting this update, the buttons are localized</Span>
-                                <LineBreak/>
-                                <Span>on the middle of the screen at the edges</Span>
-                                <LineBreak/>
-                                <Span>when using a mouse :)</Span>
-                            </Paragraph>
-
-                            <Paragraph Margin="0,34">
-                                <Span FontSize="22" 
-                              FontWeight="Medium" 
-                              Foreground="{ThemeResource SystemControlForegroundAccentBrush}">
-                                    MILLIMETERS OF MERCURY
-                                </Span>
-                                <LineBreak/>
-                                <Span>Atmospheric pressure can be displayed in</Span>
-                                <LineBreak/>
-                                <Span>millimeters of mercury.</Span>
-                                <LineBreak/>
-                                <Span>Just tap on the pressure icon to switch unit.</Span>
-                            </Paragraph>
-
-                            <Paragraph Margin="0,34">
-                                <Span FontSize="22" 
-                              FontWeight="Medium" 
-                              Foreground="{ThemeResource SystemControlForegroundAccentBrush}">
-                                    ANIMATIONS SETTINGS
-                                </Span>
-                                <LineBreak/>
-                                <Span>Some animations can be deactivated in settings</Span>
-                                <LineBreak/>
-                                <Span>like the background gradient color on home page.</Span>
-                            </Paragraph>
-
-                            <Paragraph Margin="0,34">
-                                <Span FontSize="22" 
-                              FontWeight="Medium" 
-                              Foreground="{ThemeResource SystemControlForegroundAccentBrush}">
-                                    THEMES
-                                </Span>
-                                <LineBreak/>
-                                <Span>You can switch between dark and light theme.</Span>
-                            </Paragraph>
-
-                            <Paragraph Margin="0,34">
-                                <Span FontSize="22" 
-                              FontWeight="Medium">
-                                    OTHER MINOR CHANGES
-                                </Span>
-                                <LineBreak/>
-                                <Span>• Sunset and Sunrise are now displayed</Span>
-                                <LineBreak/>
-                                <Span>in 24 hours format (easier to read).</Span>
-                                <LineBreak/>
-                                <Span>• Added moonrise and moonset</Span>
-                            </Paragraph>
-
-                            <Paragraph>
-                                <Span>Thanks to Дмитрий for the feedback!</Span>
-                            </Paragraph>
-                        </RichTextBlock>
+                        </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
             </PivotItem>
@@ -400,27 +295,27 @@
                 <ScrollViewer Margin="0,20,0,0" 
                               VerticalScrollBarVisibility="Hidden">
                     <StackPanel>
-                        <RichTextBlock Opacity=".6" FontSize="18" Margin="0,0,0,20">
+                        <RichTextBlock Opacity=".6" FontSize="16" Margin="0,0,0,20">
                             <Paragraph>
                                 <Run x:Uid="PrivacyPolicyLine0" 
                                      Text="Your privacy is important to us and we respect it."/>
                                 <LineBreak/>
 
-                                <LineBreak/>
                                 <Run x:Uid="PrivacyPolicyLine1" 
-                                     Text="-We don't share your personal information with anyone" />
+                                     Text="• We don't share your personal information with anyone" />
                                 <LineBreak/>
                                 <Run x:Uid="PrivacyPolicyLine2" 
-                                     Text="-We don't store your personal information at all" />
+                                     Text="• We don't store your personal information at all" />
                             </Paragraph>
                         </RichTextBlock>
 
-                        <TextBlock x:Uid="LocationInformationLabel" Text="Location Information" FontSize="24"/>
-                        <RichTextBlock Opacity=".6" FontSize="18">
+                        <TextBlock x:Uid="LocationInformationLabel" Text="location Information" 
+                                   Style="{StaticResource SettingsTitle}"/>
+                        <RichTextBlock Opacity=".6" FontSize="16" Visibility="Visible">
                             <Paragraph>
                                 <LineBreak/>
                                 <Span>
-                                    <Run x:Uid="LocationLine0" 
+                                    <Run x:Uid="LocationLine0"
                                          Text="Your location information is only used by the " />
                                     <Hyperlink NavigateUri="https://DarkSky.net">DarkSky API.</Hyperlink>
                                 </Span>
@@ -451,22 +346,190 @@
                         <TextBlock Text="You can contact me by email at this address: " 
                                    x:Uid="ContactMeLabel"
                                    TextWrapping="Wrap"
-                                   FontSize="18"
+                                   Margin="0,20,0,0"
+                                   FontSize="16"
                                    Opacity=".6"/>
 
                         <Button Content="jeremiecorpinot@outlook.com" Margin="0,10" Tapped="Email_Tapped"/>
 
-                        <TextBlock Text="You can also contact me on twitter @jeremiecorpinot" 
+                        <TextBlock Text="You can also contact me on twitter at:" 
                                    x:Uid="ContactMeTwitterLabel"
                                    TextWrapping="Wrap"
                                    Margin="0,20,0,0"/>
 
                         <Button Content="@jeremiecorpinot" Margin="0,10" Tapped="Twitter_Tapped"/>
 
+                        <TextBlock Text="privacy policy online version"
+                                   Style="{StaticResource SettingsTitle}"
+                                   Margin="0,24,0,12"/>
                         <Button x:Uid="ButtonPrivacyPolicyGitHub" 
                                 Content="privacy policy GitHub version" 
                                 Tapped="PrivacyPolicyGitHub_Tapped"/>
                     </StackPanel>
+                </ScrollViewer>
+            </PivotItem>
+
+            <PivotItem x:Name="ContributionsPivot"
+                       Header="contributions">
+                <ScrollViewer>
+                    <StackPanel>
+                        <StackPanel>
+                            <RichTextBlock Opacity=".5" Margin="0,0,0,24">
+                                <Paragraph>
+                                    <Run x:Uid="ThanksMade" Text="Cette application a été possible à réaliser grâce aux "/>
+                                    <Run x:Uid="DataContent1" Text="données météo viennent du site "/>
+                                    <Hyperlink NavigateUri="https://darksky.net/">Darksky</Hyperlink>
+                                    <Run x:Uid="DataContent2" Text="et cette application n'est aucunement liée à "/>
+                                    <Run>DarkSky.</Run>
+                                    <LineBreak/>
+                                    <Hyperlink NavigateUri="https://darksky.net/poweredby/">
+                                        <Run Text="Powered by Dark Sky"/>
+                                    </Hyperlink>
+                                </Paragraph>
+                            </RichTextBlock>
+
+                            <RichTextBlock>
+                                <Paragraph>
+                                    <Run FontSize="24" FontWeight="SemiBold"
+                                         Typography.Capitals="SmallCaps">
+                                        third party libraries
+                                    </Run>                                    
+                                </Paragraph>
+                            </RichTextBlock>
+
+                            <RichTextBlock Margin="0,0,0,24" Opacity=".7">
+                                <Paragraph>
+                                    •
+                                    <Hyperlink NavigateUri="https://github.com/jcheng31/DarkSkyApi">
+                                        <Run>DarkSkyApi</Run>
+                                    </Hyperlink>
+                                    <LineBreak/>
+
+                                    •
+                                    <Hyperlink NavigateUri="https://github.com/JamesNK/Newtonsoft.Json">
+                                        <Run>Newtonsoft.Json</Run>
+                                    </Hyperlink>
+                                    <LineBreak/>
+
+                                    •
+                                    <Hyperlink NavigateUri="https://github.com/Microsoft/UWPCommunityToolkit">
+                                        <Run>UWPCommunityToolkit</Run>
+                                    </Hyperlink>
+                                </Paragraph>
+                            </RichTextBlock>
+
+                            <RichTextBlock>
+                                <Paragraph>
+                                    <Run FontSize="24" FontWeight="SemiBold"
+                                         Typography.Capitals="SmallCaps">
+                                        icons
+                                    </Run>
+                                </Paragraph>
+                            </RichTextBlock>
+
+                            <RichTextBlock Margin="0,0,0,24" Opacity=".7">
+                                <Paragraph>
+                                    •
+                                    <Hyperlink NavigateUri="https://iconmonstr.com/">
+                                        <Run>iconmonster</Run>
+                                    </Hyperlink>
+                                    <LineBreak/>
+
+                                    •
+                                    <Hyperlink NavigateUri="http://www.freepik.com/">
+                                        <Run>Freepik</Run>
+                                    </Hyperlink>
+                                    <LineBreak/>
+
+                                    •
+                                    <Hyperlink NavigateUri="https://www.flaticon.com/authors/epiccoders/">
+                                        <Run>EpicCoders</Run>
+                                    </Hyperlink>
+                                    <LineBreak/>
+
+                                    •
+                                    <Hyperlink NavigateUri="https://www.flaticon.com/authors/zlatko-najdenovski">
+                                        <Run>Zlatko Najdenovski</Run>
+                                    </Hyperlink>
+                                    <LineBreak/>
+
+                                    •
+                                    <Hyperlink NavigateUri="https://www.flaticon.com/authors/nikita-golubev">
+                                        <Run>Nikita Golubev</Run>
+                                    </Hyperlink>
+                                    <LineBreak/>
+                                </Paragraph>
+                            </RichTextBlock>
+
+                            <RichTextBlock>
+                                <Paragraph>
+                                    <Run FontSize="24" FontWeight="SemiBold"
+                                         Typography.Capitals="SmallCaps">
+                                        top community contributors
+                                    </Run>
+                                </Paragraph>
+                            </RichTextBlock>
+                            
+                            <RichTextBlock Opacity=".5">
+                                <Paragraph FontSize="18">
+                                    <Run>• Дмитрий</Run>
+                                    <LineBreak/>
+                                    <Run>• Пекурин Максим</Run>
+                                </Paragraph>
+                            </RichTextBlock>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </PivotItem>
+
+            <PivotItem x:Name="UpdateChangelogPivot"
+                       Header="update">
+                <ScrollViewer>
+                    <StackPanel Margin="0,24,0,0">
+                        <!--UPDATE CHANGELOG-->
+                        <RichTextBlock TextWrapping="Wrap" Margin="0,0,0,0">
+                            <Paragraph>
+                                <Span FontWeight="SemiBold">LAST UPDATE CHANGELOG</Span>
+                            </Paragraph>
+
+                            <Paragraph>
+                                <Span FontSize="22" 
+                                  FontWeight="Medium" 
+                                  Foreground="{ThemeResource SystemControlForegroundAccentBrush}">
+                                    PIN SECONDARY TILES
+                                </Span>
+                            </Paragraph>
+                        </RichTextBlock>
+
+                        <RichTextBlock Opacity=".5" Margin="0,0,0,24">
+                            <Paragraph>
+                                <Span>You can now pin several locations to your start screen.</Span>
+                                <LineBreak/>
+                                <Span>Tiles will automatically update every hour.</Span>
+                            </Paragraph>
+                        </RichTextBlock>
+
+                        <RichTextBlock>
+                            <Paragraph Margin="0,34">
+                                <Span FontSize="22" 
+                                  FontWeight="Medium" 
+                                  Foreground="{ThemeResource SystemControlForegroundAccentBrush}">
+                                    CONTRIBUTIONS
+                                </Span>
+                            </Paragraph>
+                        </RichTextBlock>
+
+                        <RichTextBlock Opacity=".5" Margin="0,0,0,24">
+                            <Paragraph>
+                                <Span>You can support the development of the app by buying in-app puchases.</Span>
+                                <LineBreak/>
+                                <Span>This will truly help me for futher features.</Span>
+                                <LineBreak/>
+                                <Span>More importantly, the DarkSky API I use is not entirely free. 
+                                    It's free only for the first 1000 requests.</Span>
+                            </Paragraph>
+                        </RichTextBlock>
+                    </StackPanel>                    
                 </ScrollViewer>
             </PivotItem>
         </Pivot>

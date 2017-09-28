@@ -166,10 +166,10 @@
     <value>dark</value>
   </data>
   <data name="DataContent1.Text" xml:space="preserve">
-    <value>data come from these sources</value>
+    <value>data come from </value>
   </data>
   <data name="DataContent2.Text" xml:space="preserve">
-    <value>and this app has no link with these entities</value>
+    <value>and this app has no link with </value>
   </data>
   <data name="DataTitle.Text" xml:space="preserve">
     <value>data</value>
@@ -187,10 +187,10 @@
     <value>There is no data for hourly forecast at the moment :(</value>
   </data>
   <data name="FeedbackButton.Content" xml:space="preserve">
-    <value>send a request</value>
+    <value>send an email</value>
   </data>
   <data name="FeedbackLabel.Text" xml:space="preserve">
-    <value>suggest an improvement or signal a bug</value>
+    <value>suggest an improvement or signal a bug by email</value>
   </data>
   <data name="FeedbackTitle.Text" xml:space="preserve">
     <value>my request</value>
@@ -241,7 +241,7 @@
     <value>rain</value>
   </data>
   <data name="RatingButton.Content" xml:space="preserve">
-    <value>note the app</value>
+    <value>rate the app</value>
   </data>
   <data name="RatingLabel.Text" xml:space="preserve">
     <value>note the app in the Store</value>
@@ -343,10 +343,10 @@
     <value>You can contact me by email at this address:</value>
   </data>
   <data name="ContactMeTwitterLabel.Text" xml:space="preserve">
-    <value>You can also contact me on twitter @jeremiecorpinot</value>
+    <value>You can also contact me on twitter</value>
   </data>
   <data name="LocationInformationLabel.Text" xml:space="preserve">
-    <value>Location Information</value>
+    <value>location Information</value>
   </data>
   <data name="LocationLine0.Text" xml:space="preserve">
     <value>Your location information is only used by the</value>
@@ -509,5 +509,29 @@
   </data>
   <data name="Pin" xml:space="preserve">
     <value>pin</value>
+  </data>
+  <data name="AnimationsLabel.Text" xml:space="preserve">
+    <value>animations</value>
+  </data>
+  <data name="FeedbackPivot.Header" xml:space="preserve">
+    <value>feedback</value>
+  </data>
+  <data name="ThanksMade.Text" xml:space="preserve">
+    <value>This application has been made thanks to</value>
+  </data>
+  <data name="APICallMadeLabel.Text" xml:space="preserve">
+    <value>API calls made today</value>
+  </data>
+  <data name="WhyDonate1.Text" xml:space="preserve">
+    <value>By donating, you're contributing to the development of Feels.</value>
+  </data>
+  <data name="WhyDonate2.Text" xml:space="preserve">
+    <value>Feels uses DarkSky API which is free only for the first 1000 calls (one call is made basically everytime you request weather data).</value>
+  </data>
+  <data name="WhyDonate3.Text" xml:space="preserve">
+    <value>So in order for me to continue developing the app and make it growing, I'll need your help.</value>
+  </data>
+  <data name="WhyDonateTitle.Text" xml:space="preserve">
+    <value>why donate ?</value>
   </data>
 </root>

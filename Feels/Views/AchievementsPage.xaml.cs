@@ -118,6 +118,7 @@ namespace Feels.Views {
             var product = (StoreProduct)item.DataContext;
             Purchase(product.StoreId);
         }
+
         #endregion events
 
         #region others
@@ -165,5 +166,23 @@ namespace Feels.Views {
         }
         #endregion others
 
+        private void PagePivot_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            var pivot = (Pivot)sender;
+
+            switch (pivot.SelectedIndex) {
+                case 2:
+                    int calls = App.DataSource.Client.ApiCallsMade != null ? 
+                        (int)App.DataSource.Client.ApiCallsMade : 0;
+
+                    ProgressAPICalls.Value = calls;
+
+                    var dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
+                    UI.AnimateNumericValue(calls, APICallsMadeValue, dispatcher, "/1000", 100);
+
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }

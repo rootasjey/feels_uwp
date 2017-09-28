@@ -34,7 +34,6 @@ namespace Feels.Services {
             return null;
         }
 
-
         public static T GetChildOfType<T>(this DependencyObject depObj) where T : DependencyObject {
             if (depObj == null) return null;
 
@@ -232,7 +231,13 @@ namespace Feels.Services {
             }
         }
 
-        public static async void AnimateNumericValue(int targetValue, TextBlock block, CoreDispatcher dispatcher, string unit = "", int baseDelay = 1000) {
+        public static async void AnimateNumericValue(
+            int targetValue, 
+            TextBlock block, 
+            CoreDispatcher dispatcher, 
+            string unit = "", 
+            int baseDelay = 1000) {
+
             var max = targetValue;
             var curr = 0;
             var step = max > 0 ? 1 : -1;
@@ -253,7 +258,13 @@ namespace Feels.Services {
             }
         }
 
-        public static async void AnimateNumericValue(float targetValue, TextBlock block, CoreDispatcher dispatcher, string unit = "", int baseDelay = 1000) {
+        public static async void AnimateNumericValue(
+            float targetValue, 
+            TextBlock block, 
+            CoreDispatcher dispatcher, 
+            string unit = "", 
+            int baseDelay = 1000) {
+
             var max = (int)targetValue;
             var curr = 0;
             var step = max > 0 ? 1 : -1;

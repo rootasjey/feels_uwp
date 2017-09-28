@@ -10,10 +10,12 @@ namespace Feels.Converters {
             var images = (IReadOnlyList<StoreImage>)value;
 
             if (images == null || images.Count == 0) {
-                return new BitmapImage();
+                //return new BitmapImage();
+                return new Uri("");
             }
 
-            return new BitmapImage(images[0].Uri);
+            //return new BitmapImage(images[0].Uri);
+            return images[0].Uri;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language) {

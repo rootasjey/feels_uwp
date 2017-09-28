@@ -797,6 +797,13 @@ namespace Feels.Views {
             FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
         }
 
+        private void AddLocationManually_Tapped(object sender, TappedRoutedEventArgs e) {
+            Frame.Navigate(typeof(LocationsPage));
+        }
+
+        private void GoToAchievements_Tapped(object sender, TappedRoutedEventArgs e) {
+            Frame.Navigate(typeof(AchievementsPage));
+        }
         #endregion events
 
         #region commandbar
@@ -964,12 +971,5 @@ namespace Feels.Views {
         }
         #endregion animations
 
-        private void AddLocationManually_Tapped(object sender, TappedRoutedEventArgs e) {
-            Frame.Navigate(typeof(LocationsPage));
-        }
-
-        private void GoToAchievements_Tapped(object sender, TappedRoutedEventArgs e) {
-            Frame.Navigate(typeof(AchievementsPage));
-        }
     }
 }
