@@ -1039,8 +1039,8 @@
                     RequestedTheme="Light"
                     ClosedDisplayMode="Minimal">
             <CommandBar.SecondaryCommands>
+                <AppBarButton Label="donations" x:Uid="CmdDonations" Tapped="GoToAchievements_Tapped"/>
                 <AppBarButton Label="settings" x:Uid="CmdSettings" Tapped="GoToSettings_Tapped" />
-                <AppBarButton Label="achievements" Tapped="GoToAchievements_Tapped"/>
             </CommandBar.SecondaryCommands>
             <AppBarButton x:Name="CmdLocations" x:Uid="CmdLocations"
                           Label="locations" Icon="Map"

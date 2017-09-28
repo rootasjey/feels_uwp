@@ -112,7 +112,6 @@
     <Compile Include="Converters\TimeParser.cs" />
     <Compile Include="Converters\WeatherIcon.cs" />
     <Compile Include="Data\SourceModel.cs" />
-    <Compile Include="Models\AddOn.cs" />
     <Compile Include="Models\LocationItem.cs" />
     <Compile Include="Models\WeatherUnit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

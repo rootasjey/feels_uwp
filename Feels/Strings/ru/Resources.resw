@@ -534,4 +534,25 @@
   <data name="WhyDonateTitle.Text" xml:space="preserve">
     <value>Зачем жертвовать?</value>
   </data>
+  <data name="PurchaseStatusAlreadyPurchased" xml:space="preserve">
+    <value>Пользователь уже приобрели продукт.</value>
+  </data>
+  <data name="PurchaseStatusNetworkError" xml:space="preserve">
+    <value>Покупка была неудачной из-за ошибки сети.</value>
+  </data>
+  <data name="PurchaseStatusNotPurchased" xml:space="preserve">
+    <value>Не удается завершить покупку. Возможно, вы отменили покупки.</value>
+  </data>
+  <data name="PurchaseStatusServerError" xml:space="preserve">
+    <value>Покупка была неудачной из-за ошибки сервера.</value>
+  </data>
+  <data name="PurchaseStatusSucceeded" xml:space="preserve">
+    <value>Покупка была успешной. Благодарю вас так много для этого.</value>
+  </data>
+  <data name="PurchaseStatusUknownError" xml:space="preserve">
+    <value>Покупка была неудачной из-за неизвестной ошибки.</value>
+  </data>
+  <data name="CmdDonations.Label" xml:space="preserve">
+    <value>пожертвования</value>
+  </data>
 </root>

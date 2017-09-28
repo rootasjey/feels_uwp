@@ -534,4 +534,25 @@
   <data name="WhyDonateTitle.Text" xml:space="preserve">
     <value>why donate ?</value>
   </data>
+  <data name="PurchaseStatusAlreadyPurchased" xml:space="preserve">
+    <value>The user has already purchased the product.</value>
+  </data>
+  <data name="PurchaseStatusNetworkError" xml:space="preserve">
+    <value>The purchase was unsuccessful due to a network error.</value>
+  </data>
+  <data name="PurchaseStatusNotPurchased" xml:space="preserve">
+    <value>The purchase did not complete. You may have cancelled the purchase.</value>
+  </data>
+  <data name="PurchaseStatusServerError" xml:space="preserve">
+    <value>The purchase was unsuccessful due to a server error.</value>
+  </data>
+  <data name="PurchaseStatusSucceeded" xml:space="preserve">
+    <value>The purchase was successful. Thank you so much for doing this.</value>
+  </data>
+  <data name="PurchaseStatusUknownError" xml:space="preserve">
+    <value>The purchase was unsuccessful due to an unknown error.</value>
+  </data>
+  <data name="CmdDonations.Label" xml:space="preserve">
+    <value>donations</value>
+  </data>
 </root>

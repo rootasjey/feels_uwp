@@ -79,27 +79,39 @@
             <Pivot x:Name="PagePivot"
                    SelectionChanged="PagePivot_SelectionChanged"
                    Grid.Row="1">
-                <PivotItem x:Name="AchievementsPivot"
-                       Header="achievements">
+                <!--<PivotItem x:Name="AchievementsPivot"
+                            Header="achievements">
                     <Grid>
                         <ListView x:Name="AchievementsListView">
 
                         </ListView>
                     </Grid>
-                </PivotItem>
+                </PivotItem>-->
 
                 <PivotItem x:Name="DonationsPivot"
                            Header="unlocks"
                            Margin="0,12,0,0">
-                    <ListView x:Name="UnlocksListView"
+                    <Grid>
+                        <ListView x:Name="UnlocksListView"
                           ItemTemplate="{StaticResource AddonTemplate}">
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                                <Setter Property="Margin" Value="0,1"/>
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                    </ListView>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="Margin" Value="0,1"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+
+                        <StackPanel x:Name="DonationsLoadingView"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="loading in-app purchases"
+                                       FontSize="24"
+                                       TextWrapping="Wrap"/>
+                            <ProgressBar x:Name="ProgressLoadingInAppPurchases"
+                                         IsIndeterminate="True"/>
+                        </StackPanel>
+                    </Grid>
                 </PivotItem>
 
                 <PivotItem x:Name="AboutPivot"

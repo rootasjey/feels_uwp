@@ -92,7 +92,19 @@ namespace Feels.Views {
         #endregion animations
 
         #region data
+        private void ShowInAppPurchasesLoadingView() {
+            DonationsLoadingView.Visibility = Visibility.Visible;
+            ProgressLoadingInAppPurchases.Visibility = Visibility.Visible;
+        }
+
+        private void HideInAppPurchasesLoadingView() {
+            DonationsLoadingView.Visibility = Visibility.Collapsed;
+            ProgressLoadingInAppPurchases.Visibility = Visibility.Collapsed;
+        }
+
         private async void InitializeData() {
+            ShowInAppPurchasesLoadingView();
+
             var queryResult = await InAppPurchases.GetAllAddons();
 
             if (queryResult.ExtendedError != null) {
@@ -105,6 +117,8 @@ namespace Feels.Views {
                 StoreProduct product = item.Value;
                 addonsList.Add(product);
             }
+
+            HideInAppPurchasesLoadingView();
 
             UnlocksListView.ItemsSource = addonsList;
         }
@@ -122,6 +136,7 @@ namespace Feels.Views {
         #endregion events
 
         #region others
+
         private async void Purchase(string id) {
             var result = await InAppPurchases.PurchaseAddon(id);
 
@@ -134,43 +149,48 @@ namespace Feels.Views {
 
             switch (result.Status) {
                 case StorePurchaseStatus.AlreadyPurchased:
-                    descriptionError = "The user has already purchased the product.";
+                    descriptionError = App.ResourceLoader.GetString("PurchaseStatusAlreadyPurchased");
                     break;
 
                 case StorePurchaseStatus.Succeeded:
-                    descriptionError = "The purchase was successful.";
+                    descriptionError = App.ResourceLoader.GetString("PurchaseStatusSucceeded");
                     break;
 
                 case StorePurchaseStatus.NotPurchased:
-                    descriptionError = "The purchase did not complete. " +
-                        "The user may have cancelled the purchase. " + extendedError;
+                    descriptionError = string.Format("{0}. {1}", 
+                        App.ResourceLoader.GetString("PurchaseStatusNotPurchased"), 
+                        extendedError);
                     break;
 
                 case StorePurchaseStatus.NetworkError:
-                    descriptionError = "The purchase was unsuccessful due to a network error. " +
-                        extendedError;
+                    descriptionError = string.Format("{0}. {1}", 
+                        App.ResourceLoader.GetString("PurchaseStatusNetworkError"), 
+                        extendedError);
                     break;
 
                 case StorePurchaseStatus.ServerError:
-                    descriptionError = "The purchase was unsuccessful due to a server error. " + 
-                        extendedError;
+                    descriptionError = string.Format("{0}. {1}", 
+                        App.ResourceLoader.GetString("PurchaseStatusServerError"), 
+                        extendedError);
                     break;
 
                 default:
-                    descriptionError = "The purchase was unsuccessful due to an unknown error. " +
-                        extendedError;
+                    descriptionError = string.Format("{0}. {1}", 
+                        App.ResourceLoader.GetString("PurchaseStatusUknownError"), 
+                        extendedError);
                     break;
             }
 
             DataTransfer.ShowLocalToast(descriptionError);
         }
+
         #endregion others
 
         private void PagePivot_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var pivot = (Pivot)sender;
 
             switch (pivot.SelectedIndex) {
-                case 2:
+                case 1:
                     int calls = App.DataSource.Client.ApiCallsMade != null ? 
                         (int)App.DataSource.Client.ApiCallsMade : 0;
 
