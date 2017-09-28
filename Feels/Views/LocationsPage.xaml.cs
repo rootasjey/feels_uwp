@@ -357,6 +357,7 @@ namespace Feels.Views {
 
             // 2.Register task config            
             Settings.SaveSecondaryTaskLocation(locationId, location);
+            //Settings.SavePinnedLocationsTasksList(location);
 
             // 3.Register task
             BackgroundTasks.RegisterSecondaryTileTask(locationId);

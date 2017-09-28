@@ -65,6 +65,8 @@ namespace Feels.Views {
             InitialzeEvents();
             InitializePageData();
 
+            BackgroundTasks.CheckAllTasks();
+
             ApplyCommandBarBarFrostedGlass();
             ShowUpdateChangelogIfUpdated();
         }

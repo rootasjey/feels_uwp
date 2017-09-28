@@ -1,5 +1,4 @@
-﻿using System;
-using Windows.Storage;
+﻿using Windows.Storage;
 using Windows.System.UserProfile;
 using Windows.Devices.Geolocation;
 using DarkSkyApi;
@@ -195,27 +194,23 @@ namespace Tasks.Services {
         public static LocationItem GetFavoriteLocation() {
             StorageFile file = (StorageFile)ApplicationData.Current.LocalFolder
                 .TryGetItemAsync(FavoriteLocationKey)
-                .AsTask()
-                .AsAsyncOperation().
-                GetResults();
+                .GetResults();
 
             if (file == null) return null;
 
-            string json = FileIO.ReadTextAsync(file).AsTask().AsAsyncOperation().GetResults();
+            string json = FileIO.ReadTextAsync(file).GetResults();
             var favoriteLocation = JsonConvert.DeserializeObject<LocationItem>(json);
             return favoriteLocation;
         }
 
-        public static LocationItem GetLocation(string name) {
+        public static LocationItem GetLocationAsync(string name) {
             StorageFile file = (StorageFile)ApplicationData.Current.LocalFolder
                 .TryGetItemAsync(name)
-                .AsTask()
-                .AsAsyncOperation().
-                GetResults();
+                .GetResults();
 
             if (file == null) return null;
 
-            string json = FileIO.ReadTextAsync(file).AsTask().AsAsyncOperation().GetResults();
+            string json = FileIO.ReadTextAsync(file).GetResults();
             return JsonConvert.DeserializeObject<LocationItem>(json);
         }
 

@@ -175,6 +175,17 @@ namespace Feels.Services {
             }
         }
 
+        public static async void CheckAllTasks() {
+            foreach (var task in BackgroundTaskRegistration.AllTasks) {
+                if (TileDesigner.IsSecondaryTileExist(task.Value.Name)) {
+                    continue;
+                }
+
+                task.Value.Unregister(false);
+                await Settings.DeleteSecondaryTaskLocation(task.Value.Name);
+            }
+        }
+
         #endregion tasks
     }
 }

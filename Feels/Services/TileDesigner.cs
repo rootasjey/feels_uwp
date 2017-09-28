@@ -50,7 +50,7 @@ namespace Feels.Services {
             var activationArguments = id;
             var uriSquare150x150Logo = new Uri("ms-appx:///Assets/Square150x150Logo.scale-100.png");
             var desiredSize = TileSize.Square150x150;
-
+            
             var tile = new SecondaryTile(id, displayName, activationArguments, uriSquare150x150Logo, desiredSize);
 
             tile.VisualElements.ShowNameOnSquare150x150Logo = false;

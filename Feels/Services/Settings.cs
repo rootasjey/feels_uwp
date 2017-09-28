@@ -90,6 +90,13 @@ namespace Feels.Services {
                 return "location";
             }
         }
+
+        private static string SavedLocationsTasksKey {
+            get {
+                return "SavedLocationTasks";
+            }
+        }
+
         #endregion keys
 
         #region position
@@ -259,8 +266,7 @@ namespace Feels.Services {
             if (file == null) return null;
 
             string json = await FileIO.ReadTextAsync(file);
-            var savedLocationList = JsonConvert.DeserializeObject<List<LocationItem>>(json);
-            return savedLocationList;
+            return JsonConvert.DeserializeObject<List<LocationItem>>(json);
         }
 
         public static async Task SaveFavoriteLocation(LocationItem location) {
@@ -280,8 +286,7 @@ namespace Feels.Services {
             if (file == null) return null;
 
             string json = await FileIO.ReadTextAsync(file);
-            var favoriteLocation = JsonConvert.DeserializeObject<LocationItem>(json);
-            return favoriteLocation;
+            return JsonConvert.DeserializeObject<LocationItem>(json);
         }
 
         public static async Task DeleteFavoriteLocation() {
@@ -290,7 +295,6 @@ namespace Feels.Services {
 
             await file.DeleteAsync();
         }
-
 
         #endregion locations
 
@@ -324,6 +328,51 @@ namespace Feels.Services {
 
             await file.DeleteAsync();
         }
+
+        //public static async Task SavePinnedLocationsTasksList(LocationItem location) {
+        //    var previousList = await GetPinnedLocationsTaskList();
+        //    if (previousList == null) previousList = new List<LocationItem>();
+
+        //    previousList.Add(location);
+
+        //    string json = JsonConvert.SerializeObject(previousList);
+
+        //    StorageFile file =
+        //        await ApplicationData
+        //                .Current
+        //                .LocalFolder
+        //                .CreateFileAsync(SavedLocationsTasksKey, CreationCollisionOption.ReplaceExisting);
+
+        //    await FileIO.WriteTextAsync(file, json);
+        //}
+
+        //public static async Task RemovePinnedLocationsTasksList(LocationItem location) {
+        //    var previousList = await GetPinnedLocationsTaskList();
+        //    if (previousList == null) return;
+
+        //    previousList.RemoveAll((item) => {
+        //        return item.Id == location.Id;
+        //    });
+
+        //    string json = JsonConvert.SerializeObject(previousList);
+
+        //    StorageFile file =
+        //        await ApplicationData
+        //                .Current
+        //                .LocalFolder
+        //                .CreateFileAsync(SavedLocationsTasksKey, CreationCollisionOption.ReplaceExisting);
+
+        //    await FileIO.WriteTextAsync(file, json);
+        //}
+
+        //public static async Task<List<LocationItem>> GetPinnedLocationsTaskList() {
+        //    StorageFile file = (StorageFile)await ApplicationData.Current.LocalFolder.TryGetItemAsync(SavedLocationsTasksKey);
+        //    if (file == null) return null;
+
+        //    string json = await FileIO.ReadTextAsync(file);
+        //    return JsonConvert.DeserializeObject<List<LocationItem>>(json);
+        //}
+
         #endregion tasks
 
         #region animations

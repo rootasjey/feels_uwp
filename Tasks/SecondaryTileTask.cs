@@ -4,12 +4,12 @@ using System;
 using System.Globalization;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
-using Tasks.Models;
 using Tasks.Services;
 using Windows.ApplicationModel.Background;
 using Windows.Devices.Geolocation;
 using Windows.Services.Maps;
 using Windows.Storage;
+using Windows.UI.StartScreen;
 
 namespace Tasks {
     public sealed class SecondaryTileTask : IBackgroundTask {
@@ -64,8 +64,12 @@ namespace Tasks {
             StartTask(taskInstance);
 
             // 1.Get LocatonItem from storage (json)
-            var location = Settings.GetLocation(taskInstance.Task.Name);
-            if (location == null) { EndTask(); return; }
+            var location = Settings.GetLocationAsync(taskInstance.Task.Name);
+
+            if (location == null || !SecondaryTile.Exists(taskInstance.Task.Name)) {
+                EndTask();
+                return;
+            }
 
             // 2.Fetch current weather
             var forecast = await FetchCurrentForecast(location.Latitude, location.Longitude);
