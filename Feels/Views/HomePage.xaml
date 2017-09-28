@@ -593,9 +593,11 @@
 
                                         <StackPanel x:Name="PanelMoonPhase"
                                                     HorizontalAlignment="Center">
-                                            <Grid x:Name="MoonPhaseIconContainer"
-                                                  HorizontalAlignment="Center"
-                                                  Margin="0,0,0,10"/>
+                                            <BitmapIcon x:Name="MoonPhaseIcon"
+                                                        Height="30"
+                                                        Width="30"
+                                                        HorizontalAlignment="Center"
+                                                        Margin="0,0,0,10"/>
 
                                             <TextBlock x:Uid="MoonPhase" 
                                                        Text="moon phase"

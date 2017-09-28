@@ -1,6 +1,5 @@
 ﻿using DarkSkyApi.Models;
 using Feels.Composition;
-using MahApps.Metro.IconPacks;
 using System;
 using System.Numerics;
 using Windows.Foundation;
@@ -282,19 +281,19 @@ namespace Feels.Services.WeatherScene {
             return container;
         }
 
-        public static PackIconModern CreateLeafIcon(double size) {
-            return new PackIconModern() {
+        public static BitmapIcon CreateLeafIcon(double size) {
+            return new BitmapIcon() {
                 Height = size,
                 Width = size,
-                Kind = PackIconModernKind.TreeLeaf
+                UriSource = new Uri("ms-appx:///Assets/Icons/leaf.png")
             };
         }
 
-        public static PackIconModern CreateFogIcon(double size = 150) {
-            return new PackIconModern() {
+        public static BitmapIcon CreateFogIcon(double size = 150) {
+            return new BitmapIcon() {
                 Height = size,
                 Width = size,
-                Kind = PackIconModernKind.Cloud
+                UriSource = new Uri("ms-appx:///Assets/Icons/haze.png")
             };
         }
 
@@ -522,10 +521,10 @@ namespace Feels.Services.WeatherScene {
             var compositor = ElementCompositionPreview.GetElementVisual(container).Compositor;
             var containerVisual = compositor.CreateContainerVisual();
 
-            var iconSnow = new PackIconModern() {
+            var iconSnow = new BitmapIcon() {
                 Height = 70,
                 Width = 70,
-                Kind = PackIconModernKind.Snowflake
+                UriSource = new Uri("ms-appx:///Assets/Icons/snowflake.png")
             };
 
             var iconSnowVisual = ElementCompositionPreview.GetElementVisual(iconSnow);
@@ -633,7 +632,7 @@ namespace Feels.Services.WeatherScene {
 
             containerVisual.Size = new Vector2(radius, radius);
 
-            var iconMoon = new PackIconModern() {
+            var iconMoon = new BitmapIcon() {
                 Height = 120,
                 Width = 120,
                 Foreground = new SolidColorBrush(color)
@@ -654,13 +653,13 @@ namespace Feels.Services.WeatherScene {
                 containerVisual.Children.InsertAtBottom(newMoonBeamVisual);
 
             } else if (moonPhase > 0 && moonPhase < .25) {
-                iconMoon.Kind = PackIconModernKind.MoonWaxingCrescent;
+                iconMoon.UriSource = new Uri("ms-appx:///Assets/Icons/moon_waxing_crescent.png");
 
             } else if (moonPhase == .25) {
-                iconMoon.Kind = PackIconModernKind.MoonFirstQuarter;
+                iconMoon.UriSource = new Uri("ms-appx:///Assets/Icons/moon_first_quarter.png");
 
             } else if (moonPhase > .25 && moonPhase < .5) {
-                iconMoon.Kind = PackIconModernKind.MoonWaxingGibbous;
+                iconMoon.UriSource = new Uri("ms-appx:///Assets/Icons/moon_waxing_gibbous.png");
 
             } else if (moonPhase == .5) {
                 if (ImageLoader.Instance == null) {
@@ -673,13 +672,13 @@ namespace Feels.Services.WeatherScene {
                 iconMoon.Visibility = Visibility.Collapsed;
 
             } else if (moonPhase > .5 && moonPhase < .75) {
-                iconMoon.Kind = PackIconModernKind.MoonWaningGibbous;
+                iconMoon.UriSource = new Uri("ms-appx:///Assets/Icons/moon_waning_gibbous.png");
 
             } else if (moonPhase == .75) {
-                iconMoon.Kind = PackIconModernKind.MoonThirdQuarter;
+                iconMoon.UriSource = new Uri("ms-appx:///Assets/Icons/moon_third_quarter.png");
 
             } else { // moonPhase > .75
-                iconMoon.Kind = PackIconModernKind.MoonWaxingCrescent;
+                iconMoon.UriSource = new Uri("ms-appx:///Assets/Icons/moon_waxing_crescent.png");
             }
 
             AnimateMoon(iconMoon);

@@ -3,12 +3,10 @@ using Feels.Data;
 using Feels.Models;
 using Feels.Services;
 using Feels.Services.WeatherScene;
-using MahApps.Metro.IconPacks;
 using Microsoft.Graphics.Canvas.Effects;
 using Microsoft.Toolkit.Uwp.UI.Animations;
 using System;
 using System.Numerics;
-using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Devices.Geolocation;
@@ -24,8 +22,6 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Shapes;
 
 namespace Feels.Views {
     public sealed partial class HomePage : Page {
@@ -342,64 +338,38 @@ namespace Feels.Views {
 
         private void SetMoonPhase(DayDataPoint weatherToday) {
             var moonPhase = weatherToday.MoonPhase;
-
-            var iconMoon = new PackIconModern() {
-                Height = 32,
-                Width = 32,
-            };
-
+            
             if (moonPhase == 0) {
                 MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseNewMoon");
-                iconMoon.Kind = PackIconModernKind.MoonNew;
-
-                MoonPhaseIconContainer.Children.Add(iconMoon);
+                MoonPhaseIcon.UriSource = new Uri("ms-appx:///Assets/Icons/moon_new.png");
 
             } else if (moonPhase > 0 && moonPhase < .25) {
                 MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseWaxingCrescent");
-                iconMoon.Kind = PackIconModernKind.MoonWaxingCrescent;
-
-                MoonPhaseIconContainer.Children.Add(iconMoon);
+                MoonPhaseIcon.UriSource = new Uri("ms-appx:///Assets/Icons/moon_waxing_crescent.png");
 
             } else if (moonPhase == .25) {
                 MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseFirstQuarter");
-                iconMoon.Kind = PackIconModernKind.MoonFirstQuarter;
-
-                MoonPhaseIconContainer.Children.Add(iconMoon);
+                MoonPhaseIcon.UriSource = new Uri("ms-appx:///Assets/Icons/moon_first_quarter.png");
 
             } else if (moonPhase > .25 && moonPhase < .5) {
                 MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseWaxingGibbous");
-                iconMoon.Kind = PackIconModernKind.MoonWaxingGibbous;
-
-                MoonPhaseIconContainer.Children.Add(iconMoon);
+                MoonPhaseIcon.UriSource = new Uri("ms-appx:///Assets/Icons/moon_waxing_gibbous.png");
 
             } else if (moonPhase == .5) {
                 MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseFullMoon");
-
-                var fullMoon = new Ellipse() {
-                    Height = 30,
-                    Width = 30,
-                    Fill = new SolidColorBrush(Colors.White)
-                };
-
-                MoonPhaseIconContainer.Children.Add(fullMoon);
+                MoonPhaseIcon.UriSource = new Uri("ms-appx:///Assets/Icons/moon_full.png");
 
             } else if (moonPhase > .5 && moonPhase < .75) {
                 MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseWaningGibbous");
-                iconMoon.Kind = PackIconModernKind.MoonWaningGibbous;
-
-                MoonPhaseIconContainer.Children.Add(iconMoon);
+                MoonPhaseIcon.UriSource = new Uri("ms-appx:///Assets/Icons/moon_waning_gibbous.png");
 
             } else if (moonPhase == .75) {
                 MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseThirdQuarter");
-                iconMoon.Kind = PackIconModernKind.MoonThirdQuarter;
-
-                MoonPhaseIconContainer.Children.Add(iconMoon);
+                MoonPhaseIcon.UriSource = new Uri("ms-appx:///Assets/Icons/moon_third_quarter.png");
 
             } else { // moonPhase > .75
                 MoonPhaseValue.Text = App.ResourceLoader.GetString("MoonPhaseWaningCrescent");
-                iconMoon.Kind = PackIconModernKind.MoonWaxingCrescent;
-
-                MoonPhaseIconContainer.Children.Add(iconMoon);
+                MoonPhaseIcon.UriSource = new Uri("ms-appx:///Assets/Icons/moon_waning_crescent.png");
             }
         }
 
@@ -642,8 +612,8 @@ namespace Feels.Views {
             Theater.Children.Add(scene);
 
             await scene.Fade(0, 0).Offset(0, 200, 0).StartAsync();
-            Theater.Fade(1, 1000, 1000).Start();
-            scene.Fade(1, 1000).Offset(0, 0, 1000).SetDelay(1000).Start();
+            Theater.Fade(1, 1000, 500).Start();
+            scene.Fade(1, 1000).Offset(0, 0, 1000).SetDelay(500).Start();
         }
 
         private void CleanTheater() {

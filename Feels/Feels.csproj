@@ -164,9 +164,19 @@
     <Content Include="Assets\Icons\cloudy.png" />
     <Content Include="Assets\Icons\dark_cloud.png" />
     <Content Include="Assets\Icons\fog.png" />
+    <Content Include="Assets\Icons\haze.png" />
+    <Content Include="Assets\Icons\leaf.png" />
     <Content Include="Assets\Icons\moon.png" />
+    <Content Include="Assets\Icons\moon_full.png" />
+    <Content Include="Assets\Icons\moon_new.png" />
     <Content Include="Assets\Icons\moon_rise.png" />
     <Content Include="Assets\Icons\moon_set.png" />
+    <Content Include="Assets\Icons\moon_third_quarter.png" />
+    <Content Include="Assets\Icons\moon_thirst_querter.png" />
+    <Content Include="Assets\Icons\moon_waning_crescent.png" />
+    <Content Include="Assets\Icons\moon_waning_gibbous.png" />
+    <Content Include="Assets\Icons\moon_waxing_crescent.png" />
+    <Content Include="Assets\Icons\moon_waxing_gibbous.png" />
     <Content Include="Assets\Icons\partycloudy_day.png" />
     <Content Include="Assets\Icons\partycloudy_night.png" />
     <Content Include="Assets\Icons\precip_proba.png" />
@@ -174,6 +184,7 @@
     <Content Include="Assets\Icons\rain.png" />
     <Content Include="Assets\Icons\sleet.png" />
     <Content Include="Assets\Icons\snow.png" />
+    <Content Include="Assets\Icons\snowflake.png" />
     <Content Include="Assets\Icons\sun.png" />
     <Content Include="Assets\Icons\sunrise.png" />
     <Content Include="Assets\Icons\sunset.png" />
@@ -267,9 +278,6 @@
   <ItemGroup>
     <PackageReference Include="DarkSkyApi">
       <Version>3.2.0</Version>
-    </PackageReference>
-    <PackageReference Include="MahApps.Metro.IconPacks.Modern">
-      <Version>1.9.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>5.4.0</Version>

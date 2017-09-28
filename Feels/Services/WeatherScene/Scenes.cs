@@ -174,14 +174,14 @@ namespace Feels.Services.WeatherScene {
             var compositor = ElementCompositionPreview.GetElementVisual(container).Compositor;
             var containerVisual = compositor.CreateContainerVisual();
 
-            var fog1 = Icons.CreateFogIcon();
-            var fogVisual1 = Visuals.CreateFogVisual(fog1, compositor, 170, -100);
+            var fog1 = Icons.CreateFogIcon(240);
+            var fogVisual1 = Visuals.CreateFogVisual(fog1, compositor, 170, -90, -110, 30);
 
-            var fog2 = Icons.CreateFogIcon(130);
-            var fogVisual2 = Visuals.CreateFogVisual(fog2, compositor, 90, (float)_screenSize.Width, 0, 20);
+            var fog2 = Icons.CreateFogIcon(220);
+            var fogVisual2 = Visuals.CreateFogVisual(fog2, compositor, 90, (float)_screenSize.Width, (float)_screenSize.Width - 20, 40);
 
-            var fog3 = Icons.CreateFogIcon(120);
-            var fogVisual3 = Visuals.CreateFogVisual(fog3, compositor, 120, (float)_screenSize.Width / 2, -90, 15);
+            var fog3 = Icons.CreateFogIcon(280);
+            var fogVisual3 = Visuals.CreateFogVisual(fog3, compositor, 120, (float)_screenSize.Width / 2, ((float)_screenSize.Width / 2 )- 90, 25);
 
             container.Children.Add(fog1);
             container.Children.Add(fog2);
