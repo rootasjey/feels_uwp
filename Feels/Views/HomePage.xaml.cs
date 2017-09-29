@@ -118,7 +118,9 @@ namespace Feels.Views {
         protected override void OnNavigatedTo(NavigationEventArgs e) {
             base.OnNavigatedTo(e);
 
-            if (e.Parameter != null && (string)e.Parameter != "App") {
+            if (e.Parameter != null && (string)e.Parameter != "App" &&
+                !string.IsNullOrEmpty((string)e.Parameter)) {
+
                 var locationId = (string)e.Parameter;
                 FetchNewDataFromLocation(locationId);
                 return;

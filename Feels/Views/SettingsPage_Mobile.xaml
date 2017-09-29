@@ -5,14 +5,49 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="using:Feels.Models"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:tasks="using:Windows.ApplicationModel.Background"
     mc:Ignorable="d">
 
     <Page.Resources>
+        <DataTemplate x:Key="TaskListItem" x:DataType="tasks:IBackgroundTaskRegistration">
+            <controls:SlidableListItem
+                MinHeight="80"
+                HorizontalAlignment="Stretch"
+                ActivationWidth="100"
+                IsLeftCommandEnabled="False"
+                IsRightCommandEnabled="True"
+                RightBackground="OrangeRed"
+                RightForeground="White"
+                RightIcon="Delete"
+                RightLabel="Delete"
+                MouseSlidingEnabled="True"
+                RightTapped="TaskListItem_RightTapped"
+                RightCommandRequested="TaskListItem_RightCommandRequested">
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="{x:Bind Name}" FontSize="24" VerticalAlignment="Center"/>
+                </StackPanel>
+            </controls:SlidableListItem>
+        </DataTemplate>
+
+        <MenuFlyout x:Name="SavedLocationRightTappedFlyout">
+            <MenuFlyoutItem x:Name="CmdDeleteSavedLocation"
+                            x:Uid="CmdDeleteSavedLocation"
+                            Text="Delete"
+                            Tapped="CmdDeleteSecondaryTask_Tapped"/>
+        </MenuFlyout>
+
         <Style x:Key="SettingsTitle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="24"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="Typography.Capitals" Value="SmallCaps"/>
+        </Style>
+
+        <Style x:Key="TextDescription" TargetType="TextBlock">
+            <Setter Property="Opacity" Value=".5"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
         </Style>
 
         <Style x:Key="StackPanelStyle" TargetType="StackPanel">
@@ -127,11 +162,9 @@
                 </ScrollViewer>
             </PivotItem>
 
-            <PivotItem x:Name="TasksPivot">
-                <PivotItem.Header>
-                    <TextBlock x:Uid="BackgroundsTasksHeader" 
-                               Text="tâches d'arrière-plan"/>
-                </PivotItem.Header>
+            <PivotItem x:Name="PrimaryTasksPivot"
+                       x:Uid="PrimaryTasksPivot"
+                       Header="primary tasks">
 
                 <ScrollViewer Margin="0,20,0,0"
                               VerticalScrollBarVisibility="Hidden">
@@ -221,6 +254,44 @@
                 </ScrollViewer>
             </PivotItem>
 
+            <PivotItem x:Name="SecondaryTasksPivot"
+                       x:Uid="SecondaryTasksPivot"
+                       Header="secondary tasks">
+                <Grid>
+                    <StackPanel Margin="0,24,0,0">
+                        <TextBlock x:Uid="SecondaryTasksExplanations1" 
+                                   Text="When you pin a location to the start screen, it creates a task. This task will update the live tile periodically each hour."
+                                   Style="{StaticResource TextDescription}"/>
+                        <TextBlock x:Uid="SecondaryTasksExplanations2" 
+                                   Text="On this page, you can vizualize and delete your active tasks, except the primary task for the app tile which can be managed from the primary task page."
+                                   Margin="0,6,0,0"
+                                   Style="{StaticResource TextDescription}"/>
+
+                        <StackPanel x:Name="EmptyViewSecondaryTasks"
+                                    HorizontalAlignment="Center"
+                                    Margin="0,90,0,0">
+                            <FontIcon Glyph="&#57356;" FontSize="36"/>
+                            <TextBlock x:Uid="EmptyViewSecondaryTasksLabel" 
+                                       Text="There's no secondary task at the moment."
+                                       FontSize="20"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+
+                        <ListView x:Name="SecondaryTasksListView"
+                                  Margin="0,36,0,0"
+                                  ItemTemplate="{StaticResource TaskListItem}"
+                                  Loaded="SecondaryTasksListView_Loaded">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                                    <Setter Property="Margin" Value="0,1"></Setter>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                    </StackPanel>
+                </Grid>
+            </PivotItem>
+            
             <PivotItem x:Name="FeedbackPivot"
                        x:Uid="FeedbackPivot"
                        Header="feedback">

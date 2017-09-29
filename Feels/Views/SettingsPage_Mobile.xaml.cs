@@ -14,6 +14,9 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Input;
 using Windows.ApplicationModel.Core;
+using Microsoft.Toolkit.Uwp.UI.Controls;
+using Windows.ApplicationModel.Background;
+using System.Collections.ObjectModel;
 
 namespace Feels.Views {
     public sealed partial class SettingsPage_Mobile : Page {
@@ -21,6 +24,8 @@ namespace Feels.Views {
         private List<WeatherUnit> Units;
 
         ResourceLoader _ResourcesLoader;
+
+        private ObservableCollection<IBackgroundTaskRegistration> _ActiveTasks { get; set; }
         #endregion variables
 
 
@@ -233,16 +238,16 @@ namespace Feels.Views {
         #endregion lockscreen task
 
         #region about
-        private void Email_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
+        private void Email_Tapped(object sender, TappedRoutedEventArgs e) {
             FeedbackButton_Click(sender, e);
         }
 
-        private async void Twitter_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
+        private async void Twitter_Tapped(object sender, TappedRoutedEventArgs e) {
             var uriTwitter = new Uri("https://twitter.com/jeremiecorpinot");
             var success = await Windows.System.Launcher.LaunchUriAsync(uriTwitter);
         }
 
-        private async void PrivacyPolicyGitHub_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
+        private async void PrivacyPolicyGitHub_Tapped(object sender, TappedRoutedEventArgs e) {
             var uriGitHub = new Uri("https://github.com/rootasjey/Feels");
             var success = await Windows.System.Launcher.LaunchUriAsync(uriGitHub);
         }
@@ -259,12 +264,12 @@ namespace Feels.Views {
 
         private async void NoteButton_Click(object sender, RoutedEventArgs e) {
             string appID = "9NB305KW0MBP";
+
             var op = await Windows.System.Launcher
                 .LaunchUriAsync(new Uri("ms-windows-store://review/?ProductId=" + appID));
         }
 
         private async void LockscreenButton_Click(object sender, RoutedEventArgs e) {
-            // Launch URI for the lock screen settings screen. 
             var op = await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-settings:lockscreen"));
         }
 
@@ -427,5 +432,48 @@ namespace Feels.Views {
         }
 
         #endregion personalization
+
+        private void SecondaryTasksListView_Loaded(object sender, RoutedEventArgs e) {
+            var listView = (ListView)sender;
+
+            _ActiveTasks = new ObservableCollection<IBackgroundTaskRegistration>(BackgroundTasks.GetAllTasks());
+            listView.ItemsSource = _ActiveTasks;
+
+            if (listView.Items.Count > 0) {
+                EmptyViewSecondaryTasks.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void TaskListItem_RightCommandRequested(object sender, EventArgs e) {
+            var listItem = (SlidableListItem)sender;
+            var task = (IBackgroundTaskRegistration)listItem.DataContext;
+            DeleteSecondaryTask(task);
+        }
+
+        private async void DeleteSecondaryTask(IBackgroundTaskRegistration task) {
+            var taskName = task.Name;
+
+            await Settings.DeleteSecondaryTaskLocation(taskName);
+            BackgroundTasks.UnregisterSecondaryTileTask(taskName);
+
+            _ActiveTasks.Remove(task);
+
+            if (_ActiveTasks.Count == 0) {
+                EmptyViewSecondaryTasks.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void TaskListItem_RightTapped(object sender, RightTappedRoutedEventArgs e) {
+            var listItem = (SlidableListItem)sender;
+            var task = (IBackgroundTaskRegistration)listItem.DataContext;
+
+            SavedLocationRightTappedFlyout.ShowAt(listItem);
+        }
+
+        private void CmdDeleteSecondaryTask_Tapped(object sender, TappedRoutedEventArgs e) {
+            var menuFlyoutItem = (MenuFlyoutItem)sender;
+            var task = (IBackgroundTaskRegistration)menuFlyoutItem.DataContext;
+            DeleteSecondaryTask(task);
+        }
     }
 }

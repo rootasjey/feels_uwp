@@ -120,9 +120,6 @@
   <data name="AboutHeader.Text" xml:space="preserve">
     <value>о проекте</value>
   </data>
-  <data name="BackgroundsTasksHeader.Text" xml:space="preserve">
-    <value>работа в фоне</value>
-  </data>
   <data name="BetaMessage" xml:space="preserve">
     <value>Это приложение в Beta версии и может работать не так, как ожидается, содержать ошибки или отсутствующие функции. Пожалуйста, сообщайте о любых ошибках по почте или на GitHub. Спасибо!</value>
   </data>
@@ -151,16 +148,16 @@
     <value>Это проект с открытым исходным кодом и вы можете участвовать в нем разными способами:</value>
   </data>
   <data name="ContributeFourthLine.Text" xml:space="preserve">
-    <value>- радактировать исходный код</value>
+    <value>• радактировать исходный код</value>
   </data>
   <data name="ContributeSecondLine.Text" xml:space="preserve">
-    <value>- сообщить об ошибке</value>
+    <value>• сообщить об ошибке</value>
   </data>
   <data name="ContributeSixthLine.Text" xml:space="preserve">
     <value>для более подробной информации и становитесь участником проекта :)</value>
   </data>
   <data name="ContributeThirdLine.Text" xml:space="preserve">
-    <value>- предложить идею</value>
+    <value>• предложить идею</value>
   </data>
   <data name="ContributeTitle.Text" xml:space="preserve">
     <value>Участвуйте</value>
@@ -373,10 +370,10 @@
     <value>Ваша конфиденциальность важна для нас и мы её уважаем.</value>
   </data>
   <data name="PrivacyPolicyLine1.Text" xml:space="preserve">
-    <value>- Мы ни с кем не делимся вашей личной информацией.</value>
+    <value>• Мы ни с кем не делимся вашей личной информацией.</value>
   </data>
   <data name="PrivacyPolicyLine2.Text" xml:space="preserve">
-    <value>- Мы не храним вашу личную информацию вообще.</value>
+    <value>• Мы не храним вашу личную информацию вообще.</value>
   </data>
   <data name="CloudCover.Text" xml:space="preserve">
     <value>облачность</value>
@@ -563,5 +560,20 @@
   </data>
   <data name="UnpinSuccess" xml:space="preserve">
     <value>Плитки был должным образом удален.</value>
+  </data>
+  <data name="EmptyViewSecondaryTasksLabel.Text" xml:space="preserve">
+    <value>На данный момент нет вторичные задачи.</value>
+  </data>
+  <data name="PrimaryTasksPivot.Header" xml:space="preserve">
+    <value>Первая задача</value>
+  </data>
+  <data name="SecondaryTasksExplanations1.Text" xml:space="preserve">
+    <value>При закреплении местоположение на начальный экран, он создает задачу. Эта задача будет обновлять динамическую плитку периодически каждый час.</value>
+  </data>
+  <data name="SecondaryTasksExplanations2.Text" xml:space="preserve">
+    <value>На этой странице можно просматривать и удалять ваши активные задачи, за исключением главной задачей, которой можно управлять, если вы swipe справа.</value>
+  </data>
+  <data name="SecondaryTasksPivot.Header" xml:space="preserve">
+    <value>Вторичные задачи</value>
   </data>
 </root>

@@ -316,6 +316,7 @@ namespace Feels.Views {
             if (isPinned) {
                 CmdUnpinLocation.Visibility = Visibility.Visible;
                 CmdPinLocation.Visibility = Visibility.Collapsed;
+
             } else {
                 CmdUnpinLocation.Visibility = Visibility.Collapsed;
                 CmdPinLocation.Visibility = Visibility.Visible;
@@ -392,7 +393,7 @@ namespace Feels.Views {
 
             if (!isUnpinned) { return false; }
 
-            // 2.Delte task config
+            // 2.Delete task config
             await Settings.DeleteSecondaryTaskLocation(locationId);
 
             // 3.Unregister task
@@ -474,11 +475,14 @@ namespace Feels.Views {
                 var isPinned = TileDesigner.IsSecondaryTilePinned(location);
 
                 var item = (ListViewItem)SavedLocationsListView.ContainerFromItem(location);
+                if (item == null) continue;
+
                 var slidableListItem = (SlidableListItem)item.ContentTemplateRoot;
 
                 if (isPinned) {
                     slidableListItem.LeftLabel = App.ResourceLoader.GetString("Unpin");
                     slidableListItem.LeftIcon = Symbol.UnPin;
+
                 } else {
                     slidableListItem.LeftLabel = App.ResourceLoader.GetString("Pin");
                     slidableListItem.LeftIcon = Symbol.Pin;

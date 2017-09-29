@@ -125,8 +125,7 @@
 
                 <ListView x:Name="SavedLocationsListView"
                           Margin="0,24,0,0"
-                          ItemTemplate="{StaticResource LocationItem}"
-                          Visibility="Visible">
+                          ItemTemplate="{StaticResource LocationItem}">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>

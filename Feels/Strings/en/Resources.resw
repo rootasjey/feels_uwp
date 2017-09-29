@@ -120,9 +120,6 @@
   <data name="AboutHeader.Text" xml:space="preserve">
     <value>about</value>
   </data>
-  <data name="BackgroundsTasksHeader.Text" xml:space="preserve">
-    <value>background tasks</value>
-  </data>
   <data name="BetaMessage" xml:space="preserve">
     <value>This app is in beta and can act not as expected, contains bugs or missing features. Please report any unexpected behavior via email or on GitHub. Thanks!</value>
   </data>
@@ -148,16 +145,16 @@
     <value>this project is open source and you can contribute in many ways</value>
   </data>
   <data name="ContributeFourthLine.Text" xml:space="preserve">
-    <value>- edit app's code source</value>
+    <value>• edit app's code source</value>
   </data>
   <data name="ContributeSecondLine.Text" xml:space="preserve">
-    <value>- report a bug</value>
+    <value>• report a bug</value>
   </data>
   <data name="ContributeSixthLine.Text" xml:space="preserve">
     <value>and come participate in this project :)</value>
   </data>
   <data name="ContributeThirdLine.Text" xml:space="preserve">
-    <value>- suggest a feature</value>
+    <value>• suggest a feature</value>
   </data>
   <data name="ContributeTitle.Text" xml:space="preserve">
     <value>contribute</value>
@@ -373,10 +370,10 @@
     <value>Your privacy is important to us and we respect it.</value>
   </data>
   <data name="PrivacyPolicyLine1.Text" xml:space="preserve">
-    <value>-We don't share your personal information with anyone</value>
+    <value>• We don't share your personal information with anyone</value>
   </data>
   <data name="PrivacyPolicyLine2.Text" xml:space="preserve">
-    <value>-We don't store your personal information at all</value>
+    <value>• We don't store your personal information at all</value>
   </data>
   <data name="CloudCover.Text" xml:space="preserve">
     <value>cover</value>
@@ -563,5 +560,20 @@
   </data>
   <data name="UnpinSuccess" xml:space="preserve">
     <value>The tile has been correctly unpinned.</value>
+  </data>
+  <data name="EmptyViewSecondaryTasksLabel.Text" xml:space="preserve">
+    <value>There's no secondary task at the moment.</value>
+  </data>
+  <data name="PrimaryTasksPivot.Header" xml:space="preserve">
+    <value>primary task</value>
+  </data>
+  <data name="SecondaryTasksExplanations1.Text" xml:space="preserve">
+    <value>When you pin a location to the start screen, it creates a task. This task will update the live tile periodically each hour.</value>
+  </data>
+  <data name="SecondaryTasksExplanations2.Text" xml:space="preserve">
+    <value>On this page, you can vizualize and delete your active tasks, except the primary task for the app tile which can be managed on the left page.</value>
+  </data>
+  <data name="SecondaryTasksPivot.Header" xml:space="preserve">
+    <value>secondary tasks</value>
   </data>
 </root>

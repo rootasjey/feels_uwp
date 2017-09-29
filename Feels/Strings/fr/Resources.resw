@@ -120,9 +120,6 @@
   <data name="AboutHeader.Text" xml:space="preserve">
     <value>à propos</value>
   </data>
-  <data name="BackgroundsTasksHeader.Text" xml:space="preserve">
-    <value>tâches en arrière-plan</value>
-  </data>
   <data name="BetaMessage" xml:space="preserve">
     <value>Cette application est en beta et peut donc contenir des bugs, des textes non-traduits ainsi que des fonctionnalités manquantes. Merci de repporter (par mail ou github) tout comportement anormal. Merci</value>
   </data>
@@ -148,16 +145,16 @@
     <value>ce projet est open source et vous pouvez y contribuer de plusieurs manières:</value>
   </data>
   <data name="ContributeFourthLine.Text" xml:space="preserve">
-    <value>- éditer le code de l'application</value>
+    <value>• éditer le code de l'application</value>
   </data>
   <data name="ContributeSecondLine.Text" xml:space="preserve">
-    <value>- signaler un bug</value>
+    <value>• signaler un bug</value>
   </data>
   <data name="ContributeSixthLine.Text" xml:space="preserve">
     <value>et venez participer à ce projet :)</value>
   </data>
   <data name="ContributeThirdLine.Text" xml:space="preserve">
-    <value>- suggérer une fonctionnalité</value>
+    <value>• suggérer une fonctionnalité</value>
   </data>
   <data name="ContributeTitle.Text" xml:space="preserve">
     <value>contribuer</value>
@@ -370,10 +367,10 @@
     <value>Vos données personnelles sont importantes pour nous et nous les respectons.</value>
   </data>
   <data name="PrivacyPolicyLine1.Text" xml:space="preserve">
-    <value>-Nous ne partageons vos données personnelles avec aucune entité</value>
+    <value>• Nous ne partageons vos données personnelles avec aucune entité</value>
   </data>
   <data name="PrivacyPolicyLine2.Text" xml:space="preserve">
-    <value>-Nous ne stockons aucune information vous concernant</value>
+    <value>• Nous ne stockons aucune information vous concernant</value>
   </data>
   <data name="TaskNotWorkingText.Text" xml:space="preserve">
     <value>si la tâche en arrière-plan ne fonctionne pas, redémarrez-là</value>
@@ -563,5 +560,20 @@
   </data>
   <data name="UnpinSuccess" xml:space="preserve">
     <value>La tuile a été retirée de l'écran d'accueil.</value>
+  </data>
+  <data name="EmptyViewSecondaryTasksLabel.Text" xml:space="preserve">
+    <value>Il n'y a pas de tâche secondaire pour l'instant.</value>
+  </data>
+  <data name="PrimaryTasksPivot.Header" xml:space="preserve">
+    <value>tâche primaire</value>
+  </data>
+  <data name="SecondaryTasksExplanations1.Text" xml:space="preserve">
+    <value>Quand vous épinglez un lieu sur l'écran d'accueil, une tâche secondaire est créée en parallèle. Cette tâche mettra à jour périodiquement (chaque heure) la tuile du lieu épinglé.</value>
+  </data>
+  <data name="SecondaryTasksExplanations2.Text" xml:space="preserve">
+    <value>Sur cette page, vous pouvez visualiser et supprimer vos tâches secondaires actuellement actives, excepté pour la tâche de la tuile principale, qui elle, peut être gérée sur la page juste à gauche.</value>
+  </data>
+  <data name="SecondaryTasksPivot.Header" xml:space="preserve">
+    <value>tâches secondaires</value>
   </data>
 </root>

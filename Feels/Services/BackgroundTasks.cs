@@ -1,5 +1,6 @@
 ﻿using Feels.Models;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
 using Windows.Storage;
@@ -8,7 +9,7 @@ namespace Feels.Services {
     public static class BackgroundTasks {
         #region keys
 
-        private static string _PrimaryTileTaskBaseName {
+        private static string _PrimaryTileTaskName {
             get {
                 return "PrimaryTileTask";
             }
@@ -80,7 +81,7 @@ namespace Feels.Services {
 
         #region tile task
         public static string GetPrimaryTileTaskName() {
-            return _PrimaryTileTaskBaseName;
+            return _PrimaryTileTaskName;
         }
 
         public static void RegisterPrimaryTileTask(uint interval) {
@@ -184,6 +185,17 @@ namespace Feels.Services {
                 task.Value.Unregister(false);
                 await Settings.DeleteSecondaryTaskLocation(task.Value.Name);
             }
+        }
+
+        public static List<IBackgroundTaskRegistration> GetAllTasks() {
+            var tasksList = new List<IBackgroundTaskRegistration>();
+
+            foreach (var task in BackgroundTaskRegistration.AllTasks) {
+                if (task.Value.Name == _PrimaryTileTaskName) continue;
+                tasksList.Add(task.Value);
+            }
+
+            return tasksList;
         }
 
         #endregion tasks
