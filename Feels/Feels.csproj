@@ -231,6 +231,14 @@
     <Content Include="Assets\TileIcons\fog.png" />
     <Content Include="Assets\TileIcons\cloudy.png" />
     <Content Include="Assets\TileIcons\moon.png" />
+    <Content Include="Assets\TileIcons\moon_full.png" />
+    <Content Include="Assets\TileIcons\moon_new.png" />
+    <Content Include="Assets\TileIcons\moon_third_quarter.png" />
+    <Content Include="Assets\TileIcons\moon_thirst_querter.png" />
+    <Content Include="Assets\TileIcons\moon_waning_crescent.png" />
+    <Content Include="Assets\TileIcons\moon_waning_gibbous.png" />
+    <Content Include="Assets\TileIcons\moon_waxing_crescent.png" />
+    <Content Include="Assets\TileIcons\moon_waxing_gibbous.png" />
     <Content Include="Assets\TileIcons\partycloudy_day.png" />
     <Content Include="Assets\TileIcons\partycloudy_night.png" />
     <Content Include="Assets\TileIcons\rain.png" />

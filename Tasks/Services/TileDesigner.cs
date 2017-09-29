@@ -90,6 +90,51 @@ namespace Tasks.Services {
             return path;
         }
 
+        private static string GetIcon(Forecast forecast) {
+            var currentForecast = forecast.Currently;
+            var condition = currentForecast.Icon;
+
+            switch (condition) {
+                case "clear-night":
+                case "partly-cloudy-night":
+                    return GetMoonPhaseIcon(forecast.Daily.Days[0]);
+                default:
+                    return GetIcon(condition);
+            }
+        }
+
+        private static string GetMoonPhaseIcon(DayDataPoint todayForecast) {
+            var moonPhase = todayForecast.MoonPhase;
+            string path = null;
+
+            if (moonPhase == 0) {
+                path = "ms-appx:///Assets/TileIcons/moon_new.png";
+
+            } else if (moonPhase > 0 && moonPhase < .25) {
+                path = "ms-appx:///Assets/TileIcons/moon_waxing_crescent.png";
+
+            } else if (moonPhase == .25) {
+                path = "ms-appx:///Assets/TileIcons/moon_first_quarter.png";
+
+            } else if (moonPhase > .25 && moonPhase < .5) {
+                path = "ms-appx:///Assets/TileIcons/moon_waxing_gibbous.png";
+
+            } else if (moonPhase == .5) {
+                path = "ms-appx:///Assets/TileIcons/moon_full.png";
+
+            } else if (moonPhase > .5 && moonPhase < .75) {
+                path = "ms-appx:///Assets/TileIcons/moon_waning_gibbous.png";
+
+            } else if (moonPhase == .75) {
+                path = "ms-appx:///Assets/TileIcons/moon_third_quarter.png";
+
+            } else { // moonPhase > .75
+                path = "ms-appx:///Assets/TileIcons/moon_waning_crescent.png";
+            }
+
+            return path;
+        }
+
         static string GetPrecipIcon(string condition) {
             var path = "";
 
@@ -127,13 +172,13 @@ namespace Tasks.Services {
         // TILES CREATIONS
         // ---------------
         static TileNotification CreateTileCurrent(Forecast forecast, string location) {
-            var currentWeather = forecast.Currently;
-            var condition = currentWeather.Icon;
+            var currentForecast = forecast.Currently;
+            var condition = currentForecast.Icon;
             var currentTemperature = GetTemperature(forecast.Currently.ApparentTemperature);
             var maxTemperature = GetTemperature(forecast.Daily.Days[0].ApparentMaxTemperature);
             var minTemperature = GetTemperature(forecast.Daily.Days[0].ApparentMinTemperature);
 
-            var time = DateTime.Now.ToLocalTime().ToString("h tt", CultureInfo.InvariantCulture);
+            var time = DateTime.Now.ToLocalTime().ToString("HH:mm", CultureInfo.InvariantCulture);
 
             // Generate Visual
             var content = new TileContent() {
@@ -183,7 +228,7 @@ namespace Tasks.Services {
                                         HintWeight = 2,
                                         Children = {
                                             new AdaptiveImage() {
-                                                Source = GetIcon(condition),
+                                                Source = GetIcon(forecast),
                                                 HintRemoveMargin = true
                                             }
                                         }
@@ -236,7 +281,7 @@ namespace Tasks.Services {
                                         HintTextStacking = AdaptiveSubgroupTextStacking.Center,
                                         Children = {
                                             new AdaptiveImage() {
-                                                Source = GetIcon(condition),
+                                                Source = GetIcon(forecast),
                                                 HintRemoveMargin = true
                                             }
                                         }
@@ -290,7 +335,7 @@ namespace Tasks.Services {
                                         HintTextStacking = AdaptiveSubgroupTextStacking.Center,
                                         Children = {
                                             new AdaptiveImage() {
-                                                Source = GetIcon(condition),
+                                                Source = GetIcon(forecast),
                                                 HintRemoveMargin = true
                                             }
                                         }
