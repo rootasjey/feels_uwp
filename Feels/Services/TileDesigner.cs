@@ -254,8 +254,8 @@ namespace Feels.Services {
             var content = new TileContent() {
                 Visual = new TileVisual() {
                     LockDetailedStatus1 = GetDetailedStatus(),
-                    TileMedium = GetMediumVisual(),
                     TileSmall = GetSmallVisual(),
+                    TileMedium = GetMediumVisual(),
                     TileWide = GetWideVisual(),
                     TileLarge = GetLargeVisual()
                 }
@@ -273,9 +273,11 @@ namespace Feels.Services {
                 return new TileBinding() {
                     Content = new TileBindingContentAdaptive() {
                         Children = {
-                            new AdaptiveImage() {
-                                Source = GetIcon(forecast.Currently.Icon)
-                            }
+                            new AdaptiveText() {
+                                Text = currentTemperature,
+                                HintAlign = AdaptiveTextAlign.Center,
+                                HintStyle = AdaptiveTextStyle.Subtitle
+                            },
                         }
                     }
                 };
@@ -511,16 +513,10 @@ namespace Feels.Services {
         static TileNotification CreateTileCurrentDetails(Forecast forecast) {
             var content = new TileContent() {
                 Visual = new TileVisual() {
-                    TileMedium = GetMediumVisual()
+                    TileMedium = GetMediumVisual(),
+                    TileWide = GetWideVisual()
                 }
             };
-
-            TileBinding GetSmallVisual()
-            {
-                return new TileBinding() {
-
-                };
-            }
 
             TileBinding GetMediumVisual() {
                 //var precipIconPath = GetIcon(forecast.Currently.Icon);
@@ -565,7 +561,7 @@ namespace Feels.Services {
                                 }
                             },
 
-                            // Wind speed ?
+                            // Wind direction
                             new AdaptiveGroup() {
                                 Children = {
                                     new AdaptiveSubgroup() { HintWeight = 1 },
@@ -574,7 +570,7 @@ namespace Feels.Services {
                                         HintTextStacking = AdaptiveSubgroupTextStacking.Bottom,
                                         Children = {
                                             new AdaptiveImage() {
-                                                Source = "Assets/Icons/wind_direction.png",
+                                                Source = "Assets/TileIcons/wind_direction.png",
                                                 HintRemoveMargin = true
                                             }
                                         }
@@ -586,6 +582,98 @@ namespace Feels.Services {
                                             new AdaptiveText() {
                                                 Text = forecast.Currently.WindSpeed.ToString(),
                                                 HintStyle = AdaptiveTextStyle.Caption
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
+            }
+
+            TileBinding GetWideVisual() {
+                return new TileBinding() {
+                    Content = new TileBindingContentAdaptive() {
+                        Children = {
+                            new AdaptiveGroup() {
+                                Children = {
+                                    // Precip proba
+                                    new AdaptiveSubgroup() {
+                                        HintWeight = 1,
+                                        Children = {
+                                            new AdaptiveImage() {
+                                                Source = "Assets/TileIcons/precip_proba.png",
+                                                HintRemoveMargin = true
+                                            },
+                                            new AdaptiveText() {
+                                                Text = string.Format("{0}%", forecast.Currently.PrecipitationProbability * 100),
+                                                HintStyle = AdaptiveTextStyle.Caption,
+                                                HintAlign = AdaptiveTextAlign.Center
+                                            }
+                                        }
+                                    },
+
+                                    // Humidity
+                                    new AdaptiveSubgroup() {
+                                        HintWeight = 1,
+                                        Children = {
+                                            new AdaptiveImage() {
+                                                Source = "Assets/TileIcons/humidity.png",
+                                                HintRemoveMargin = true
+                                            },
+                                            new AdaptiveText() {
+                                                Text = string.Format("{0}%", forecast.Currently.Humidity * 100),
+                                                HintStyle = AdaptiveTextStyle.Caption,
+                                                HintAlign = AdaptiveTextAlign.Center
+                                            }
+                                        }
+                                    },
+
+                                    // Cloud cover
+                                    new AdaptiveSubgroup() {
+                                        HintWeight = 1,
+                                        Children = {
+                                            new AdaptiveImage() {
+                                                Source = "Assets/TileIcons/cloudy.png",
+                                                HintRemoveMargin = true
+                                            },
+                                            new AdaptiveText() {
+                                                Text = string.Format("{0}%", forecast.Currently.CloudCover * 100),
+                                                HintStyle = AdaptiveTextStyle.Caption,
+                                                HintAlign = AdaptiveTextAlign.Center
+                                            }
+                                        }
+                                    },
+
+                                    // Wind speed
+                                    new AdaptiveSubgroup() {
+                                        HintWeight = 1,
+                                        Children = {
+                                            new AdaptiveImage() {
+                                                Source = "Assets/TileIcons/wind.png",
+                                                HintRemoveMargin = true
+                                            },
+                                            new AdaptiveText() {
+                                                Text = string.Format("{0}{1}", forecast.Currently.WindSpeed, GetWindSpeedUnits()),
+                                                HintStyle = AdaptiveTextStyle.Caption,
+                                                HintAlign = AdaptiveTextAlign.Center
+                                            }
+                                        }
+                                    },
+
+                                    // Wind direction
+                                    new AdaptiveSubgroup() {
+                                        HintWeight = 1,
+                                        Children = {
+                                            new AdaptiveImage() {
+                                                Source = "Assets/TileIcons/wind_direction.png",
+                                                HintRemoveMargin = true
+                                            },
+                                            new AdaptiveText() {
+                                                Text = string.Format("{0}°", forecast.Currently.WindBearing),
+                                                HintStyle = AdaptiveTextStyle.Caption,
+                                                HintAlign = AdaptiveTextAlign.Center
                                             }
                                         }
                                     }
@@ -729,13 +817,13 @@ namespace Feels.Services {
                                 Children = {
                                     CreateDailySubGroup(dailyForecast.Days[1]),
                                     CreateDailySubGroup(dailyForecast.Days[2]),
-                                    CreateDailySubGroup(dailyForecast.Days[3])
+                                    CreateDailySubGroup(dailyForecast.Days[3]),
+                                    CreateDailySubGroup(dailyForecast.Days[4]),                                    
                                 }
                             },
                             //new AdaptiveText(), // for spacing
                             new AdaptiveGroup() {
                                 Children = {
-                                    CreateDailySubGroup(dailyForecast.Days[4]),
                                     CreateDailySubGroup(dailyForecast.Days[5]),
                                     CreateDailySubGroup(dailyForecast.Days[6]),
                                     CreateDailySubGroup(dailyForecast.Days[7])
@@ -749,7 +837,7 @@ namespace Feels.Services {
             return new TileNotification(content.GetXml());
         }
 
-        static AdaptiveSubgroup CreateHourlySubGroup(HourDataPoint hour) {
+        private static AdaptiveSubgroup CreateHourlySubGroup(HourDataPoint hour) {
             return new AdaptiveSubgroup() {
                 HintWeight = 1,
                 Children = {
@@ -771,7 +859,7 @@ namespace Feels.Services {
             };
         }
 
-        static AdaptiveSubgroup CreateDailySubGroup(DayDataPoint day) {
+        private static AdaptiveSubgroup CreateDailySubGroup(DayDataPoint day) {
             return new AdaptiveSubgroup() {
                 HintWeight = 1,
                 Children = {
@@ -798,5 +886,25 @@ namespace Feels.Services {
             };
         }
 
+        private static string GetWindSpeedUnits() {
+            var unit = Settings.GetUnit();
+
+            switch (unit) {
+                case DarkSkyApi.Unit.US:
+                    return "miles/h";
+                case DarkSkyApi.Unit.SI:
+                    return "m/s";
+                case DarkSkyApi.Unit.CA:
+                    return "km/h";
+                case DarkSkyApi.Unit.UK:
+                    return "miles/h";
+                case DarkSkyApi.Unit.UK2:
+                    return "miles/h";
+                case DarkSkyApi.Unit.Auto:
+                    return "m/s";
+                default:
+                    return "miles/h";
+            }
+        }
     }
 }

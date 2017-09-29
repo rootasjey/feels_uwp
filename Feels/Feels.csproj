@@ -164,6 +164,7 @@
     <Content Include="Assets\Icons\dark_cloud.png" />
     <Content Include="Assets\Icons\fog.png" />
     <Content Include="Assets\Icons\haze.png" />
+    <Content Include="Assets\Icons\humidity.png" />
     <Content Include="Assets\Icons\leaf.png" />
     <Content Include="Assets\Icons\moon.png" />
     <Content Include="Assets\Icons\moon_full.png" />
@@ -230,6 +231,7 @@
     <Content Include="Assets\StoreLogo.scale-400.png" />
     <Content Include="Assets\TileIcons\fog.png" />
     <Content Include="Assets\TileIcons\cloudy.png" />
+    <Content Include="Assets\TileIcons\humidity.png" />
     <Content Include="Assets\TileIcons\moon.png" />
     <Content Include="Assets\TileIcons\moon_full.png" />
     <Content Include="Assets\TileIcons\moon_new.png" />
@@ -241,12 +243,15 @@
     <Content Include="Assets\TileIcons\moon_waxing_gibbous.png" />
     <Content Include="Assets\TileIcons\partycloudy_day.png" />
     <Content Include="Assets\TileIcons\partycloudy_night.png" />
+    <Content Include="Assets\TileIcons\precip_proba.png" />
     <Content Include="Assets\TileIcons\rain.png" />
     <Content Include="Assets\TileIcons\sleet.png" />
     <Content Include="Assets\TileIcons\snow.png" />
     <Content Include="Assets\TileIcons\sun.png" />
+    <Content Include="Assets\TileIcons\sunrise.png" />
+    <Content Include="Assets\TileIcons\sunset.png" />
     <Content Include="Assets\TileIcons\wind.png" />
-    <Content Include="Assets\TileIcons\wind0.png" />
+    <Content Include="Assets\TileIcons\wind_direction.png" />
     <Content Include="Assets\Wide310x150Logo.scale-100.png" />
     <Content Include="Assets\Wide310x150Logo.scale-125.png" />
     <Content Include="Assets\Wide310x150Logo.scale-150.png" />

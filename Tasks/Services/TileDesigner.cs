@@ -441,8 +441,8 @@ namespace Tasks.Services {
         static TileNotification CreateTileCurrentDetails(Forecast forecast) {
             var content = new TileContent() {
                 Visual = new TileVisual() {
-                    TileMedium = GetMediumVisual()
-                    //TileWide = GetWideVisual()
+                    TileMedium = GetMediumVisual(),
+                    TileWide = GetWideVisual()
                 }
             };
             
@@ -521,13 +521,97 @@ namespace Tasks.Services {
                 };
             }
 
-            // TODO: Complete
-            //TileBinding GetWideVisual()
-            //{
-            //    return new TileBinding() {
+            TileBinding GetWideVisual() {
+                return new TileBinding() {
+                    Content = new TileBindingContentAdaptive() {
+                        Children = {
+                            new AdaptiveGroup() {
+                                Children = {
+                                    // Precip proba
+                                    new AdaptiveSubgroup() {
+                                        HintWeight = 1,
+                                        Children = {
+                                            new AdaptiveImage() {
+                                                Source = "Assets/TileIcons/precip_proba.png",
+                                                HintRemoveMargin = true
+                                            },
+                                            new AdaptiveText() {
+                                                Text = string.Format("{0}%", forecast.Currently.PrecipitationProbability * 100),
+                                                HintStyle = AdaptiveTextStyle.Caption,
+                                                HintAlign = AdaptiveTextAlign.Center
+                                            }
+                                        }
+                                    },
 
-            //    };
-            //}
+                                    // Humidity
+                                    new AdaptiveSubgroup() {
+                                        HintWeight = 1,
+                                        Children = {
+                                            new AdaptiveImage() {
+                                                Source = "Assets/TileIcons/humidity.png",
+                                                HintRemoveMargin = true
+                                            },
+                                            new AdaptiveText() {
+                                                Text = string.Format("{0}%", forecast.Currently.Humidity * 100),
+                                                HintStyle = AdaptiveTextStyle.Caption,
+                                                HintAlign = AdaptiveTextAlign.Center
+                                            }
+                                        }
+                                    },
+
+                                    // Cloud cover
+                                    new AdaptiveSubgroup() {
+                                        HintWeight = 1,
+                                        Children = {
+                                            new AdaptiveImage() {
+                                                Source = "Assets/TileIcons/cloudy.png",
+                                                HintRemoveMargin = true
+                                            },
+                                            new AdaptiveText() {
+                                                Text = string.Format("{0}%", forecast.Currently.CloudCover * 100),
+                                                HintStyle = AdaptiveTextStyle.Caption,
+                                                HintAlign = AdaptiveTextAlign.Center
+                                            }
+                                        }
+                                    },
+
+                                    // Wind speed
+                                    new AdaptiveSubgroup() {
+                                        HintWeight = 1,
+                                        Children = {
+                                            new AdaptiveImage() {
+                                                Source = "Assets/TileIcons/wind.png",
+                                                HintRemoveMargin = true
+                                            },
+                                            new AdaptiveText() {
+                                                Text = string.Format("{0}{1}", forecast.Currently.WindSpeed, GetWindSpeedUnits()),
+                                                HintStyle = AdaptiveTextStyle.Caption,
+                                                HintAlign = AdaptiveTextAlign.Center
+                                            }
+                                        }
+                                    },
+
+                                    // Wind direction
+                                    new AdaptiveSubgroup() {
+                                        HintWeight = 1,
+                                        Children = {
+                                            new AdaptiveImage() {
+                                                Source = "Assets/TileIcons/wind_direction.png",
+                                                HintRemoveMargin = true
+                                            },
+                                            new AdaptiveText() {
+                                                Text = string.Format("{0}°", forecast.Currently.WindBearing),
+                                                HintStyle = AdaptiveTextStyle.Caption,
+                                                HintAlign = AdaptiveTextAlign.Center
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
+            }
 
             return new TileNotification(content.GetXml());
         }
@@ -731,5 +815,25 @@ namespace Tasks.Services {
             };
         }
 
+        private static string GetWindSpeedUnits() {
+            var unit = Settings.GetUnit();
+
+            switch (unit) {
+                case DarkSkyApi.Unit.US:
+                    return "miles/h";
+                case DarkSkyApi.Unit.SI:
+                    return "m/s";
+                case DarkSkyApi.Unit.CA:
+                    return "km/h";
+                case DarkSkyApi.Unit.UK:
+                    return "miles/h";
+                case DarkSkyApi.Unit.UK2:
+                    return "miles/h";
+                case DarkSkyApi.Unit.Auto:
+                    return "m/s";
+                default:
+                    return "miles/h";
+            }
+        }
     }
 }

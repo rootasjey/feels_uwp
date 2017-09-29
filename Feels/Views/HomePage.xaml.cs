@@ -250,7 +250,7 @@ namespace Feels.Views {
             WeatherViewContent.AnimateSlideIn();
 
             UI.AnimateNumericValue((int)weatherCurrent.Temperature, Temperature, _UIDispatcher, "°");
-            PopulateWeatherView(weatherToday, weatherCurrent);
+            PopulateForecastView(weatherToday, weatherCurrent);
             AnimateDetailsItems();
             SetMoonPhase(weatherToday);
             AnimateWindDirectionIcons();
@@ -268,7 +268,7 @@ namespace Feels.Views {
             //}, autoEvent, 500, Timeout.Infinite);
         }
 
-        private void PopulateWeatherView(DayDataPoint todayWeather, CurrentDataPoint currentWeather) {
+        private void PopulateForecastView(DayDataPoint todayWeather, CurrentDataPoint currentWeather) {
             Status.Text = currentWeather.Summary;
             FeelsLike.Text += string.Format(" {0}°{1}", currentWeather.ApparentTemperature, Settings.GetTemperatureUnit());
             PrecipProbaValue.Text = string.Format("{0}%", todayWeather.PrecipitationProbability * 100);
