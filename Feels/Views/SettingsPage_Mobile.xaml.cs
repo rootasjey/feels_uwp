@@ -77,7 +77,7 @@ namespace Feels.Views {
         private async void InitializeVariables() {
             InitializeUnits();
             _ResourcesLoader = new ResourceLoader();
-            
+            CurrentAppVersionLabel.Text = string.Format("version {0}", Settings.GetAppVersion());
         }
 
         void InitializeUnits() {

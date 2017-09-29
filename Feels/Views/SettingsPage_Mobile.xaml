@@ -564,6 +564,10 @@
                             </Paragraph>
 
                             <Paragraph>
+                                <Run x:Name="CurrentAppVersionLabel"/>
+                            </Paragraph>
+
+                            <Paragraph>
                                 <Span FontSize="22" 
                                   FontWeight="Medium" 
                                   Foreground="{ThemeResource SystemControlForegroundAccentBrush}">
@@ -575,7 +579,6 @@
                         <RichTextBlock Opacity=".5" Margin="0,0,0,24">
                             <Paragraph>
                                 <Span>You can now pin several locations to your start screen.</Span>
-                                <LineBreak/>
                                 <Span>Tiles will automatically update every hour.</Span>
                             </Paragraph>
                         </RichTextBlock>

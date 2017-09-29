@@ -15,6 +15,7 @@ Minimalistic weather app
 * Hourly forecast
 * Daily forecast
 * Live tile
+* Pin multiple locations to start view
 * Lockscreen text status
 
 ## setup

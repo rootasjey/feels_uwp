@@ -163,7 +163,7 @@
     <value>sombre</value>
   </data>
   <data name="DataContent1.Text" xml:space="preserve">
-    <value>données météo viennent du site </value>
+    <value>données météo viennent de </value>
   </data>
   <data name="DataContent2.Text" xml:space="preserve">
     <value>et cette application n'est aucunement liée à </value>

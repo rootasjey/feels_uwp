@@ -163,7 +163,7 @@
     <value>dark</value>
   </data>
   <data name="DataContent1.Text" xml:space="preserve">
-    <value>data come from </value>
+    <value>data from </value>
   </data>
   <data name="DataContent2.Text" xml:space="preserve">
     <value>and this app has no link with </value>

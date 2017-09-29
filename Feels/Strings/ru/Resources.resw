@@ -166,7 +166,7 @@
     <value>темная</value>
   </data>
   <data name="DataContent1.Text" xml:space="preserve">
-    <value>данные поступают из</value>
+    <value>данные из</value>
   </data>
   <data name="DataContent2.Text" xml:space="preserve">
     <value>и этот app не имеет связи с </value>
