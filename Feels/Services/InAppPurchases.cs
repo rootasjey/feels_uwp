@@ -14,7 +14,20 @@ namespace Feels.Services {
 
             return await _context.RequestPurchaseAsync(storeId);
         }
-        
+
+        public static async void ConsumeAddon(string storeId) {
+            if (_context == null) {
+                _context = StoreContext.GetDefault();
+            }
+
+            uint quantity = 1;
+            Guid trackingId = Guid.NewGuid();
+
+            StoreConsumableResult result = await _context.ReportConsumableFulfillmentAsync(
+                storeId, quantity, trackingId);
+
+        }
+
         public static async Task<StoreProductQueryResult> GetAllAddons() {
             if (_context == null) {
                 _context = StoreContext.GetDefault();

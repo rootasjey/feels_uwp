@@ -150,10 +150,12 @@ namespace Feels.Views {
             switch (result.Status) {
                 case StorePurchaseStatus.AlreadyPurchased:
                     descriptionError = App.ResourceLoader.GetString("PurchaseStatusAlreadyPurchased");
+                    InAppPurchases.ConsumeAddon(id);
                     break;
 
                 case StorePurchaseStatus.Succeeded:
                     descriptionError = App.ResourceLoader.GetString("PurchaseStatusSucceeded");
+                    InAppPurchases.ConsumeAddon(id);
                     break;
 
                 case StorePurchaseStatus.NotPurchased:
