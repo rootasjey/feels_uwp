@@ -22,6 +22,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Navigation;
 
 namespace Feels.Views {
     public sealed partial class HomePage : Page {
@@ -63,7 +64,7 @@ namespace Feels.Views {
             InitializeTitleBar();
             InitializeVariables();
             InitialzeEvents();
-            InitializePageData();
+            //InitializePageData();
 
             BackgroundTasks.CheckAllTasks();
 
@@ -113,7 +114,32 @@ namespace Feels.Views {
 
         #endregion titlebar
 
+        #region navigation
+        protected override void OnNavigatedTo(NavigationEventArgs e) {
+            base.OnNavigatedTo(e);
+
+            if (e.Parameter != null && (string)e.Parameter != "App") {
+                var locationId = (string)e.Parameter;
+                FetchNewDataFromLocation(locationId);
+                return;
+            }
+
+            InitializePageData();
+        }
+
+        private void App_Resuming(object sender, object e) {
+            var task = _UIDispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                InitializePageData();
+            });
+        }
+
+        #endregion navigation
+
         #region data
+
+        private void InitialzeEvents() {
+            Application.Current.Resuming += App_Resuming;
+        }        
 
         private void InitializeVariables() {
             _PageDataSource = App.DataSource;
@@ -180,6 +206,32 @@ namespace Feels.Views {
             return false;
         }
 
+        private async void FetchNewDataFromLocation(string locationId) {
+            var locationsList = await Settings.GetSavedLocationAsync();
+            var locationName = locationId.Replace(".", ", ");
+            LocationItem locationToFind = null;
+
+            foreach (var location in locationsList) {
+                if (location.Name == locationName) {
+                    locationToFind = location;
+                    break;
+                }
+            }
+
+            if (locationToFind == null) {
+                InitializePageData();
+                return;
+            }
+
+            ShowLoadingView();
+            await FetchCurrentForecast(locationToFind);
+
+            HideLoadingView();
+            PopulateView();
+
+            TownTextBlock.Text = locationToFind.Town;
+        }
+
         private async void FetchNewData() {
             var location = await Settings.GetFavoriteLocation();
 
@@ -207,20 +259,10 @@ namespace Feels.Views {
                 SetCurrentCity();
             }
 
-            await FetchCurrentWeather(location);
+            await FetchCurrentForecast(location);
 
             HideLoadingView();
             PopulateView();
-        }
-
-        private void InitialzeEvents() {
-            Application.Current.Resuming += App_Resuming;
-        }
-
-        private void App_Resuming(object sender, object e) {
-            var task = _UIDispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                InitializePageData();
-            });
         }
 
         private void PopulateView() {
@@ -455,7 +497,7 @@ namespace Feels.Views {
             return string.IsNullOrEmpty(location.Id);
         }
 
-        private async Task FetchCurrentWeather(LocationItem location) {
+        private async Task FetchCurrentForecast(LocationItem location) {
             await _PageDataSource.FetchCurrentForecast(location.Latitude, location.Longitude);
 
             _LastFetchedTime = DateTime.Now;

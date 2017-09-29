@@ -299,6 +299,7 @@ namespace Feels.Services {
         #endregion locations
 
         #region tasks
+
         public static void SavePrimaryTileTaskType(string type) {
             var localSettingsValues = ApplicationData.Current.LocalSettings.Values;
             localSettingsValues[PrimaryTileTaskTypeKey] = type;
@@ -328,50 +329,6 @@ namespace Feels.Services {
 
             await file.DeleteAsync();
         }
-
-        //public static async Task SavePinnedLocationsTasksList(LocationItem location) {
-        //    var previousList = await GetPinnedLocationsTaskList();
-        //    if (previousList == null) previousList = new List<LocationItem>();
-
-        //    previousList.Add(location);
-
-        //    string json = JsonConvert.SerializeObject(previousList);
-
-        //    StorageFile file =
-        //        await ApplicationData
-        //                .Current
-        //                .LocalFolder
-        //                .CreateFileAsync(SavedLocationsTasksKey, CreationCollisionOption.ReplaceExisting);
-
-        //    await FileIO.WriteTextAsync(file, json);
-        //}
-
-        //public static async Task RemovePinnedLocationsTasksList(LocationItem location) {
-        //    var previousList = await GetPinnedLocationsTaskList();
-        //    if (previousList == null) return;
-
-        //    previousList.RemoveAll((item) => {
-        //        return item.Id == location.Id;
-        //    });
-
-        //    string json = JsonConvert.SerializeObject(previousList);
-
-        //    StorageFile file =
-        //        await ApplicationData
-        //                .Current
-        //                .LocalFolder
-        //                .CreateFileAsync(SavedLocationsTasksKey, CreationCollisionOption.ReplaceExisting);
-
-        //    await FileIO.WriteTextAsync(file, json);
-        //}
-
-        //public static async Task<List<LocationItem>> GetPinnedLocationsTaskList() {
-        //    StorageFile file = (StorageFile)await ApplicationData.Current.LocalFolder.TryGetItemAsync(SavedLocationsTasksKey);
-        //    if (file == null) return null;
-
-        //    string json = await FileIO.ReadTextAsync(file);
-        //    return JsonConvert.DeserializeObject<List<LocationItem>>(json);
-        //}
 
         #endregion tasks
 

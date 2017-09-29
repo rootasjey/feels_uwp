@@ -22,6 +22,8 @@ namespace Feels {
 
         public static ResourceLoader ResourceLoader { get; set; }
 
+        private const string PrimaryTileId = "App";
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -49,8 +51,6 @@ namespace Feels {
             }
 #endif
             Frame rootFrame = Window.Current.Content as Frame;
-
-            //if (DataSource == null) UpdateLanguage();
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
@@ -86,7 +86,10 @@ namespace Feels {
                     //} else {
                     //    rootFrame.Navigate(typeof(HomePage_Desktop), e.Arguments);
                     //}
-                    rootFrame.Navigate(typeof(HomePage), e.Arguments);
+
+                    //rootFrame.Navigate(typeof(HomePage), e.Arguments);
+                    if (e.TileId == PrimaryTileId) { rootFrame.Navigate(typeof(HomePage), e.Arguments); }
+                    else { rootFrame.Navigate(typeof(HomePage), e.TileId); }
                 }
 
                 // Ensure the current window is active
