@@ -221,6 +221,10 @@ namespace Feels.Views {
         #endregion commandbar
 
         #region events
+        protected override void OnGotFocus(RoutedEventArgs e) {
+            RefreshSavedLocationsItems();
+            base.OnGotFocus(e);
+        }
 
         private async void SearchLocationBox_KeyUp(object sender, KeyRoutedEventArgs e) {
             var query = ((TextBox)sender).Text;
@@ -320,6 +324,35 @@ namespace Feels.Views {
             SavedLocationRightTappedFlyout.ShowAt(listItem);
         }
 
+        private async void SlidableListItem_LeftCommandRequested(object sender, EventArgs e) {
+            var item = (SlidableListItem)sender;
+            var location = (LocationItem)item.DataContext;
+
+            var isPinned = TileDesigner.IsSecondaryTilePinned(location);
+
+            if (isPinned) {
+                var unpinSuccess = await UnpinLocationOnStart(location);
+
+                if (unpinSuccess) {
+                    item.LeftLabel = App.ResourceLoader.GetString("Pin");
+                    item.LeftIcon = Symbol.Pin;
+
+                    DataTransfer.ShowLocalToast(App.ResourceLoader.GetString("UnpinSuccess"));
+                }
+
+                return;
+            }
+
+            var pinSuccess = await PinLocationOnStart(location);
+
+            if (pinSuccess) {
+                item.LeftLabel = App.ResourceLoader.GetString("Unpin");
+                item.LeftIcon = Symbol.UnPin;
+
+                DataTransfer.ShowLocalToast(App.ResourceLoader.GetString("PinSuccess"));
+            }
+        }
+
         private void CmdPinLocation_Tapped(object sender, TappedRoutedEventArgs e) {
             var flyout = (MenuFlyoutItem)sender;
             var location = (LocationItem)flyout.DataContext;
@@ -332,32 +365,15 @@ namespace Feels.Views {
             UnpinLocationOnStart(location);
         }
 
-        private async void UnpinLocationOnStart(LocationItem location) {
-            // 1.Unpin
-            var locationId = TileDesigner.ConvertLocationNameToTileId(location.Name);
-            var isUnpinned = await TileDesigner.UnpinSecondaryTile(locationId);
-
-            if (!isUnpinned) { return; }
-
-            // 2.Delte task config
-            Settings.DeleteSecondaryTaskLocation(locationId);
-
-            // 3.Unregister task
-            BackgroundTasks.UnregisterSecondaryTileTask(locationId);
-        }
-
-        private async void PinLocationOnStart(LocationItem location) {
+        private async Task<bool> PinLocationOnStart(LocationItem location) {
             // 1.Ask for pin
             var locationId = TileDesigner.ConvertLocationNameToTileId(location.Name);
             var isPined = await TileDesigner.PinSecondaryTile(location);
 
-            if (!isPined) { return; }
-
-            CmdPinLocation.Text = App.ResourceLoader.GetString("Unpin");
+            if (!isPined) { return false; }
 
             // 2.Register task config            
-            Settings.SaveSecondaryTaskLocation(locationId, location);
-            //Settings.SavePinnedLocationsTasksList(location);
+            await Settings.SaveSecondaryTaskLocation(locationId, location);
 
             // 3.Register task
             BackgroundTasks.RegisterSecondaryTileTask(locationId);
@@ -365,12 +381,31 @@ namespace Feels.Views {
             // 4.Update the tile
             var forecast = await App.DataSource.GetCurrentForecast(location.Latitude, location.Longitude);
             TileDesigner.UpdateSecondary(locationId, forecast, location);
+
+            return true;
+        }
+
+        private async Task<bool> UnpinLocationOnStart(LocationItem location) {
+            // 1.Unpin
+            var locationId = TileDesigner.ConvertLocationNameToTileId(location.Name);
+            var isUnpinned = await TileDesigner.UnpinSecondaryTile(locationId);
+
+            if (!isUnpinned) { return false; }
+
+            // 2.Delte task config
+            await Settings.DeleteSecondaryTaskLocation(locationId);
+
+            // 3.Unregister task
+            BackgroundTasks.UnregisterSecondaryTileTask(locationId);
+
+            return true;
         }
 
         private void SavedLocation_Loaded(object sender, RoutedEventArgs e) {
             _delaySavedLocationList += 100;
 
             var item = (SlidableListItem)sender;
+
             item.Offset(0, 50, 0)
                 .Fade(0, 0)
                 .Then()
@@ -378,6 +413,14 @@ namespace Feels.Views {
                 .Fade(1)
                 .SetDelay(_delaySavedLocationList)
                 .Start();
+
+            var location = (LocationItem)item.DataContext;
+            var isPinned = TileDesigner.IsSecondaryTilePinned(location);
+
+            if (isPinned) {
+                item.LeftLabel = App.ResourceLoader.GetString("Unpin");
+                item.LeftIcon = Symbol.UnPin;
+            }
         }
         #endregion events
 
@@ -422,6 +465,26 @@ namespace Feels.Views {
             }
         }
 
+        private void RefreshSavedLocationsItems() {
+            if (SavedLocationsListView == null || SavedLocationsListView.Items.Count == 0) {
+                return;
+            }
+
+            foreach (LocationItem location in SavedLocationsListView.Items) {
+                var isPinned = TileDesigner.IsSecondaryTilePinned(location);
+
+                var item = (ListViewItem)SavedLocationsListView.ContainerFromItem(location);
+                var slidableListItem = (SlidableListItem)item.ContentTemplateRoot;
+
+                if (isPinned) {
+                    slidableListItem.LeftLabel = App.ResourceLoader.GetString("Unpin");
+                    slidableListItem.LeftIcon = Symbol.UnPin;
+                } else {
+                    slidableListItem.LeftLabel = App.ResourceLoader.GetString("Pin");
+                    slidableListItem.LeftIcon = Symbol.Pin;
+                }
+            }
+        }
 
         #endregion others methods
 

@@ -555,4 +555,13 @@
   <data name="CmdDonations.Label" xml:space="preserve">
     <value>пожертвования</value>
   </data>
+  <data name="LocationListItem.LeftLabel" xml:space="preserve">
+    <value>pin</value>
+  </data>
+  <data name="PinSuccess" xml:space="preserve">
+    <value>Плитка была закреплена на начальном экране.</value>
+  </data>
+  <data name="UnpinSuccess" xml:space="preserve">
+    <value>Плитки был должным образом удален.</value>
+  </data>
 </root>

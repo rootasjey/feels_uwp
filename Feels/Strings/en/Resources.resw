@@ -457,7 +457,7 @@
     <value>Seems like you aren't on Earth. Please check your location settings or your internet connection</value>
   </data>
   <data name="LocationListItem.RightLabel" xml:space="preserve">
-    <value>Delete</value>
+    <value>delete</value>
   </data>
   <data name="LocationSettingsButton.Content" xml:space="preserve">
     <value>location settings</value>
@@ -554,5 +554,14 @@
   </data>
   <data name="CmdDonations.Label" xml:space="preserve">
     <value>donations</value>
+  </data>
+  <data name="LocationListItem.LeftLabel" xml:space="preserve">
+    <value>pin</value>
+  </data>
+  <data name="PinSuccess" xml:space="preserve">
+    <value>The tile has been pinned.</value>
+  </data>
+  <data name="UnpinSuccess" xml:space="preserve">
+    <value>The tile has been correctly unpinned.</value>
   </data>
 </root>

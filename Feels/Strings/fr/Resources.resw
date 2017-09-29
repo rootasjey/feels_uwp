@@ -457,7 +457,7 @@
     <value>Vous ne semblez pas avoir les pieds au sol. Veuillez vérifier vos paramètres de localisation ainsi que votre connexion internet.</value>
   </data>
   <data name="LocationListItem.RightLabel" xml:space="preserve">
-    <value>Supprimer</value>
+    <value>supprimer</value>
   </data>
   <data name="LocationSettingsButton.Content" xml:space="preserve">
     <value>paramètres de localisation</value>
@@ -508,7 +508,7 @@
     <value>désépingler</value>
   </data>
   <data name="Pin" xml:space="preserve">
-    <value>Epingler</value>
+    <value>épingler</value>
   </data>
   <data name="AnimationsLabel.Text" xml:space="preserve">
     <value>animations</value>
@@ -554,5 +554,14 @@
   </data>
   <data name="CmdDonations.Label" xml:space="preserve">
     <value>dons</value>
+  </data>
+  <data name="LocationListItem.LeftLabel" xml:space="preserve">
+    <value>épingler</value>
+  </data>
+  <data name="PinSuccess" xml:space="preserve">
+    <value>La tuile a été correctement épinglée.</value>
+  </data>
+  <data name="UnpinSuccess" xml:space="preserve">
+    <value>La tuile a été retirée de l'écran d'accueil.</value>
   </data>
 </root>
