@@ -576,4 +576,10 @@
   <data name="SecondaryTasksPivot.Header" xml:space="preserve">
     <value>tâches secondaires</value>
   </data>
+  <data name="OnLabel.Text" xml:space="preserve">
+    <value> sur </value>
+  </data>
+  <data name="StoreHeroImage.Text" xml:space="preserve">
+    <value>L'image héro du store est de </value>
+  </data>
 </root>

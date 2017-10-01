@@ -548,6 +548,24 @@
                                     <Run>• Пекурин Максим</Run>
                                 </Paragraph>
                             </RichTextBlock>
+                            
+                            <TextBlock Text="images" Style="{StaticResource SettingsTitle}"
+                                       Margin="0,12,0,0"/>
+                            <RichTextBlock Opacity=".5" FontSize="18">
+                                <Paragraph>
+                                    <Run x:Uid="StoreHeroImage" Text="The store hero image is from "/>
+                                    
+                                    <Hyperlink NavigateUri="https://unsplash.com/photos/BKEz7vA8l7U?utm_source=hangon">
+                                        Matthias Heil
+                                    </Hyperlink>
+
+                                    <Run x:Uid="OnLabel" Text=" on "/>
+
+                                    <Hyperlink NavigateUri="https://unsplash.com/?utm_source=hangon">
+                                        Unsplash
+                                    </Hyperlink>
+                                </Paragraph>
+                            </RichTextBlock>
                         </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
@@ -563,10 +581,14 @@
                                 <Span FontWeight="SemiBold">LAST UPDATE CHANGELOG</Span>
                             </Paragraph>
 
-                            <Paragraph>
+                            <!--<Paragraph>
                                 <Run x:Name="CurrentAppVersionLabel"/>
-                            </Paragraph>
+                            </Paragraph>-->
+                        </RichTextBlock>
 
+                        <TextBlock x:Name="CurrentAppVersionLabel" Opacity=".5" FontWeight="SemiBold"/>
+
+                        <RichTextBlock Margin="0,12,0,0">
                             <Paragraph>
                                 <Span FontSize="22" 
                                   FontWeight="Medium" 
@@ -575,7 +597,7 @@
                                 </Span>
                             </Paragraph>
                         </RichTextBlock>
-
+                        
                         <RichTextBlock Opacity=".5" Margin="0,0,0,24">
                             <Paragraph>
                                 <Span>You can now pin several locations to your start screen.</Span>

@@ -101,13 +101,13 @@
                          Visibility="Collapsed"
                          VerticalAlignment="Center"
                          Grid.Row="1"
+                         Padding="0"
                          Canvas.ZIndex="2">
             
             <StackPanel ScrollViewer.VerticalScrollBarVisibility="Disabled"
                         Padding="0,0,0,30">
 
                 <StackPanel Orientation="Horizontal"
-                            Margin="-12,-12"
                             Padding="12"
                             Height="90"
                             Background="{ThemeResource SystemControlHighlightAccentBrush}"
@@ -128,9 +128,9 @@
                 </StackPanel>
 
                 <TextBlock x:Name="UpdateVersion"
-                           x:Uid="UpdateVersion" Opacity=".5" Margin="0,24,0,0"/>
+                           x:Uid="UpdateVersion" Opacity=".5" Margin="12,24,0,0"/>
 
-                <StackPanel>
+                <StackPanel Padding="12">
                     <!--UPDATE CHANGELOG-->
                     <RichTextBlock TextWrapping="Wrap" Margin="0,0,0,0">
                         <Paragraph>
@@ -181,7 +181,7 @@
 
                 <Button x:Name="ChangelogDismissButton" 
                         Content="OKAY" 
-                        Margin="0,42,0,0"
+                        Margin="12,42,0,0"
                         Width="100"
                         Height="40"
                         HorizontalAlignment="Left"

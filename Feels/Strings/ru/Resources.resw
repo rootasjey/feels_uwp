@@ -576,4 +576,10 @@
   <data name="SecondaryTasksPivot.Header" xml:space="preserve">
     <value>Вторичные задачи</value>
   </data>
+  <data name="OnLabel.Text" xml:space="preserve">
+    <value> на </value>
+  </data>
+  <data name="StoreHeroImage.Text" xml:space="preserve">
+    <value>Microsoft Store изображение происходит от </value>
+  </data>
 </root>

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="17924JrmieCorpinot.Feels" Publisher="CN=08229696-E9AC-418B-A19C-5ECD19E1E58A" Version="1.4.0.0" />
+  <Identity Name="17924JrmieCorpinot.Feels" Publisher="CN=jerem" Version="1.4.0.0" />
   <mp:PhoneIdentity PhoneProductId="f458506c-d00c-4666-bfe3-34e3b4bd599f" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Feels</DisplayName>
@@ -22,15 +22,15 @@
         <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="transparent" />
       </uap:VisualElements>
       <Extensions>
+        <Extension Category="windows.backgroundTasks" EntryPoint="Tasks.SecondaryTileTask">
+          <BackgroundTasks>
+            <Task Type="timer" />
+          </BackgroundTasks>
+        </Extension>
         <Extension Category="windows.backgroundTasks" EntryPoint="Tasks.PrimaryTileTask">
           <BackgroundTasks>
             <Task Type="timer" />
             <Task Type="location" />
-          </BackgroundTasks>
-        </Extension>
-        <Extension Category="windows.backgroundTasks" EntryPoint="Tasks.SecondaryTileTask">
-          <BackgroundTasks>
-            <Task Type="timer" />
           </BackgroundTasks>
         </Extension>
       </Extensions>
