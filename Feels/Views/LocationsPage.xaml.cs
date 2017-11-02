@@ -288,7 +288,7 @@ namespace Feels.Views {
             await Settings.SaveFavoriteLocation(location);
             await Settings.SaveLocationsAsync(_savedLocations.ToList());
 
-            HomePage._ForceDataRefresh = true;
+            HomePage._forceDataRefresh = true;
             Frame.Navigate(typeof(HomePage));
         }
 

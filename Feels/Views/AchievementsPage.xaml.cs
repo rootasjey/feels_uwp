@@ -121,6 +121,13 @@ namespace Feels.Views {
             HideInAppPurchasesLoadingView();
 
             UnlocksListView.ItemsSource = addonsList;
+
+            // TODO: move to check entitlement
+            var res = await InAppPurchases.GetUserAddons();
+            foreach (KeyValuePair<string, StoreProduct> item in res.Products) {
+                StoreProduct product = item.Value;
+            }
+
         }
 
         #endregion data
@@ -130,6 +137,7 @@ namespace Feels.Views {
         private void Addon_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
             var item = (Grid)sender;
             var product = (StoreProduct)item.DataContext;
+
             Purchase(product.StoreId);
         }
 
@@ -147,15 +155,18 @@ namespace Feels.Views {
                 extendedError = "ExtendedError: " + result.ExtendedError.Message;
             }
 
+            //var res1 = await InAppPurchases.GetRemainingBalance(id);
+
             switch (result.Status) {
                 case StorePurchaseStatus.AlreadyPurchased:
                     descriptionError = App.ResourceLoader.GetString("PurchaseStatusAlreadyPurchased");
-                    InAppPurchases.ConsumeAddon(id);
+                    //InAppPurchases.ConsumeAddon(id);
                     break;
 
                 case StorePurchaseStatus.Succeeded:
                     descriptionError = App.ResourceLoader.GetString("PurchaseStatusSucceeded");
-                    InAppPurchases.ConsumeAddon(id);
+                    //InAppPurchases.ConsumeAddon(id);
+                    //var res2 = await InAppPurchases.GetRemainingBalance(id);
                     break;
 
                 case StorePurchaseStatus.NotPurchased:

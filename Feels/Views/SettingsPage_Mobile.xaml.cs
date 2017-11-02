@@ -396,7 +396,7 @@ namespace Feels.Views {
 
         #region personalization
         void AutoRefreshDataOnNextNavigation() {
-            HomePage._ForceDataRefresh = true;
+            HomePage._forceDataRefresh = true;
         }
 
         private void BackgroundColorAnimationToggle_Toggled(object sender, RoutedEventArgs e) {

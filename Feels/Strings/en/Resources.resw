@@ -192,7 +192,7 @@
   <data name="FeedbackTitle.Text" xml:space="preserve">
     <value>my request</value>
   </data>
-  <data name="FeelsLikeText.Text" xml:space="preserve">
+  <data name="FeelsLike" xml:space="preserve">
     <value>feels more like</value>
   </data>
   <data name="FindLocationManually.Text" xml:space="preserve">
@@ -456,13 +456,13 @@
   <data name="LocationListItem.RightLabel" xml:space="preserve">
     <value>delete</value>
   </data>
-  <data name="LocationSettingsButton.Content" xml:space="preserve">
+  <data name="LocationSettingsButton.Text" xml:space="preserve">
     <value>location settings</value>
   </data>
   <data name="NoLocationFoundBlock.Text" xml:space="preserve">
     <value>Sorry, there's no result for your query. Try something else.</value>
   </data>
-  <data name="TryAgainButton.Content" xml:space="preserve">
+  <data name="TryAgainButton.Text" xml:space="preserve">
     <value>try again</value>
   </data>
   <data name="CmdDeleteSavedLocation.Text" xml:space="preserve">
@@ -483,7 +483,7 @@
   <data name="BlockDontUseGPS.Text" xml:space="preserve">
     <value>If you don't want to use your GPS location, you can add manually locations</value>
   </data>
-  <data name="ButtonAddLocationManually.Content" xml:space="preserve">
+  <data name="ButtonAddLocationManually.Text" xml:space="preserve">
     <value>add location manually</value>
   </data>
   <data name="BlockTheme.Text" xml:space="preserve">
@@ -581,5 +581,11 @@
   </data>
   <data name="StoreHeroImage.Text" xml:space="preserve">
     <value>The store hero image is from </value>
+  </data>
+  <data name="LoadingTryingLocalize.Text" xml:space="preserve">
+    <value>Trying to locate you on Earth...</value>
+  </data>
+  <data name="SuccessMessageLocationName" xml:space="preserve">
+    <value>We found you at the following location</value>
   </data>
 </root>

@@ -13,6 +13,18 @@
         <Flyout x:Key="FlyoutWeatherDetail">
             <Grid x:Name="FlyoutWeatherDetailContent"/>
         </Flyout>
+
+        <Style x:Key="ButtonSquarredStyle" TargetType="Button">
+            <Setter Property="Height" Value="140"/>
+            <Setter Property="Width" Value="120"/>
+        </Style>
+
+        <Style x:Key="EllipseSeparatorStyle" TargetType="Ellipse">
+            <Setter Property="Height" Value="10"/>
+            <Setter Property="Width" Value="10"/>
+            <Setter Property="Margin" Value="5,0"/>
+            <Setter Property="Fill" Value="{ThemeResource SystemControlHighlightAccentBrush}"/>
+        </Style>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -193,7 +205,6 @@
             <PivotItem x:Name="NowPivot" Margin="0,-51,0,0">
                 <ScrollViewer x:Name="PivotContent">
                     <Grid>
-
                         <Grid x:Name="Theater" 
                               Visibility="Visible" 
                               Opacity="0"/>
@@ -258,8 +269,7 @@
                                                    Opacity=".5"
                                                    TextAlignment="Center"/>
 
-                                    <TextBlock x:Name="FeelsLike" 
-                                               x:Uid="FeelsLikeText"
+                                    <TextBlock x:Name="FeelsLike"
                                                Text="Feels more like "
                                                FontWeight="Light"
                                                Opacity=".6"
@@ -576,81 +586,207 @@
                                     Margin="24,0,24,0"
                                     VerticalAlignment="Center"
                                     Visibility="Collapsed">
-                            
-                            <FontIcon x:Name="PinEarthIcon" 
-                                      FontFamily="Segoe MDL2 Assets" 
-                                      FontSize="40"
-                                      Height="40"
-                                      Width="40"
-                                      Glyph="&#xE139;"/>
-                            
-                            <FontIcon x:Name="EarthIcon" 
+
+                            <Grid x:Name="SpaceBackgroundPanel">
+                                <StackPanel x:Name="SpaceModulePanel">
+                                    <BitmapIcon x:Name="SpaceModuleIcon"
+                                        Height="200"
+                                        Width="200"
+                                        Margin="0,-60,-30,0"
+                                        UriSource="/Assets/Icons/space-module.png"/>
+
+                                    <Line x:Name="SpaceModuleLine"
+                                      X1="45" Y1="0"
+                                      X2="0" Y2="45"
+                                      Margin="-70,-75,0,0"
+                                      HorizontalAlignment="Center"
+                                      Fill="Red"
+                                      StrokeThickness="10"
+                                      StrokeDashArray="1.5"
+                                      StrokeDashCap="Round"
+                                      Stroke="Salmon"/>
+                                </StackPanel>
+
+                                <Grid x:Name="LoadingViewStarsBackground">
+                                    <BitmapIcon x:Name="LoadingViewStars1" 
+                                                UriSource="/Assets/Icons/shining_yellow.png"
+                                                Height="50"
+                                                Width="50"
+                                                Foreground="Gold"
+                                                Margin="0,-350,0,0"/>
+
+                                    <BitmapIcon x:Name="LoadingViewStars2" 
+                                                UriSource="/Assets/Icons/shining_yellow.png"
+                                                Height="30"
+                                                Width="30"
+                                                Margin="250,-50,0,0"/>
+
+                                    <Ellipse x:Name="LoadingViewStars3"
+                                             Height="10"
+                                             Width="10"
+                                             Margin="-250,-100,0,0"
+                                             Fill="{ThemeResource TextBoxButtonForegroundThemeBrush}"
+                                             StrokeThickness="4"/>
+
+                                    <Ellipse x:Name="LoadingViewStars4"
+                                             Height="15"
+                                             Width="15"
+                                             Margin="250,-350,0,0"
+                                             Fill="{ThemeResource TextBoxButtonForegroundThemeBrush}"
+                                             StrokeThickness="4"/>
+                                </Grid>
+                            </Grid>
+
+                            <FontIcon x:Name="EarthIcon"
                                       FontFamily="Segoe MDL2 Assets"
-                                      FontSize="80"
-                                      Height="80"
-                                      Width="80"
-                                      Margin="0,20"
+                                      FontSize="50"
+                                      Height="50"
+                                      Width="50"
+                                      Margin="-160,-30,0,0"
                                       Glyph="&#xE128;"/>
                             
-                            <TextBlock Text="Trying to locate you on Earth..." 
-                                       Opacity="0.6"
-                                       FontSize="24"
-                                       TextWrapping="Wrap"
-                                       HorizontalAlignment="Center"/>
-                            <ProgressBar x:Name="LoadingProgress" IsIndeterminate="True"/>
+                            <StackPanel x:Name="LocalizationSearchingMessage"
+                                        Visibility="Visible">
+                                
+                                <TextBlock x:Uid="LoadingTryingLocalize" 
+                                           Text="Trying to locate you on Earth..." 
+                                           Opacity="0.6"
+                                           Margin="0,50,0,6"
+                                           FontSize="20"
+                                           TextWrapping="Wrap"
+                                           FontWeight="SemiBold"
+                                           HorizontalAlignment="Center"/>
+                                <ProgressBar x:Name="LoadingProgress" IsIndeterminate="True"/>
+                            </StackPanel>
+
+                            <StackPanel x:Name="LocalizationSuccessMessage"
+                                        Margin="0,50,0,0"
+                                        Visibility="Collapsed"
+                                        HorizontalAlignment="Center">
+                                
+                                <FontIcon Glyph="&#xE001;" FontSize="50" Foreground="LimeGreen"/>
+                                <TextBlock x:Name="SuccessMessageLocationName" 
+                                           x:Uid="SuccessMessageLocationName"
+                                           FontSize="20"
+                                           Opacity=".6"
+                                           TextWrapping="Wrap"
+                                           FontWeight="SemiBold"
+                                           Text="We found you at the following location: "/>
+                            </StackPanel>
                         </StackPanel>
 
-                        <StackPanel x:Name="LocationDisabledMessage"
+                        <ScrollViewer x:Name="LocationDisabledMessage"
                                     Visibility="Collapsed"
                                     VerticalAlignment="Center"
                                     Margin="24,0,24,0">
-                            <FontIcon x:Name="LocPauseIcon" 
-                                      FontFamily="Segoe MDL2 Assets" 
-                                      Glyph="&#xEB4A;" 
-                                      FontSize="60" 
-                                      Foreground="{ThemeResource SystemControlHighlightAccentBrush}"/>
-                            <TextBlock x:Name="LocationFailedText"
-                                       x:Uid="LocationFailedText"
-                                       TextAlignment="Center"
-                                       Text="Seems like you aren't on Earth. Please check your location settings or your internet connection"
-                                       FontSize="20" 
-                                       FontWeight="SemiBold"
-                                       Opacity=".7"
-                                       TextWrapping="Wrap"/>
-                            <Button x:Name="LocationSettingsButton"
-                                    x:Uid="LocationSettingsButton"
-                                    Content="location settings" 
-                                    MinWidth="150" 
-                                    Margin="0,20,0,10" 
-                                    Tapped="LocationSettingsButton_Tapped"
-                                    HorizontalAlignment="Center"/>
 
-                            <Button x:Name="TryAgainButton"
-                                    x:Uid="TryAgainButton"
-                                    Content="Try Again"
-                                    MinWidth="150"
-                                    Foreground="White"
-                                    Background="{ThemeResource SystemControlHighlightAccentBrush}"
-                                    Tapped="TryAgainButton_Tapped"
-                                    HorizontalAlignment="Center"/>
+                            <StackPanel x:Name="LocationDisabledMessageContent"
+                                        Opacity="0">
+                                <Grid>
+                                    <BitmapIcon Height="20" 
+                                                Margin="20,-150,0,0"
+                                                UriSource="/Assets/Icons/shining_yellow.png"/>
 
-                            <Rectangle Width="200" Fill="{ThemeResource SystemControlHighlightAccentBrush}" 
-                                       Height="2" Margin="0,40"/>
+                                    <BitmapIcon Height="20" 
+                                                Foreground="Salmon"
+                                                Margin="230,-20,0,0"
+                                                UriSource="/Assets/Icons/shining_yellow.png"/>
+
+                                    <BitmapIcon Height="30" 
+                                                Foreground="Gold"
+                                                Margin="-230,80,0,0"
+                                                UriSource="/Assets/Icons/shining_yellow.png"/>
+
+                                    <BitmapIcon x:Name="AstronauteIcon" 
+                                                Height="190"
+                                                Width="190"
+                                                Visibility="Visible"
+                                                Canvas.ZIndex="2"
+                                                UriSource="/Assets/Icons/astronaut-ingravity.png"/>
+                                </Grid>
                             
-                            <TextBlock x:Uid="BlockDontUseGPS"
-                                       Margin="0,0,0,10"
-                                       Text="If you don't want to use your GPS location, you can add manually locations"
-                                       FontSize="18"
-                                       HorizontalAlignment="Center"
-                                       FontWeight="Light"
-                                       TextWrapping="Wrap"/>
-                            <Button x:Uid="ButtonAddLocationManually" 
-                                    Content="add location manually" 
-                                    HorizontalAlignment="Center"
-                                    Foreground="White"
-                                    Background="{ThemeResource SystemControlHighlightAccentBrush}"
-                                    Tapped="AddLocationManually_Tapped"/>
-                        </StackPanel>
+                                <TextBlock x:Name="LocationFailedText"
+                                           x:Uid="LocationFailedText"
+                                           Margin="0,30"
+                                           TextAlignment="Center"
+                                           Text="Seems like you aren't on Earth. Please check your location settings or your internet connection"
+                                           FontSize="18" 
+                                           FontWeight="Normal"
+                                           Opacity=".6"
+                                           TextWrapping="Wrap"/>
+
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="0,12"
+                                            HorizontalAlignment="Center">
+
+                                    <Button x:Name="LocationSettingsButton"
+                                            Style="{StaticResource ButtonSquarredStyle}"
+                                            Tapped="LocationSettingsButton_Tapped"
+                                            HorizontalAlignment="Center">
+                                        <Button.Content>
+                                            <StackPanel>
+                                                <FontIcon Glyph="&#xE115;"/>
+                                                <TextBlock x:Uid="LocationSettingsButton" 
+                                                           Text="location settings" TextWrapping="Wrap"/>
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+
+                                    <Button x:Name="TryAgainButton"
+                                            Style="{StaticResource ButtonSquarredStyle}"
+                                            Foreground="White"
+                                            Background="{ThemeResource SystemControlHighlightAccentBrush}"
+                                            Tapped="TryAgainButton_Tapped"
+                                            HorizontalAlignment="Center">
+                                        <Button.Content>
+                                            <StackPanel>
+                                                <FontIcon Glyph="&#xE149;"/>
+                                                <TextBlock x:Uid="TryAgainButton" 
+                                                           Text="try Again" 
+                                                           TextWrapping="Wrap"/>
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                </StackPanel>
+
+                                <Rectangle  Height="4" Width="50"
+                                            Visibility="Collapsed"
+                                            HorizontalAlignment="Center"
+                                            Stroke="{ThemeResource SystemControlHighlightAccentBrush}" 
+                                            StrokeThickness="3" Margin="0,30"/>
+                                
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="0,20"
+                                            HorizontalAlignment="Center">
+                                    <Ellipse Style="{StaticResource EllipseSeparatorStyle}"/>
+                                    <Ellipse Style="{StaticResource EllipseSeparatorStyle}"/>
+                                    <Ellipse Style="{StaticResource EllipseSeparatorStyle}"/>
+                                </StackPanel>
+                            
+                                <TextBlock x:Uid="BlockDontUseGPS"
+                                           Margin="20,0,20,20"
+                                           Opacity=".6"
+                                           TextAlignment="Center"
+                                           Text="If you don't want to use your GPS location, you can add your location manually."
+                                           FontSize="16"
+                                           HorizontalAlignment="Center"
+                                           FontWeight="Normal"
+                                           TextWrapping="Wrap"/>
+
+                                <Button HorizontalAlignment="Center"
+                                        Foreground="White"
+                                        Background="{ThemeResource SystemControlHighlightAccentBrush}"
+                                        Tapped="AddLocationManually_Tapped">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <FontIcon Glyph="&#xE11A;" Margin="0,0,12,0"/>
+                                            <TextBlock x:Uid="ButtonAddLocationManually" 
+                                                       Text="add location manually"/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                            </StackPanel>
+                        </ScrollViewer>
 
                         <Maps:MapControl x:Name="PageMapControl" 
                                          HorizontalAlignment="Left"

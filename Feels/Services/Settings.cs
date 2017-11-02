@@ -347,6 +347,7 @@ namespace Feels.Services {
         #endregion animation
 
         #region appversion
+
         public static bool IsNewUpdatedLaunch() {
             var isNewUpdatedLaunch = true;
             var currentVersion = GetAppVersion();
@@ -369,9 +370,9 @@ namespace Feels.Services {
             PackageId packageId = package.Id;
             PackageVersion version = packageId.Version;
 
-            return string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
-
+            return $"{version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
         }
+
         #endregion appversion
     }
 }

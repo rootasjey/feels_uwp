@@ -198,7 +198,7 @@
   <data name="FeedbackTitle.Text" xml:space="preserve">
     <value>Напишите</value>
   </data>
-  <data name="FeelsLikeText.Text" xml:space="preserve">
+  <data name="FeelsLike" xml:space="preserve">
     <value>по ощущениям</value>
   </data>
   <data name="FindLocationManually.Text" xml:space="preserve">
@@ -456,13 +456,13 @@
   <data name="LocationListItem.RightLabel" xml:space="preserve">
     <value>Удалить</value>
   </data>
-  <data name="LocationSettingsButton.Content" xml:space="preserve">
+  <data name="LocationSettingsButton.Text" xml:space="preserve">
     <value>Параметры местоположения</value>
   </data>
   <data name="NoLocationFoundBlock.Text" xml:space="preserve">
     <value>К сожалению это не результат для вашего запроса. Попробуйте что-нибудь другое.</value>
   </data>
-  <data name="TryAgainButton.Content" xml:space="preserve">
+  <data name="TryAgainButton.Text" xml:space="preserve">
     <value>Повторить</value>
   </data>
   <data name="CmdDeleteSavedLocation.Text" xml:space="preserve">
@@ -483,7 +483,7 @@
   <data name="BlockDontUseGPS.Text" xml:space="preserve">
     <value>Если вы не хотите использовать местоположение GPS, можно вручную добавить местоположения</value>
   </data>
-  <data name="ButtonAddLocationManually.Content" xml:space="preserve">
+  <data name="ButtonAddLocationManually.Text" xml:space="preserve">
     <value>Добавить местоположение вручную</value>
   </data>
   <data name="BlockTheme.Text" xml:space="preserve">
@@ -581,5 +581,11 @@
   </data>
   <data name="StoreHeroImage.Text" xml:space="preserve">
     <value>Microsoft Store изображение происходит от </value>
+  </data>
+  <data name="LoadingTryingLocalize.Text" xml:space="preserve">
+    <value>Trying to locate you on Earth...</value>
+  </data>
+  <data name="SuccessMessageLocationName" xml:space="preserve">
+    <value>We found you at the following location</value>
   </data>
 </root>

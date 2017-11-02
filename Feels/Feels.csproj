@@ -18,7 +18,7 @@
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WindowsXamlEnableOverview>true</WindowsXamlEnableOverview>
     <PackageCertificateKeyFile>Feels_TemporaryKey.pfx</PackageCertificateKeyFile>
-    <PackageCertificateThumbprint>6696980BD714C9DC7C0D07C9BDF109E1796D079B</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>A2ECB87B2F86424ECA2987D2CE632A80FFC7309D</PackageCertificateThumbprint>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
@@ -146,7 +146,6 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="Feels_StoreKey.pfx" />
     <None Include="Feels_TemporaryKey.pfx" />
     <PRIResource Include="Strings\ru\Resources.resw" />
     <PRIResource Include="Strings\en\Resources.resw" />
@@ -160,6 +159,7 @@
     <Content Include="Assets\BadgeLogo.scale-200.png" />
     <Content Include="Assets\BadgeLogo.scale-400.png" />
     <Content Include="Assets\icon.png" />
+    <Content Include="Assets\Icons\astronaut-ingravity.png" />
     <Content Include="Assets\Icons\cloudy.png" />
     <Content Include="Assets\Icons\dark_cloud.png" />
     <Content Include="Assets\Icons\fog.png" />
@@ -182,9 +182,12 @@
     <Content Include="Assets\Icons\precip_proba.png" />
     <Content Include="Assets\Icons\pressure.png" />
     <Content Include="Assets\Icons\rain.png" />
+    <Content Include="Assets\Icons\shining.png" />
+    <Content Include="Assets\Icons\shining_yellow.png" />
     <Content Include="Assets\Icons\sleet.png" />
     <Content Include="Assets\Icons\snow.png" />
     <Content Include="Assets\Icons\snowflake.png" />
+    <Content Include="Assets\Icons\space-module.png" />
     <Content Include="Assets\Icons\sun.png" />
     <Content Include="Assets\Icons\sunrise.png" />
     <Content Include="Assets\Icons\sunset.png" />
