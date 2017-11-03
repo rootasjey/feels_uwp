@@ -945,15 +945,13 @@
                                                    VerticalAlignment="Center"
                                                    FontSize="26"
                                                    FontWeight="Light"
-                                                   Grid.Row="0"
-                                                   />
+                                                   Grid.Row="0"/>
 
                                         <BitmapIcon UriSource="{x:Bind Icon, Converter={StaticResource WeatherIcon}}"
                                                     Height="30"
                                                     Width="30"
                                                     VerticalAlignment="Center"
-                                                    Grid.Column="1"
-                                                    />
+                                                    Grid.Column="1"/>
 
                                         <TextBlock x:Name="Summary" 
                                                    Text="{x:Bind Summary}"
