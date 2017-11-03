@@ -51,7 +51,10 @@ namespace Feels.Views {
 
         private string _currentTown { get; set; }
 
+        // -----------
         // Composition
+        // -----------
+
         private Compositor _compositor { get; set; }
 
         private Visual _earthVisual { get; set; }
@@ -65,12 +68,6 @@ namespace Feels.Views {
         private AnimationSet _rightArrowAnimationOut { get; set; }
 
         private List<Tuple<Visual, string>> _animatedVisuals { get; set; }
-        //private Dictionary<Visual, string> _animatedVisuals { get; set; }
-        //private List<Visual> _animatedVisuals { get; set; }
-        private Visual _starVisual1 { get; set; }
-        private Visual _starVisual2 { get; set; }
-        private Visual _starVisual3 { get; set; }
-        private Visual _starVisual4 { get; set; }
 
         #endregion variables
 
@@ -80,10 +77,10 @@ namespace Feels.Views {
             InitializeVariables();
             InitialzeEvents();
 
-            BackgroundTasks.CheckAllTasks();
-
             ApplyCommandBarBarFrostedGlass();
             ShowUpdateChangelogIfUpdated();
+
+            BackgroundTasks.CheckAllTasks();
         }
 
         #region titlebar
@@ -141,14 +138,17 @@ namespace Feels.Views {
                 return;
             }
 
-            //InitializePageData();
-            ShowNoAccessView();
+            InitializePageData();
         }
 
         private void App_Resuming(object sender, object e) {
             var task = _UIDispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
                 InitializePageData();
             });
+        }
+
+        private void GoToAchievements_Tapped(object sender, TappedRoutedEventArgs e) {
+            Frame.Navigate(typeof(AchievementsPage));
         }
 
         #endregion navigation
@@ -185,12 +185,6 @@ namespace Feels.Views {
         /// so the app seems fast.
         /// </summary>
         private void LoadLastFetchedData() {
-            //if (_pageDataSource.Forecast != null && _forceDataRefresh == false) {
-            //    HideSplashView();
-            //    HideLoadingView();
-            //    PopulateView();
-            //}
-
             if (_pageDataSource.Forecast == null || _forceDataRefresh) {
                 return;
             }
@@ -291,7 +285,6 @@ namespace Feels.Views {
                 SetCurrentCity();
             }
 
-            // TODO
             await FetchCurrentForecast(location);
 
             ShowLocalizationSuccess();
@@ -304,9 +297,6 @@ namespace Feels.Views {
                     PopulateView();
                 });
             }, autoEvent, 3000, Timeout.Infinite);
-
-            //HideLoadingView();
-            //PopulateView();
         }
 
         private void PopulateView() {
@@ -328,87 +318,68 @@ namespace Feels.Views {
 
             WeatherView.Visibility = Visibility.Visible;
 
-            var weatherCurrent = _pageDataSource.Forecast.Currently;
+            var currentWeather = _pageDataSource.Forecast.Currently;
             var weatherToday = _pageDataSource.Forecast.Daily.Days[0];
 
             WeatherViewContent.AnimateSlideIn();
 
-            UI.AnimateNumericValue((int)weatherCurrent.Temperature, Temperature, _UIDispatcher, "°");
+            UI.AnimateNumericValue((int)currentWeather.Temperature, Temperature, _UIDispatcher, "°");
 
-            PopulateForecastView(weatherToday, weatherCurrent);
+            PopulateForecastView(weatherToday, currentWeather);
 
             AnimateDetailsItems();
             SetMoonPhase(weatherToday);
-            AnimateWindDirectionIcons();
+            AnimateWindDirectionIcons(currentWeather);
 
             DrawScene();
-            UpdateMainTile();
 
-            //var autoEvent = new AutoResetEvent(true);
-
-            //var deffered = new Timer(async (object state) => {
-            //    await _UIDispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-            //        DrawScene();
-            //        UpdateMainTile();
-            //    });
-            //}, autoEvent, 500, Timeout.Infinite);
+            TileDesigner.UpdatePrimary(_LastPosition);
         }
 
         private void PopulateForecastView(DayDataPoint todayWeather, CurrentDataPoint currentWeather) {
             Status.Text = currentWeather.Summary;
-            FeelsLike.Text = string.Format("{0} {1}°{2}", App.ResourceLoader.GetString("FeelsLike"), 
-                currentWeather.ApparentTemperature, Settings.GetTemperatureUnit());
 
-            PrecipProbaValue.Text = string.Format("{0}%", todayWeather.PrecipitationProbability * 100);
-            HumidityValue.Text = string.Format("{0}%", currentWeather.Humidity * 100);
+            //FeelsLike.Text = string.Format("{0} {1}°{2}", App.ResourceLoader.GetString("FeelsLike"), 
+            //    currentWeather.ApparentTemperature, Settings.GetTemperatureUnit());
 
-            SunriseTime.Text = todayWeather.SunriseTime.ToLocalTime().ToString("HH:mm");
-            SunsetTime.Text = todayWeather.SunsetTime.ToLocalTime().ToString("HH:mm");
-            MoonriseTime.Text = todayWeather.SunsetTime.ToLocalTime().ToString("HH:mm");
-            MoonsetTime.Text = todayWeather.SunriseTime.ToLocalTime().ToString("HH:mm");
+            PrecipProbaValue.Text   = $"{todayWeather.PrecipitationProbability * 100}%";
+            HumidityValue.Text      = $"{currentWeather.Humidity * 100}%";
 
-            WindSpeed.Text = string.Format("{0}{1}", currentWeather.WindSpeed, GetWindSpeedUnits());
+            SunriseTime.Text        = todayWeather.SunriseTime.ToLocalTime().ToString("HH:mm");
+            SunsetTime.Text         = todayWeather.SunsetTime.ToLocalTime().ToString("HH:mm");
+            MoonriseTime.Text       = todayWeather.SunsetTime.ToLocalTime().ToString("HH:mm");
+            MoonsetTime.Text        = todayWeather.SunriseTime.ToLocalTime().ToString("HH:mm");
 
-            WindDirection.Text = string.Format("{0}°", currentWeather.WindBearing);
-            WindDirectionIcon
-                .Rotate(currentWeather.WindBearing + 180, 15, 15)
-                .Start();
+            WindSpeed.Text          = $"{currentWeather.WindSpeed}{GetWindSpeedUnits()}";
 
-            CloudCover.Text = string.Format("{0}%", currentWeather.CloudCover * 100);
+            WindDirection.Text      = $"{currentWeather.WindBearing}°";
+
+            CloudCover.Text         = $"{currentWeather.CloudCover * 100}%";
             
-            LastTimeUpdate.Text = DateTime.Now.ToLocalTime().ToString("dddd HH:mm");
-
-            if (_pageDataSource.Forecast.Daily.Days == null ||
-                _pageDataSource.Forecast.Daily.Days.Count == 0) return;
-
-            var currentDay = _pageDataSource.Forecast.Daily.Days[0];
-            var maxTemp = (int)currentDay.MaxTemperature;
-            var minTemp = (int)currentDay.MinTemperature;
-
-            MaxTempValue.Text = maxTemp.ToString();
-            MinTempValue.Text = minTemp.ToString();
-
+            LastTimeUpdate.Text     = DateTime.Now.ToLocalTime().ToString("dddd HH:mm");
+            
             SetPressureValue(currentWeather, true);
 
             SetCurrentCity();
+
+            if (_pageDataSource.Forecast.Daily.Days == null ||
+                _pageDataSource.Forecast.Daily.Days.Count == 0) { return; }
+
+            var currentDay = _pageDataSource.Forecast.Daily.Days[0];
+
+            MaxTempValue.Text = $"{(int)currentDay.MaxTemperature}°";
+            MinTempValue.Text = $"{(int)currentDay.MinTemperature}°";            
         }
 
-        private void AnimateWindDirectionIcons() {
+        private void AnimateWindDirectionIcons(CurrentDataPoint currentWeather) {
+            WindDirectionIcon.Rotate(currentWeather.WindBearing + 180, 15, 15).Start();
+
             var baseAngle = 0;
-
             var visual = ElementCompositionPreview.GetElementVisual(WindDirectionIcon);
-            var compositor = visual.Compositor;
-
-            var animationRotate = compositor.CreateScalarKeyFrameAnimation();
-            animationRotate.InsertKeyFrame(0f, baseAngle);
-            animationRotate.InsertKeyFrame(1f, baseAngle + 20);
-            animationRotate.Duration = TimeSpan.FromSeconds(3);
-            animationRotate.IterationBehavior = AnimationIterationBehavior.Forever;
-            animationRotate.Direction = Windows.UI.Composition.AnimationDirection.Alternate;
+            var animationRotate = UI.CreateScalarAnimation(_compositor, baseAngle, baseAngle + 20);
 
             visual.RotationAxis = new Vector3(0, 0, 1);
             visual.CenterPoint = new Vector3(15, 15, 0);
-
             visual.StartAnimation("RotationAngleInDegrees", animationRotate);
         }
 
@@ -671,52 +642,16 @@ namespace Feels.Views {
         }
 
         private void StartSpaceModuleAnimation() {
-            var offsetAnimation = CreateOffsetAnimation();
-            var opacityAnimation = CreateOpacityAnimation();
+            var offsetAnimation = UI.CreateScalarAnimation(_compositor, 0, 20);
+            var opacityAnimation = UI.CreateScalarAnimation(_compositor, 1, 0);
 
-            StartAnimatingElement(SpaceModulePanel, "Translation.y", offsetAnimation);
-            StartAnimatingElement(SpaceModuleLine, "Opacity", opacityAnimation);
+            UI.StartAnimatingElement(SpaceModulePanel, "Translation.y", offsetAnimation, -1, _animatedVisuals);
+            UI.StartAnimatingElement(SpaceModuleLine, "Opacity", opacityAnimation, -1, _animatedVisuals);
 
-            StartAnimatingElement(LoadingViewStars1, "Opacity", opacityAnimation, 7);
-            StartAnimatingElement(LoadingViewStars2, "Opacity", opacityAnimation, 6);
-            StartAnimatingElement(LoadingViewStars3, "Opacity", opacityAnimation, 5);
-            StartAnimatingElement(LoadingViewStars4, "Opacity", opacityAnimation);
-        }
-
-        private ScalarKeyFrameAnimation CreateOffsetAnimation(float start = 0, float end = 20) {
-            var offsetAnimation = _compositor.CreateScalarKeyFrameAnimation();
-            offsetAnimation.InsertKeyFrame(0f, start);
-            offsetAnimation.InsertKeyFrame(1f, end);
-            offsetAnimation.Duration = TimeSpan.FromSeconds(3);
-            offsetAnimation.Direction = Windows.UI.Composition.AnimationDirection.Alternate;
-            offsetAnimation.IterationBehavior = AnimationIterationBehavior.Forever;
-
-            return offsetAnimation;
-        }
-
-        private ScalarKeyFrameAnimation CreateOpacityAnimation() {
-            var opacityAnimation = _compositor.CreateScalarKeyFrameAnimation();
-            opacityAnimation.InsertKeyFrame(0f, 1);
-            opacityAnimation.InsertKeyFrame(1f, 0);
-            opacityAnimation.Duration = TimeSpan.FromSeconds(3);
-            opacityAnimation.Direction = Windows.UI.Composition.AnimationDirection.Alternate;
-            opacityAnimation.IterationBehavior = AnimationIterationBehavior.Forever;
-
-            return opacityAnimation;
-        }
-
-        private void StartAnimatingElement(UIElement element, 
-                                           string property, 
-                                           ScalarKeyFrameAnimation animation, 
-                                           double animationDuration = -1) {
-
-            if (animationDuration > -1) animation.Duration = TimeSpan.FromSeconds(animationDuration);
-
-            var visual = ElementCompositionPreview.GetElementVisual(element);
-            ElementCompositionPreview.SetIsTranslationEnabled(element, true);
-
-            visual.StartAnimation(property, animation);
-            _animatedVisuals.Add(new Tuple<Visual, string>(visual, property));
+            UI.StartAnimatingElement(LoadingViewStars1, "Opacity", opacityAnimation, 7, _animatedVisuals);
+            UI.StartAnimatingElement(LoadingViewStars2, "Opacity", opacityAnimation, 6, _animatedVisuals);
+            UI.StartAnimatingElement(LoadingViewStars3, "Opacity", opacityAnimation, 5, _animatedVisuals);
+            UI.StartAnimatingElement(LoadingViewStars4, "Opacity", opacityAnimation, -1, _animatedVisuals);
         }
 
         private void StopAllAnimations() {
@@ -726,7 +661,6 @@ namespace Feels.Views {
         }
 
         private async void ShowLocalizationSuccess() {
-            //LocalizationSearchingMessage.Visibility = Visibility.Collapsed;
             LocalizationSearchingMessage.Opacity = 0;
 
             if (string.IsNullOrEmpty(_currentTown)) {
@@ -759,8 +693,8 @@ namespace Feels.Views {
             LocationDisabledMessage.Visibility = Visibility.Visible;
             LocationDisabledMessageContent.AnimateSlideIn();
 
-            var offsetAnimation = CreateOffsetAnimation();
-            StartAnimatingElement(AstronauteIcon, "Translation.y", offsetAnimation, 5);
+            var offsetAnimation = UI.CreateScalarAnimation(_compositor, 0, 20);
+            UI.StartAnimatingElement(AstronauteIcon, "Translation.y", offsetAnimation, 5, _animatedVisuals);
         }
 
         private void HideNoAccessView() {
@@ -774,7 +708,7 @@ namespace Feels.Views {
 
         #region scene theater
 
-        private async void DrawScene() {
+        private void DrawScene() {
             var scene = Scenes.CreateNew(
                 _pageDataSource.Forecast.Currently, 
                 _pageDataSource.Forecast.Daily.Days[0],
@@ -782,9 +716,16 @@ namespace Feels.Views {
 
             Theater.Children.Add(scene);
 
-            await scene.Fade(0, 0).Offset(0, 200, 0).StartAsync();
+            scene.Opacity = 0;
+
             Theater.Fade(1, 1000, 500).Start();
-            scene.Fade(1, 1000).Offset(0, 0, 1000).SetDelay(500).Start();
+
+            scene.Offset(0, 200, 0)
+                .Then()
+                .Fade(1, 1000)
+                .Offset(0, 0, 1000)
+                .SetDelay(500)
+                .Start();
         }
 
         private void CleanTheater() {
@@ -960,9 +901,6 @@ namespace Feels.Views {
             Frame.Navigate(typeof(LocationsPage));
         }
 
-        private void GoToAchievements_Tapped(object sender, TappedRoutedEventArgs e) {
-            Frame.Navigate(typeof(AchievementsPage));
-        }
         #endregion events
 
         #region commandbar
@@ -1042,11 +980,8 @@ namespace Feels.Views {
         #endregion commandbar
 
         #region others
-        void UpdateMainTile() {
-            TileDesigner.UpdatePrimary(_LastPosition);
-        }
 
-        async Task ShowBetaMessageAsync() {
+        private async Task ShowBetaMessageAsync() {
             if (!Settings.IsFirstLaunch()) return;
 
             var resourceLoader = new Windows.ApplicationModel.Resources.ResourceLoader();

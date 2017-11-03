@@ -4,10 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using Windows.UI.Composition;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 
@@ -287,6 +289,34 @@ namespace Feels.Services {
                     });
                 });
             }
+        }
+
+        public static ScalarKeyFrameAnimation CreateScalarAnimation(Compositor _compositor, float start = 0, float end = 1) {
+            var offsetAnimation = _compositor.CreateScalarKeyFrameAnimation();
+            offsetAnimation.InsertKeyFrame(0f, start);
+            offsetAnimation.InsertKeyFrame(1f, end);
+            offsetAnimation.Duration = TimeSpan.FromSeconds(3);
+            offsetAnimation.Direction = Windows.UI.Composition.AnimationDirection.Alternate;
+            offsetAnimation.IterationBehavior = AnimationIterationBehavior.Forever;
+
+            return offsetAnimation;
+        }
+
+        public static void StartAnimatingElement(UIElement element,
+                                           string property,
+                                           ScalarKeyFrameAnimation animation,
+                                           double animationDuration = -1,
+                                           List<Tuple<Visual, string>> animatedVisuals = null) {
+
+            if (animationDuration > -1) animation.Duration = TimeSpan.FromSeconds(animationDuration);
+
+            var visual = ElementCompositionPreview.GetElementVisual(element);
+            ElementCompositionPreview.SetIsTranslationEnabled(element, true);
+
+            visual.StartAnimation(property, animation);
+
+            if (animatedVisuals == null) return;
+            animatedVisuals.Add(new Tuple<Visual, string>(visual, property));
         }
     }
 }

@@ -273,6 +273,7 @@
                                                Text="Feels more like "
                                                FontWeight="Light"
                                                Opacity=".6"
+                                               Visibility="Collapsed"
                                                HorizontalAlignment="Center"/>
 
                                     <TextBlock x:Name="Status" 

@@ -14,7 +14,7 @@ using Windows.UI.Xaml.Shapes;
 
 namespace Feels.Services.WeatherScene {
     public class Icons {
-        public static Grid AddWeatherIconCondition(Grid scene, CurrentDataPoint current, DayDataPoint day, bool isDay = true) {
+        public static Grid AddWeatherIconCondition(Grid scene, CurrentDataPoint current, DayDataPoint dayDataPoint, bool isDay = true) {
             var topScene = new Grid() {
                 Name = "PrimaryConditionScene",
                 VerticalAlignment = VerticalAlignment.Top,
@@ -31,18 +31,18 @@ namespace Feels.Services.WeatherScene {
                     weatherCondition = CreateClearDayIcon();
                     break;
                 case "clear-night":
-                    weatherCondition = CreateClearNightIcon(day);
+                    weatherCondition = CreateClearNightIcon(dayDataPoint);
                     break;
                 case "partly-cloudy-day":
                     weatherCondition = CreatePartlyCloudyDayIcon();
                     break;
                 case "partly-cloudy-night":
-                    weatherCondition = CreatePartlyCloudyNightIcon(day);
+                    weatherCondition = CreatePartlyCloudyNightIcon(dayDataPoint);
                     break;
                 case "cloudy":
                     weatherCondition = isDay == true ?
                         CreateCloudyDayIcon() :
-                        CreateCloudyNightIcon(day);
+                        CreateCloudyNightIcon(dayDataPoint);
 
                     break;
                 case "rain":
