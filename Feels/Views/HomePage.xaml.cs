@@ -344,6 +344,9 @@ namespace Feels.Views {
 
             PrecipProbaValue.Text   = $"{todayWeather.PrecipitationProbability * 100}%";
             HumidityValue.Text      = $"{currentWeather.Humidity * 100}%";
+            UVIndexValue.Text       = $"{currentWeather.UVIndex}";
+            
+            VisibilityValue.Text    = $"{currentWeather.Visibility}";
 
             SunriseTime.Text        = todayWeather.SunriseTime.ToLocalTime().ToString("HH:mm");
             SunsetTime.Text         = todayWeather.SunsetTime.ToLocalTime().ToString("HH:mm");
@@ -368,7 +371,12 @@ namespace Feels.Views {
             var currentDay = _pageDataSource.Forecast.Daily.Days[0];
 
             MaxTempValue.Text = $"{(int)currentDay.MaxTemperature}°";
-            MinTempValue.Text = $"{(int)currentDay.MinTemperature}°";            
+            MinTempValue.Text = $"{(int)currentDay.MinTemperature}°";
+
+            // TODO: Make a pull request to avoid UNIX time conversion (https://github.com/jcheng31/DarkSkyApi)
+            DateTimeOffset baseUnixTime = new DateTimeOffset(1970, 1, 1, 0, 0, 0, new TimeSpan());
+            var converted = baseUnixTime.AddSeconds(currentDay.UVIndexTime);
+            UVIndexTimeValue.Text = $"{converted.ToLocalTime().ToString("HH:mm")}";
         }
 
         private void AnimateWindDirectionIcons(CurrentDataPoint currentWeather) {

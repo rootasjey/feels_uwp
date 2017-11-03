@@ -550,14 +550,75 @@
                                                        HorizontalAlignment="Center"/>
                                         </StackPanel>
                                     </Grid>
-                                    
-                                    <Grid Margin="0,40,0,0">
-                                        <!--<Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="30*"/>
-                                            <ColumnDefinition Width="30*"/>
-                                            <ColumnDefinition Width="30*"/>
-                                        </Grid.ColumnDefinitions>-->
 
+                                    <Grid Margin="0,40,0,0" Visibility="Visible">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="40*"/>
+                                            <ColumnDefinition Width="40*"/>
+                                            <ColumnDefinition Width="40*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel x:Name="PanelUVIndex"
+                                                    Grid.Column="0">
+
+                                            <BitmapIcon UriSource="/Assets/Icons/uv.png"
+                                                        Height="30" Width="30"
+                                                        Margin="0,0,0,10"/>
+
+                                            <TextBlock 
+                                                       Text="uv"
+                                                       Opacity=".5"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Center"/>
+                                            <TextBlock x:Name="UVIndexValue" 
+                                                       Text="16"
+                                                       FontSize="20"
+                                                       FontWeight="SemiBold"
+                                                       HorizontalAlignment="Center"/>
+                                        </StackPanel>
+
+                                        <StackPanel x:Name="PanelUVIndexTime"
+                                                    Grid.Column="1">
+
+                                            <BitmapIcon UriSource="/Assets/Icons/uv_max.png"
+                                                        Height="30" Width="30"
+                                                        Margin="0,0,0,10"/>
+
+                                            <TextBlock  
+                                                       Text="max uv"
+                                                       Opacity=".5"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Center"/>
+                                            <TextBlock x:Name="UVIndexTimeValue" 
+                                                       Text="16"
+                                                       FontSize="20"
+                                                       FontWeight="SemiBold"
+                                                       HorizontalAlignment="Center"/>
+                                        </StackPanel>
+
+                                        <StackPanel x:Name="PanelVisibility"
+                                                    Grid.Column="2"
+                                                    FlyoutBase.AttachedFlyout="{StaticResource FlyoutWeatherDetail}"
+                                                    >
+
+                                            <BitmapIcon UriSource="/Assets/Icons/visibility.png"
+                                                        Height="30" Width="30"
+                                                        Margin="0,0,0,10"/>
+
+                                            <TextBlock 
+                                                       Text="visibility"
+                                                       Opacity=".5"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Center"/>
+                                            <TextBlock x:Name="VisibilityValue" 
+                                                       Text="16"
+                                                       FontSize="14"
+                                                       FontWeight="SemiBold"
+                                                       HorizontalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid Margin="0,40,0,0">
                                         <StackPanel x:Name="PanelMoonPhase"
                                                     HorizontalAlignment="Center">
                                             <BitmapIcon x:Name="MoonPhaseIcon"
