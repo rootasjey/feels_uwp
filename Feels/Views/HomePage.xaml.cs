@@ -289,14 +289,19 @@ namespace Feels.Views {
 
             ShowLocalizationSuccess();
 
-            var autoEvent = new AutoResetEvent(true);
+            Timer deffered = null;
 
-            var deffered = new Timer(async (object state) => {
+            deffered = new Timer(async (object state) => {
                 await _UIDispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                    if (LoadingView.Visibility == Visibility.Collapsed) {
+                        deffered?.Dispose();
+                        return;
+                    }
+
                     HideLoadingView();
                     PopulateView();
                 });
-            }, autoEvent, 3000, Timeout.Infinite);
+            }, new AutoResetEvent(true), 3000, 2000);
         }
 
         private void PopulateView() {
@@ -675,7 +680,7 @@ namespace Feels.Views {
                 _currentTown = await GetCurrentCity();
             }
 
-            SpaceModuleLine.Stroke = new SolidColorBrush(Colors.LightSeaGreen);
+            SpaceModuleLine.Stroke = new SolidColorBrush(Colors.LimeGreen);
 
             SuccessMessageLocationName.Text = $"{App.ResourceLoader.GetString("SuccessMessageLocationName")}: {_currentTown}";
             await LocalizationSuccessMessage.AnimateSlideIn();
@@ -1073,5 +1078,15 @@ namespace Feels.Views {
 
         #endregion animations
 
+        private void SummaryIcon_Loaded(object sender, RoutedEventArgs e) {
+            var icon = (BitmapIcon)sender;
+
+            if (Settings.IsApplicationThemeLight()) {
+                icon.Foreground = new SolidColorBrush(Colors.Black);
+                return;
+            }
+
+            icon.Foreground = new SolidColorBrush(Colors.White);
+        }
     }
 }
