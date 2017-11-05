@@ -60,3 +60,16 @@ You can contribute to improve this project by:
 
 * Windows Mobile 10
 * Windows 10
+
+
+## Get a personal API key
+
+To run this project, it's better to get your personal API key from Unsplash:
+
+1. Login or Register a new account on [DarkSky](https://darksky.net/dev/login?next=/account)
+2. On the account page, you'll get your Secret Key
+3. Copy and paste the key when you create a new client:
+
+```csharp
+var client = new DarkSkyService("YOUR API KEY HERE");
+```

@@ -9,97 +9,112 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Feels.Models;
 using Newtonsoft.Json;
+using DarkSkyApi.Models;
 
 namespace Feels.Services {
     public class Settings {
         #region keys
-        private static string ThemeKey {
+
+        private static string _themeKey {
             get {
                 return "Theme";
             }
         }
 
-        private static string LanguageKey {
+        private static string _languageKey {
             get {
                 return "Language";
             }
         }
 
-        private static string UnitKey {
+        private static string _unitKey {
             get {
                 return "Unit";
             }
         }
 
-        private static string FirstLaunchKey {
+        private static string _firstLaunchKey {
             get {
                 return "FirstLaunch";
             }
         }
 
-        private static string LastPositionKey {
+        private static string _lastPositionKey {
             get {
                 return "LastPosition";
             }
         }
 
-        private static string AppVersionKey {
+        private static string _appVersionKey {
             get {
                 return "AppVersion";
             }
         }
 
-        private static string SavedLocationsKey {
+        private static string _savedLocationsKey {
             get {
                 return "Savedlocations.json";
             }
         }
 
-        private static string FavoriteLocationKey {
+        private static string _favoriteLocationKey {
             get {
                 return "FavoriteLocation";
             }
         }
 
-        private static string PressureUnitKey {
+        private static string _pressureUnitKey {
             get {
                 return "PressureUnit";
             }
         }
 
-        private static string SceneColorAnimationDeactivatedKey {
+        private static string _sceneColorAnimationDeactivatedKey {
             get {
                 return "SceneColorAnimationDeactivated";
             }
         }
 
-        private static string PrimaryTileTaskTypeKey {
+        private static string _primaryTileTaskTypeKey {
             get {
                 return "PrimaryTileTaskType";
             }
         }
 
-        public static string _GPSTaskTypeKey {
+        public static string _gpsTaskTypeKey {
             get {
                 return "gps";
             }
         }
 
-        public static string _LocationTaskTypeKey {
+        public static string _locationTaskTypeKey {
             get {
                 return "location";
             }
         }
 
-        private static string SavedLocationsTasksKey {
+        private static string _savedLocationsTasksKey {
             get {
                 return "SavedLocationTasks";
+            }
+        }
+
+        private static string _cachedForecastDataKey {
+            get {
+                return "CachedForecastData";
+            }
+        }
+
+        private static string _cachedLocationAndTime {
+            get {
+                return "CachedLocationAndTime";
             }
         }
 
         #endregion keys
 
         #region position
+
         public static void SavePosition(BasicGeoposition position) {
             var settingsValues = ApplicationData.Current.LocalSettings.Values;
             var composite = new ApplicationDataCompositeValue {
@@ -107,14 +122,14 @@ namespace Feels.Services {
                 ["lon"] = position.Longitude
             };
 
-            settingsValues[LastPositionKey] = composite;
+            settingsValues[_lastPositionKey] = composite;
         }
 
         public static BasicGeoposition GetLastSavedPosition() {
             var settingsValues = ApplicationData.Current.LocalSettings.Values;
-            if (!settingsValues.ContainsKey(LastPositionKey)) return new BasicGeoposition();
+            if (!settingsValues.ContainsKey(_lastPositionKey)) return new BasicGeoposition();
 
-            var lastPos = (ApplicationDataCompositeValue)settingsValues[LastPositionKey];
+            var lastPos = (ApplicationDataCompositeValue)settingsValues[_lastPositionKey];
 
             var coord = new BasicGeoposition() {
                 Latitude = (double)lastPos["lat"],
@@ -123,33 +138,37 @@ namespace Feels.Services {
 
             return coord;
         }
+
         #endregion position
 
         #region language
+
         public static void SaveAppCurrentLanguage(string language) {
             var settingsValues = ApplicationData.Current.LocalSettings.Values;
-            settingsValues[LanguageKey] = language;
+            settingsValues[_languageKey] = language;
         }
 
         public static string GetAppCurrentLanguage() {
             string defaultLanguage = GlobalizationPreferences.Languages[0];
 
             var settingsValues = ApplicationData.Current.LocalSettings.Values;
-            return settingsValues.ContainsKey(LanguageKey) ? (string)settingsValues[LanguageKey] : defaultLanguage;
+            return settingsValues.ContainsKey(_languageKey) ? (string)settingsValues[_languageKey] : defaultLanguage;
         }
+
         #endregion language
 
         #region units
+
         public static void SaveUnit(Unit unit) {
             var settingsValues = ApplicationData.Current.LocalSettings.Values;
-            settingsValues[UnitKey] = unit.ToString();
+            settingsValues[_unitKey] = unit.ToString();
         }
 
         public static Unit GetUnit() {
             var settingsValues = ApplicationData.Current.LocalSettings.Values;
 
-            if (settingsValues.ContainsKey(UnitKey)) {
-                var savedUnit = (string)settingsValues[UnitKey];
+            if (settingsValues.ContainsKey(_unitKey)) {
+                var savedUnit = (string)settingsValues[_unitKey];
                 return ConvertToUnit(savedUnit);
             }
 
@@ -203,52 +222,58 @@ namespace Feels.Services {
 
         public static void SavePressureUnit(string unit) {
             var settingsValues = ApplicationData.Current.LocalSettings.Values;
-            settingsValues[PressureUnitKey] = unit;
+            settingsValues[_pressureUnitKey] = unit;
         }
 
         public static string GetPressureUnit() {
             var settingsValues = ApplicationData.Current.LocalSettings.Values;
 
-            if (settingsValues.ContainsKey(PressureUnitKey)) {
-                var savedPressureUnit = (string)settingsValues[PressureUnitKey];
+            if (settingsValues.ContainsKey(_pressureUnitKey)) {
+                var savedPressureUnit = (string)settingsValues[_pressureUnitKey];
                 return savedPressureUnit;
             }
 
             return null;
         }
+
         #endregion units
 
         #region theme
+
         public static bool IsApplicationThemeLight() {
             ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-            localSettings.Values.TryGetValue(ThemeKey, out var previousTheme);
+            localSettings.Values.TryGetValue(_themeKey, out var previousTheme);
             return ApplicationTheme.Light.ToString() == (string)previousTheme;
         }
 
         public static void UpdateAppTheme(ApplicationTheme theme) {
             ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-            localSettings.Values.TryGetValue(ThemeKey, out var previousTheme);
+            localSettings.Values.TryGetValue(_themeKey, out var previousTheme);
 
             if ((string)previousTheme == theme.ToString()) return;
 
-            localSettings.Values[ThemeKey] = theme.ToString();
+            localSettings.Values[_themeKey] = theme.ToString();
             App.UpdateAppTheme();
         }
+
         #endregion theme
 
         #region first launch
+
         public static void SaveFirstLaunchPassed() {
             ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-            localSettings.Values[FirstLaunchKey] = false;
+            localSettings.Values[_firstLaunchKey] = false;
         }
 
         public static bool IsFirstLaunch() {
             ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-            return localSettings.Values.ContainsKey(FirstLaunchKey) ? false : true;
+            return localSettings.Values.ContainsKey(_firstLaunchKey) ? false : true;
         }
+
         #endregion first launch
 
         #region locations
+
         public static async Task SaveLocationsAsync(List<LocationItem> locations) {
             string json = JsonConvert.SerializeObject(locations);
 
@@ -256,13 +281,13 @@ namespace Feels.Services {
                 await ApplicationData
                         .Current
                         .LocalFolder
-                        .CreateFileAsync(SavedLocationsKey, CreationCollisionOption.ReplaceExisting);
+                        .CreateFileAsync(_savedLocationsKey, CreationCollisionOption.ReplaceExisting);
 
             await FileIO.WriteTextAsync(file, json);
         }
 
         public static async Task<List<LocationItem>> GetSavedLocationAsync() {
-            StorageFile file = (StorageFile)await ApplicationData.Current.LocalFolder.TryGetItemAsync(SavedLocationsKey);
+            StorageFile file = (StorageFile)await ApplicationData.Current.LocalFolder.TryGetItemAsync(_savedLocationsKey);
             if (file == null) return null;
 
             string json = await FileIO.ReadTextAsync(file);
@@ -276,13 +301,13 @@ namespace Feels.Services {
                 await ApplicationData
                         .Current
                         .LocalFolder
-                        .CreateFileAsync(FavoriteLocationKey, CreationCollisionOption.ReplaceExisting);
+                        .CreateFileAsync(_favoriteLocationKey, CreationCollisionOption.ReplaceExisting);
 
             await FileIO.WriteTextAsync(file, serializedLocation);
         }
 
         public static async Task<LocationItem> GetFavoriteLocation() {
-            StorageFile file = (StorageFile)await ApplicationData.Current.LocalFolder.TryGetItemAsync(FavoriteLocationKey);
+            StorageFile file = (StorageFile)await ApplicationData.Current.LocalFolder.TryGetItemAsync(_favoriteLocationKey);
             if (file == null) return null;
 
             string json = await FileIO.ReadTextAsync(file);
@@ -290,7 +315,7 @@ namespace Feels.Services {
         }
 
         public static async Task DeleteFavoriteLocation() {
-            StorageFile file = (StorageFile)await ApplicationData.Current.LocalFolder.TryGetItemAsync(FavoriteLocationKey);
+            StorageFile file = (StorageFile)await ApplicationData.Current.LocalFolder.TryGetItemAsync(_favoriteLocationKey);
             if (file == null) return;
 
             await file.DeleteAsync();
@@ -302,13 +327,13 @@ namespace Feels.Services {
 
         public static void SavePrimaryTileTaskType(string type) {
             var localSettingsValues = ApplicationData.Current.LocalSettings.Values;
-            localSettingsValues[PrimaryTileTaskTypeKey] = type;
+            localSettingsValues[_primaryTileTaskTypeKey] = type;
         }
 
         public static string GetPrimaryTileTaskType() {
             var localSettingsValues = ApplicationData.Current.LocalSettings.Values;
-            return localSettingsValues.ContainsKey(PrimaryTileTaskTypeKey) ? 
-                (string)localSettingsValues[PrimaryTileTaskTypeKey] : _GPSTaskTypeKey;
+            return localSettingsValues.ContainsKey(_primaryTileTaskTypeKey) ? 
+                (string)localSettingsValues[_primaryTileTaskTypeKey] : _gpsTaskTypeKey;
         }
 
         public static async Task SaveSecondaryTaskLocation(string locationId, LocationItem location) {
@@ -333,17 +358,19 @@ namespace Feels.Services {
         #endregion tasks
 
         #region animations
+
         public static void SaveSceneColorAnimationDeactivated(bool status) {
             var localSettings = ApplicationData.Current.LocalSettings;
-            localSettings.Values[SceneColorAnimationDeactivatedKey] = status;
+            localSettings.Values[_sceneColorAnimationDeactivatedKey] = status;
         }
 
         public static bool IsSceneColorAnimationDeactivated() {
             var settingsValues = ApplicationData.Current.LocalSettings.Values;
 
-            return settingsValues.ContainsKey(SceneColorAnimationDeactivatedKey) ?
-                (bool)settingsValues[SceneColorAnimationDeactivatedKey] : false;
+            return settingsValues.ContainsKey(_sceneColorAnimationDeactivatedKey) ?
+                (bool)settingsValues[_sceneColorAnimationDeactivatedKey] : false;
         }
+
         #endregion animation
 
         #region appversion
@@ -353,14 +380,14 @@ namespace Feels.Services {
             var currentVersion = GetAppVersion();
             var settingsValues = ApplicationData.Current.LocalSettings.Values;
 
-            if (settingsValues.ContainsKey(AppVersionKey)) {
-                string savedVersion = (string)settingsValues[AppVersionKey];
+            if (settingsValues.ContainsKey(_appVersionKey)) {
+                string savedVersion = (string)settingsValues[_appVersionKey];
 
                 if (savedVersion == currentVersion) {
                     isNewUpdatedLaunch = false;
-                } else { settingsValues[AppVersionKey] = currentVersion; }
+                } else { settingsValues[_appVersionKey] = currentVersion; }
 
-            } else { settingsValues[AppVersionKey] = currentVersion; }
+            } else { settingsValues[_appVersionKey] = currentVersion; }
 
             return isNewUpdatedLaunch;
         }
@@ -374,5 +401,54 @@ namespace Feels.Services {
         }
 
         #endregion appversion
+
+        #region cached data
+
+        public static async void CacheForecastData(Forecast forecast) {
+            if (forecast == null) return;
+
+            var json = JsonConvert.SerializeObject(forecast);
+
+            StorageFile file =
+                await ApplicationData
+                .Current
+                .LocalFolder
+                .CreateFileAsync(_cachedForecastDataKey, CreationCollisionOption.ReplaceExisting);
+
+            await FileIO.WriteTextAsync(file, json);
+        }
+
+        public static async Task<Forecast> GetCachedForecastData() {
+            StorageFile file = (StorageFile)await ApplicationData.Current.LocalFolder.TryGetItemAsync(_cachedForecastDataKey);
+            if (file == null) return null;
+
+            string json = await FileIO.ReadTextAsync(file);
+            return JsonConvert.DeserializeObject<Forecast>(json);
+        }
+
+        /// <summary>
+        /// Cache last city and time
+        /// </summary>
+        /// <returns></returns>
+        public static void CacheLocationAndTime(string town, string datetime) {
+            var settingsValues = ApplicationData.Current.LocalSettings.Values;
+            var composite = new ApplicationDataCompositeValue {
+                ["town"] = town,
+                ["time"] = datetime
+            };
+
+            settingsValues[_cachedLocationAndTime] = composite;
+        }
+
+        public static Tuple<string, string> GetCachedLocationAndTown() {
+            var settingsValues = ApplicationData.Current.LocalSettings.Values;
+            if (!settingsValues.ContainsKey(_cachedLocationAndTime)) return null;
+
+            var cachedData = (ApplicationDataCompositeValue)settingsValues[_cachedLocationAndTime];
+
+            return new Tuple<string, string>((string)cachedData["town"], (string)cachedData["time"]);
+        }
+
+        #endregion cached data
     }
 }

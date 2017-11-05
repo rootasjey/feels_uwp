@@ -14,6 +14,14 @@
             <Grid x:Name="FlyoutWeatherDetailContent"/>
         </Flyout>
 
+        <Flyout x:Key="OutdatedDataFlyout">
+            <StackPanel MaxWidth="300">
+                <TextBlock FontSize="18"
+                           TextWrapping="Wrap"
+                           Text="The forecast data is outdated. It seems your internet connection isn't available, so I loaded the last fetched weather data."/>
+            </StackPanel>
+        </Flyout>
+
         <Style x:Key="ButtonSquarredStyle" TargetType="Button">
             <Setter Property="Height" Value="140"/>
             <Setter Property="Width" Value="120"/>
@@ -437,6 +445,7 @@
         </FlyoutPresenter>
 
         <Pivot x:Name="PagePivot" Grid.Row="1">
+            
             <PivotItem x:Name="NowPivot" Margin="0,-51,0,0">
                 <ScrollViewer x:Name="PivotContent">
                     <Grid>
@@ -445,7 +454,7 @@
                               Opacity="0"/>
 
                         <StackPanel x:Name="SplashView"
-                                    Visibility="Visible"
+                                    Visibility="Collapsed"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Center">
                             <BitmapIcon UriSource="/Assets/icon.png" 
@@ -478,11 +487,24 @@
                                                    Opacity="1"
                                                    TextAlignment="Center"/>
 
-                                    <TextBlock x:Name="LastTimeUpdate"
+                                    <StackPanel x:Name="TimePanel" 
+                                                Orientation="Horizontal"
+                                                HorizontalAlignment="Center"
+                                                FlyoutBase.AttachedFlyout="{StaticResource OutdatedDataFlyout}"
+                                                Tapped="OutdatedDataIcon_Tapped">
+                                        
+                                        <TextBlock x:Name="LastTimeUpdate"
                                                Visibility="Visible"
                                                Typography.Capitals="AllSmallCaps"
-                                               Text="Monday 11:35 AM"
-                                               TextAlignment="Center"/>
+                                               Text="Monday 11:35 AM"/>
+                                        
+                                        <FontIcon x:Name="OutdatedDataIcon" 
+                                                  Glyph="&#xECC5;"
+                                                  Margin="12,-6,0,0"
+                                                  FontSize="30"
+                                                  Foreground="Salmon"
+                                                  Visibility="Collapsed"/>
+                                    </StackPanel>
 
                                     <StackPanel Orientation="Horizontal"
                                                 Margin="0,265,0,0"
@@ -490,10 +512,10 @@
                                         <!--Margin="0,265,0,0"-->
 
                                         <TextBlock x:Name="Temperature"
-                                                       Text="42°"
-                                                       Margin="12,0,0,0"
-                                                       FontWeight="SemiBold" 
-                                                       FontSize="80"/>
+                                                    Text="42°"
+                                                    Margin="12,0,0,0"
+                                                    FontWeight="SemiBold" 
+                                                    FontSize="80"/>
                                     </StackPanel>
 
                                     <TextBlock x:Name="TempUnit" 
@@ -1084,6 +1106,20 @@
                                 </Button>
                             </StackPanel>
                         </ScrollViewer>
+
+                        <StackPanel x:Name="NoConnectivityView"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Visibility="Collapsed">
+
+                            <FontIcon Glyph="&#xEB5E;"
+                                      FontSize="40"/>
+                            
+                            <TextBlock FontSize="22" 
+                                       Margin="12"
+                                       Text="It seems there's no internet connection. Forecast data can't be displayed."
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
 
                         <Maps:MapControl x:Name="PageMapControl" 
                                          HorizontalAlignment="Left"

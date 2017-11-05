@@ -156,11 +156,11 @@ namespace Feels.Views {
             var location = await Settings.GetFavoriteLocation();
 
             if (location == null || string.IsNullOrEmpty(location.Id)) {
-                Settings.SavePrimaryTileTaskType(Settings._GPSTaskTypeKey);
+                Settings.SavePrimaryTileTaskType(Settings._gpsTaskTypeKey);
                 return;
             }
 
-            Settings.SavePrimaryTileTaskType(Settings._LocationTaskTypeKey);
+            Settings.SavePrimaryTileTaskType(Settings._locationTaskTypeKey);
         }
 
         private void ShowTileTaskActivity() {

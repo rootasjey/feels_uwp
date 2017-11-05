@@ -281,9 +281,9 @@ namespace Feels.Views {
             _lastLocationSelected = location;
 
             if (string.IsNullOrEmpty(location.Id)) {
-                Settings.SavePrimaryTileTaskType(Settings._GPSTaskTypeKey);
+                Settings.SavePrimaryTileTaskType(Settings._gpsTaskTypeKey);
 
-            } else { Settings.SavePrimaryTileTaskType(Settings._LocationTaskTypeKey); }
+            } else { Settings.SavePrimaryTileTaskType(Settings._locationTaskTypeKey); }
 
             await Settings.SaveFavoriteLocation(location);
             await Settings.SaveLocationsAsync(_savedLocations.ToList());
@@ -439,7 +439,7 @@ namespace Feels.Views {
 
             if (location.IsSelected) {
                 await Settings.DeleteFavoriteLocation(); // NOTE: wait ?
-                Settings.SavePrimaryTileTaskType(Settings._GPSTaskTypeKey);
+                Settings.SavePrimaryTileTaskType(Settings._gpsTaskTypeKey);
             }
         }
 

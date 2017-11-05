@@ -7,6 +7,7 @@ using Microsoft.Graphics.Canvas.Effects;
 using Microsoft.Toolkit.Uwp.UI.Animations;
 using System;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -41,11 +42,9 @@ namespace Feels.Views {
 
         private int _delayDetailItem { get; set; }
 
-        static DateTime _LastFetchedTime { get; set; }
+        static DateTime _lastFetchedTime { get; set; }
 
-        static BasicGeoposition _LastPosition { get; set; }
-
-        private static LocationItem _LastLocation { get; set; }
+        static BasicGeoposition _lastPosition { get; set; }
 
         public static bool _forceDataRefresh { get; set; }
 
@@ -167,8 +166,24 @@ namespace Feels.Views {
             _compositor = ElementCompositionPreview.GetElementVisual(this).Compositor;
         }
 
+        /// <summary>
+        /// 1.Load recent data fetched.
+        /// 2.If there's no connectivity:
+        ///   2.1.a.Do nothing if there's already data available
+        ///   2.1.b.Load cached data if there's no data available yet
+        ///   2.2.return
+        /// 3.Check if data must be refreshed (based on time & location)
+        /// 4.Refresh data if the previous condition is true
+        /// </summary>
         private async void InitializePageData() {
             LoadLastFetchedData();
+            
+            if (!NetworkInterface.GetIsNetworkAvailable()) {
+                if (_pageDataSource.Forecast != null) return;
+
+                LoadCachedData();
+                return;
+            }
 
             if (await MustRefreshData()) {
                 CleanTheater();
@@ -192,6 +207,7 @@ namespace Feels.Views {
             HideSplashView();
             HideLoadingView();
             PopulateView();
+            PopulateCurrentLocationAndTime();
         }
 
         /// <summary>
@@ -207,7 +223,7 @@ namespace Feels.Views {
                 return true;
             }
 
-            if (DateTime.Now.Hour - _LastFetchedTime.Hour > 0) {
+            if (DateTime.Now.Hour - _lastFetchedTime.Hour > 0) {
                 return true;
             }
 
@@ -222,8 +238,8 @@ namespace Feels.Views {
             var currLat = (int)coord.Latitude;
             var currLon = (int)coord.Longitude;
 
-            var prevLat = (int)_LastPosition.Latitude;
-            var prevLon = (int)_LastPosition.Longitude;
+            var prevLat = (int)_lastPosition.Latitude;
+            var prevLon = (int)_lastPosition.Longitude;
 
             if (currLat != prevLat || currLon != prevLon) {
                 return true;
@@ -232,7 +248,18 @@ namespace Feels.Views {
             return false;
         }
 
+        /// <summary>
+        /// Find the LocationItem from storage and get new data for the specific location.
+        /// If the item isn't found, abort and get new data for the current lcoation.
+        /// (Handle no connectivity)
+        /// </summary>
+        /// <param name="locationId"></param>
         private async void FetchNewDataFromLocation(string locationId) {
+            if (!NetworkInterface.GetIsNetworkAvailable()) {
+                LoadCachedData();
+                return;
+            }
+
             var locationsList = await Settings.GetSavedLocationAsync();
             var locationName = locationId.Replace(".", ", ");
             LocationItem locationToFind = null;
@@ -254,8 +281,41 @@ namespace Feels.Views {
 
             HideLoadingView();
             PopulateView();
+            PopulateCurrentLocationAndTime();
 
             TownTextBlock.Text = locationToFind.Town;
+
+            TileDesigner.UpdatePrimary(_lastPosition);
+            Settings.CacheForecastData(_pageDataSource.Forecast);
+            Settings.CacheLocationAndTime(
+                _currentTown, 
+                DateTime.Now.ToLocalTime().ToString("dddd HH:mm"));
+        }
+
+        /// <summary>
+        /// Get & show cached data.
+        /// Tell the user the data may be outdated.
+        /// </summary>
+        private async void LoadCachedData() {
+            HideSplashView();
+            ShowLoadingView();
+
+            var cachedForecast = await Settings.GetCachedForecastData();
+
+            if (cachedForecast == null) {
+                NoConnectivityView.AnimateSlideIn();
+                return;
+            }
+
+            _pageDataSource.Forecast = cachedForecast;
+
+            HideLoadingView();
+            PopulatCachedLocationAndTime();
+            PopulateView();
+
+            OutdatedDataIcon.Visibility = Visibility.Visible;
+            TimePanel.Margin = new Thickness(0, 12, 0, 0);
+            LastTimeUpdate.Foreground = new SolidColorBrush(Colors.Salmon);
         }
 
         private async void FetchNewData() {
@@ -289,6 +349,12 @@ namespace Feels.Views {
 
             ShowLocalizationSuccess();
 
+            TileDesigner.UpdatePrimary(_lastPosition);
+            Settings.CacheForecastData(_pageDataSource.Forecast);
+            Settings.CacheLocationAndTime(
+                _currentTown,
+                DateTime.Now.ToLocalTime().ToString("dddd HH:mm"));
+
             Timer deffered = null;
 
             deffered = new Timer(async (object state) => {
@@ -300,6 +366,7 @@ namespace Feels.Views {
 
                     HideLoadingView();
                     PopulateView();
+                    PopulateCurrentLocationAndTime();
                 });
             }, new AutoResetEvent(true), 3000, 2000);
         }
@@ -337,8 +404,6 @@ namespace Feels.Views {
             AnimateWindDirectionIcons(currentWeather);
 
             DrawScene();
-
-            TileDesigner.UpdatePrimary(_LastPosition);
         }
 
         private void PopulateForecastView(DayDataPoint todayWeather, CurrentDataPoint currentWeather) {
@@ -364,11 +429,7 @@ namespace Feels.Views {
 
             CloudCover.Text         = $"{currentWeather.CloudCover * 100}%";
             
-            LastTimeUpdate.Text     = DateTime.Now.ToLocalTime().ToString("dddd HH:mm");
-            
             SetPressureValue(currentWeather, true);
-
-            SetCurrentCity();
 
             if (_pageDataSource.Forecast.Daily.Days == null ||
                 _pageDataSource.Forecast.Daily.Days.Count == 0) { return; }
@@ -382,6 +443,20 @@ namespace Feels.Views {
             DateTimeOffset baseUnixTime = new DateTimeOffset(1970, 1, 1, 0, 0, 0, new TimeSpan());
             var converted = baseUnixTime.AddSeconds(currentDay.UVIndexTime);
             UVIndexTimeValue.Text = $"{converted.ToLocalTime().ToString("HH:mm")}";
+        }
+
+        private void PopulateCurrentLocationAndTime() {
+            LastTimeUpdate.Text = DateTime.Now.ToLocalTime().ToString("dddd HH:mm");
+            SetCurrentCity();
+        }
+
+        private void PopulatCachedLocationAndTime() {
+            var cachedData = Settings.GetCachedLocationAndTown();
+            if (cachedData == null) return;
+
+            _currentTown = cachedData.Item1;
+            LastTimeUpdate.Text = cachedData.Item2;
+            TownTextBlock.Text = _currentTown;
         }
 
         private void AnimateWindDirectionIcons(CurrentDataPoint currentWeather) {
@@ -504,7 +579,7 @@ namespace Feels.Views {
             var location = await Settings.GetFavoriteLocation();
 
             if (UseGPSLocation(location)) {
-                Geopoint pointToReverseGeocode = new Geopoint(_LastPosition);
+                Geopoint pointToReverseGeocode = new Geopoint(_lastPosition);
 
                 // Reverse geocode the specified geographic location.
                 MapLocationFinderResult result =
@@ -531,7 +606,7 @@ namespace Feels.Views {
         private async Task FetchCurrentForecast(LocationItem location) {
             await _pageDataSource.FetchCurrentForecast(location.Latitude, location.Longitude);
 
-            _LastFetchedTime = DateTime.Now;
+            _lastFetchedTime = DateTime.Now;
 
             if (_pageDataSource.Forecast == null) {
                 SafeExit();
@@ -559,7 +634,7 @@ namespace Feels.Views {
                 }
 
                 //_LastFetchedTime = DateTime.Now;
-                _LastPosition = positionToReturn;
+                _lastPosition = positionToReturn;
 
                 return positionToReturn;
 
@@ -914,6 +989,22 @@ namespace Feels.Views {
             Frame.Navigate(typeof(LocationsPage));
         }
 
+        private void SummaryIcon_Loaded(object sender, RoutedEventArgs e) {
+            var icon = (BitmapIcon)sender;
+
+            if (Settings.IsApplicationThemeLight()) {
+                icon.Foreground = new SolidColorBrush(Colors.Black);
+                return;
+            }
+
+            icon.Foreground = new SolidColorBrush(Colors.White);
+        }
+
+        private void OutdatedDataIcon_Tapped(object sender, TappedRoutedEventArgs e) {
+            if (NetworkInterface.GetIsNetworkAvailable()) return;
+            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
+        }
+
         #endregion events
 
         #region commandbar
@@ -1078,15 +1169,5 @@ namespace Feels.Views {
 
         #endregion animations
 
-        private void SummaryIcon_Loaded(object sender, RoutedEventArgs e) {
-            var icon = (BitmapIcon)sender;
-
-            if (Settings.IsApplicationThemeLight()) {
-                icon.Foreground = new SolidColorBrush(Colors.Black);
-                return;
-            }
-
-            icon.Foreground = new SolidColorBrush(Colors.White);
-        }
     }
 }
