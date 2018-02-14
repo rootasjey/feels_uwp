@@ -14,7 +14,13 @@ using Windows.UI.Xaml.Shapes;
 
 namespace Feels.Services.WeatherScene {
     public class Icons {
-        public static Grid AddWeatherIconCondition(Grid scene, CurrentDataPoint current, DayDataPoint dayDataPoint, bool isDay = true) {
+        private static bool _isPremiumUser { get; set; }
+
+        public static Grid AddWeatherIconCondition(Grid scene, Forecast forecast, bool isDay = true, bool isPremiumUser = false) {
+            _isPremiumUser = isPremiumUser;
+            CurrentDataPoint currentForecast = forecast.Currently;
+            DayDataPoint todayForecast = forecast.Daily.Days[0];
+
             var topScene = new Grid() {
                 Name = "PrimaryConditionScene",
                 VerticalAlignment = VerticalAlignment.Top,
@@ -22,8 +28,7 @@ namespace Feels.Services.WeatherScene {
                 Margin = new Thickness(0, 200, 0, 0)
             };
 
-
-            var condition = current.Icon;
+            var condition = currentForecast.Icon;
             Canvas weatherCondition = null;
 
             switch (condition) {
@@ -31,18 +36,18 @@ namespace Feels.Services.WeatherScene {
                     weatherCondition = CreateClearDayIcon();
                     break;
                 case "clear-night":
-                    weatherCondition = CreateClearNightIcon(dayDataPoint);
+                    weatherCondition = CreateClearNightIcon(todayForecast);
                     break;
                 case "partly-cloudy-day":
                     weatherCondition = CreatePartlyCloudyDayIcon();
                     break;
                 case "partly-cloudy-night":
-                    weatherCondition = CreatePartlyCloudyNightIcon(dayDataPoint);
+                    weatherCondition = CreatePartlyCloudyNightIcon(todayForecast);
                     break;
                 case "cloudy":
                     weatherCondition = isDay == true ?
                         CreateCloudyDayIcon() :
-                        CreateCloudyNightIcon(dayDataPoint);
+                        CreateCloudyNightIcon(todayForecast);
 
                     break;
                 case "rain":
@@ -625,9 +630,12 @@ namespace Feels.Services.WeatherScene {
             return container;
         }
 
-        private static Grid CreateMoon(float moonPhase, Compositor compositor, Color color, int radius = 140) {
+        public static Grid CreateMoon(float moonPhase, Compositor compositor, Color color, int radius = 140) {
             var moonExtRadius = 150;
-            var container = new Grid();
+            var container = new Grid() {
+                Name = "MoonContainer"
+            };
+
             var containerVisual = compositor.CreateContainerVisual();
 
             containerVisual.Size = new Vector2(radius, radius);
@@ -635,6 +643,7 @@ namespace Feels.Services.WeatherScene {
             var iconMoon = new BitmapIcon() {
                 Height = 120,
                 Width = 120,
+                Name = "MoonIcon",
                 Foreground = new SolidColorBrush(color)
             };
 
@@ -725,7 +734,10 @@ namespace Feels.Services.WeatherScene {
             var containerVisual = compositor.CreateContainerVisual();
             containerVisual.Size = new Vector2(moonRadius * 4, moonRadius * 4);
 
-            var moon = CreateMoon(day.MoonPhase, compositor, Color.FromArgb(255, 245, 215, 110));
+            var moonColor = Color.FromArgb(255, 245, 215, 110);
+            moonColor = _isPremiumUser ? Color.FromArgb(255, 192, 57, 43) : moonColor;
+
+            var moon = CreateMoon(day.MoonPhase, compositor, moonColor);
 
             var cloudImage = Visuals.CreateDarkCloudImage(100);
             var cloudVisual = ElementCompositionPreview.GetElementVisual(cloudImage);

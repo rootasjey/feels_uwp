@@ -128,6 +128,7 @@
     <Compile Include="Services\TileDesigner.cs" />
     <Compile Include="Services\UI.cs" />
     <Compile Include="Services\Wallpaper.cs" />
+    <Compile Include="Services\WeatherScene\SpecialEvents.cs" />
     <Compile Include="Services\WeatherScene\Visuals.cs" />
     <Compile Include="Views\AchievementsPage.xaml.cs">
       <DependentUpon>AchievementsPage.xaml</DependentUpon>

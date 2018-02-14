@@ -454,7 +454,7 @@
                               Opacity="0"/>
 
                         <StackPanel x:Name="SplashView"
-                                    Visibility="Collapsed"
+                                    Visibility="Visible"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Center">
                             <BitmapIcon UriSource="/Assets/icon.png" 
@@ -901,20 +901,27 @@
                             </StackPanel>
                         </Grid>
 
-                        <StackPanel x:Name="LoadingView"
+                        <Grid x:Name="LoadingView"
                                     Margin="24,0,24,0"
                                     VerticalAlignment="Center"
                                     Visibility="Collapsed">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition  MinHeight="150"/>
+                            </Grid.RowDefinitions>
 
-                            <Grid x:Name="SpaceBackgroundPanel">
-                                <StackPanel x:Name="SpaceModulePanel">
-                                    <BitmapIcon x:Name="SpaceModuleIcon"
+                            <StackPanel x:Name="LoadingViewPictures"
+                                        Grid.Row="0">
+                                
+                                <Grid x:Name="SpaceBackgroundPanel">
+                                    <StackPanel x:Name="SpaceModulePanel">
+                                        <BitmapIcon x:Name="SpaceModuleIcon"
                                         Height="200"
                                         Width="200"
                                         Margin="0,-60,-30,0"
                                         UriSource="/Assets/Icons/space-module.png"/>
 
-                                    <Line x:Name="SpaceModuleLine"
+                                        <Line x:Name="SpaceModuleLine"
                                       X1="45" Y1="0"
                                       X2="0" Y2="45"
                                       Margin="-70,-75,0,0"
@@ -924,50 +931,54 @@
                                       StrokeDashArray="1.5"
                                       StrokeDashCap="Round"
                                       Stroke="Salmon"/>
-                                </StackPanel>
+                                    </StackPanel>
 
-                                <Grid x:Name="LoadingViewStarsBackground">
-                                    <BitmapIcon x:Name="LoadingViewStars1" 
+                                    <Grid x:Name="LoadingViewStarsBackground">
+                                        <BitmapIcon x:Name="LoadingViewStars1" 
                                                 UriSource="/Assets/Icons/shining_yellow.png"
                                                 Height="50"
                                                 Width="50"
                                                 Foreground="Gold"
                                                 Margin="0,-350,0,0"/>
 
-                                    <BitmapIcon x:Name="LoadingViewStars2" 
+                                        <BitmapIcon x:Name="LoadingViewStars2" 
                                                 UriSource="/Assets/Icons/shining_yellow.png"
                                                 Height="30"
                                                 Width="30"
                                                 Margin="250,-50,0,0"/>
 
-                                    <Ellipse x:Name="LoadingViewStars3"
+                                        <Ellipse x:Name="LoadingViewStars3"
                                              Height="10"
                                              Width="10"
                                              Margin="-250,-100,0,0"
                                              Fill="{ThemeResource TextBoxButtonForegroundThemeBrush}"
                                              StrokeThickness="4"/>
 
-                                    <Ellipse x:Name="LoadingViewStars4"
+                                        <Ellipse x:Name="LoadingViewStars4"
                                              Height="15"
                                              Width="15"
                                              Margin="250,-350,0,0"
                                              Fill="{ThemeResource TextBoxButtonForegroundThemeBrush}"
                                              StrokeThickness="4"/>
+                                    </Grid>
                                 </Grid>
-                            </Grid>
 
-                            <FontIcon x:Name="EarthIcon"
+                                <FontIcon x:Name="EarthIcon"
                                       FontFamily="Segoe MDL2 Assets"
                                       FontSize="50"
                                       Height="50"
                                       Width="50"
                                       Margin="-160,-30,0,0"
                                       Glyph="&#xE128;"/>
-                            
-                            <StackPanel x:Name="LocalizationSearchingMessage"
-                                        Visibility="Visible">
+                            </StackPanel>
+
+                            <StackPanel x:Name="LoadingViewTextStatus"
+                                        Grid.Row="1">
                                 
-                                <TextBlock x:Uid="LoadingTryingLocalize" 
+                                <StackPanel x:Name="LocalizationSearchingMessage"
+                                        Visibility="Visible">
+
+                                    <TextBlock x:Uid="LoadingTryingLocalize" 
                                            Text="Trying to locate you on Earth..." 
                                            Opacity="0.6"
                                            Margin="0,50,0,6"
@@ -975,24 +986,26 @@
                                            TextWrapping="Wrap"
                                            FontWeight="SemiBold"
                                            HorizontalAlignment="Center"/>
-                                <ProgressBar x:Name="LoadingProgress" IsIndeterminate="True"/>
-                            </StackPanel>
+                                    <ProgressBar x:Name="LoadingProgress" IsIndeterminate="True"/>
+                                </StackPanel>
 
-                            <StackPanel x:Name="LocalizationSuccessMessage"
+                                <StackPanel x:Name="LocalizationSuccessMessage"
                                         Margin="0,50,0,0"
                                         Visibility="Collapsed"
                                         HorizontalAlignment="Center">
-                                
-                                <FontIcon Glyph="&#xE001;" FontSize="50" Foreground="LimeGreen"/>
-                                <TextBlock x:Name="SuccessMessageLocationName" 
+
+                                    <FontIcon Glyph="&#xE001;" FontSize="50" Foreground="LimeGreen"/>
+                                    <TextBlock x:Name="SuccessMessageLocationName" 
                                            x:Uid="SuccessMessageLocationName"
                                            FontSize="20"
                                            Opacity=".6"
                                            TextWrapping="Wrap"
                                            FontWeight="SemiBold"
                                            Text="We found you at the following location: "/>
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
+                            
+                        </Grid>
 
                         <ScrollViewer x:Name="LocationDisabledMessage"
                                     Visibility="Collapsed"

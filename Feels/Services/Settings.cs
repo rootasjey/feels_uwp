@@ -111,6 +111,13 @@ namespace Feels.Services {
             }
         }
 
+        private static string _premiumKey {
+            get {
+                return "Premium";
+            }
+        }
+
+
         #endregion keys
 
         #region position
@@ -450,5 +457,20 @@ namespace Feels.Services {
         }
 
         #endregion cached data
+
+        #region premium
+
+        public static void SavePremiumUser(bool value) {
+            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+            localSettings.Values[_premiumKey] = value;
+        }
+
+        public static bool IsPremiumUser() {
+            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+            return localSettings.Values.ContainsKey(_premiumKey) ? 
+                (bool)localSettings.Values[_premiumKey] : false;
+        }
+
+        #endregion premium
     }
 }

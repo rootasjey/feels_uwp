@@ -10,25 +10,31 @@ using System.Numerics;
 namespace Feels.Services.WeatherScene {
     public class Scenes {
         #region variables
+
         static Rect _screenBounds { get; set; }
         static double _screenScaleFactor { get; set; }
         static Size _screenSize { get; set; }
         
         static bool _IsDay { get; set; }
+
         #endregion variables
 
-        public static Grid CreateNew(CurrentDataPoint current, DayDataPoint day, bool deactivateBackgroundColorAnimation = false) {
-            InitializeVariables(day);
+        public static Grid CreateNew(Forecast forecast, bool isPremiumUser, bool deactivateBackgroundColorAnimation = false) {
+            CurrentDataPoint currentForecast = forecast.Currently;
+            DayDataPoint todayForecast = forecast.Daily.Days[0];
+
+            InitializeVariables(todayForecast);
 
             var scene = new Grid();
-            scene = Backgrounds.PaintBackground(scene, current, day);
+            scene = Backgrounds.PaintBackground(scene, currentForecast, todayForecast);
 
             if (!deactivateBackgroundColorAnimation) {
-                scene = Backgrounds.AnimateBackgroundColor(scene, current.Icon, _screenSize);
+                scene = Backgrounds.AnimateBackgroundColor(scene, currentForecast.Icon, _screenSize);
             }
             
-            scene = AddAnimationsOn(scene, current.Icon);
-            scene = Icons.AddWeatherIconCondition(scene, current, day, _IsDay);
+            scene = AddAnimations(scene, currentForecast.Icon);
+            scene = Icons.AddWeatherIconCondition(scene, forecast, _IsDay, isPremiumUser);
+            //scene = isPremiumUser ? AddSpecialEvents(scene, forecast) : scene;
 
             return scene;
         }
@@ -53,7 +59,7 @@ namespace Feels.Services.WeatherScene {
 
         #region animated scenes
 
-        static Grid AddAnimationsOn(Grid scene, string condition) {
+        private static Grid AddAnimations(Grid scene, string condition) {
             var animationsScene = new Grid();
 
             switch (condition) {
@@ -92,7 +98,7 @@ namespace Feels.Services.WeatherScene {
             return scene;
         }
 
-        static Canvas CreateRainyScene() {
+        private static Canvas CreateRainyScene() {
             var container = new Canvas();
             var rand = new Random();
 
@@ -107,8 +113,8 @@ namespace Feels.Services.WeatherScene {
 
             return container;
         }
-        
-        static Canvas CreateStarsScene(int starsNumber = 35) {
+
+        private static Canvas CreateStarsScene(int starsNumber = 35) {
             var container = new Canvas();
             var rand = new Random();
 
@@ -126,7 +132,7 @@ namespace Feels.Services.WeatherScene {
             return container;
         }
 
-        static Canvas CreateSnowScene() {
+        private static Canvas CreateSnowScene() {
             var container = new Canvas();
             var rand = new Random();
 
@@ -143,7 +149,7 @@ namespace Feels.Services.WeatherScene {
             return container;
         }
 
-        static Canvas CreateSleetScene() {
+        private static Canvas CreateSleetScene() {
             var container = new Canvas();
             var random = new Random();
 
@@ -169,7 +175,7 @@ namespace Feels.Services.WeatherScene {
             return container;
         }
 
-        static Canvas CreateFogScene() {
+        private static Canvas CreateFogScene() {
             var container = new Canvas();
             var compositor = ElementCompositionPreview.GetElementVisual(container).Compositor;
             var containerVisual = compositor.CreateContainerVisual();
@@ -195,7 +201,7 @@ namespace Feels.Services.WeatherScene {
             return container;
         }
 
-        static Canvas CreateWindScene() {
+        private static Canvas CreateWindScene() {
             var container = new Canvas();
             var compositor = ElementCompositionPreview.GetElementVisual(container).Compositor;
             var containerVisual = compositor.CreateContainerVisual();
@@ -225,5 +231,10 @@ namespace Feels.Services.WeatherScene {
         }
 
         #endregion animated scenes
+
+        private static Grid AddSpecialEvents(Grid scene, Forecast forecast) {
+            scene = SpecialEvents.AddHalloween(scene, forecast);
+            return scene;
+        }
     }
 }

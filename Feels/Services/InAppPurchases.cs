@@ -6,7 +6,11 @@ using Windows.Services.Store;
 
 namespace Feels.Services {
     public class InAppPurchases {
-        private static StoreContext _context = null;
+        private static StoreContext _context { get; set; }
+
+        private static string[] _productKinds = { "Durable", "Consumable", "UnmanagedConsumable" };
+
+        private static string[] _premiumAddonsIds = { "9N13LP56936K", "9N49HLLFDCW1", "9N47TFBCRB34"/*delete*/ };
 
         private static void InitializeContext() {
             if (_context == null) {
@@ -40,23 +44,20 @@ namespace Feels.Services {
 
         public static async Task<StoreProductQueryResult> GetAllAddons() {
             InitializeContext();
-
-            string[] productKinds = { "Durable", "Consumable", "UnmanagedConsumable" };
-            List<String> filterList = new List<string>(productKinds);
+            
+            List<String> filterList = new List<string>(_productKinds);
 
             return await _context.GetAssociatedStoreProductsAsync(filterList);
         }
 
         public static async Task<StoreProductQueryResult> GetUserAddons() {
             InitializeContext();
-
-            string[] productKinds = { "Durable", "Consumable", "UnmanagedConsumable" };
-            List<String> filterList = new List<string>(productKinds);
+            
+            List<String> filterList = new List<string>(_productKinds);
 
             return await _context.GetUserCollectionAsync(filterList);
         }
 
-        // TODO: handle array of ids
         public static async Task<bool> DoesUserHaveAddon(string id) {
             InitializeContext();
 
@@ -67,6 +68,35 @@ namespace Feels.Services {
                         .Where(x => x.Value.StoreId == id);
 
             return matches.Count() > 0;
+        }
+
+        public static async Task<bool> DoesUserHaveAddon(string[] ids) {
+            InitializeContext();
+
+            var foundProducts = await GetUserAddons();
+            
+            var matches = foundProducts
+                        .Products
+                        .Where(x => ids.Contains(x.Value.StoreId));
+
+            return matches.Count() > 0;
+        }
+        
+        public static async Task<bool> IsPremiumUser() {
+            InitializeContext();
+
+            var foundProducts = await GetUserAddons();
+
+            var matches = foundProducts
+                        .Products
+                        .Where(x => _premiumAddonsIds.Contains(x.Value.StoreId));
+
+            return matches.Count() > 0;
+        }
+
+        public static async void CheckAndUpdatePremiumUser() {
+            var isPremium = await IsPremiumUser();
+            Settings.SavePremiumUser(isPremium);
         }
     }
 }

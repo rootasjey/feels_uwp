@@ -50,6 +50,11 @@ namespace Feels.Views {
 
         private string _currentTown { get; set; }
 
+        /// <summary>
+        /// True if the user has the suitable addon to see special scenes.
+        /// </summary>
+        private bool _isSpecialSceneChecked { get; set; }
+
         // -----------
         // Composition
         // -----------
@@ -80,6 +85,7 @@ namespace Feels.Views {
             ShowUpdateChangelogIfUpdated();
 
             BackgroundTasks.CheckAllTasks();
+            InAppPurchases.CheckAndUpdatePremiumUser();
         }
 
         #region titlebar
@@ -749,7 +755,7 @@ namespace Feels.Views {
         }
 
         private async void ShowLocalizationSuccess() {
-            LocalizationSearchingMessage.Opacity = 0;
+            LocalizationSearchingMessage.Visibility = Visibility.Collapsed;
 
             if (string.IsNullOrEmpty(_currentTown)) {
                 _currentTown = await GetCurrentCity();
@@ -797,10 +803,13 @@ namespace Feels.Views {
         #region scene theater
 
         private void DrawScene() {
+            var isPremium = Settings.IsPremiumUser();
+            var isColorAnimationOff = Settings.IsSceneColorAnimationDeactivated();
+
             var scene = Scenes.CreateNew(
-                _pageDataSource.Forecast.Currently, 
-                _pageDataSource.Forecast.Daily.Days[0],
-                Settings.IsSceneColorAnimationDeactivated());
+                _pageDataSource.Forecast,
+                isPremium,
+                isColorAnimationOff);
 
             Theater.Children.Add(scene);
 
@@ -814,17 +823,30 @@ namespace Feels.Views {
                 .Offset(0, 0, 1000)
                 .SetDelay(500)
                 .Start();
+
+            
+
+            //Timer deffered = null;
+
+            //deffered = new Timer(async (object state) => {
+            //    await _UIDispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+            //        if (_isSpecialSceneChecked) { deffered?.Dispose(); }
+
+            //        _isSpecialSceneChecked = true;
+            //        AddSpecialScene();
+            //    });
+            //}, new AutoResetEvent(true), 3000, 2000);
         }
 
         private void CleanTheater() {
             Theater.Children.Clear();
             Theater.Fade(0).Start();
         }
-
+        
         #endregion scene theater
 
         #region buttons
-        
+
         private void HourlySummary_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
             HourlyList.ScrollToIndex(0);
         }
