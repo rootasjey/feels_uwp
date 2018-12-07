@@ -1,0 +1,591 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutHeader.Text" xml:space="preserve">
+    <value>Über</value>
+  </data>
+  <data name="BetaMessage" xml:space="preserve">
+    <value>Diese App ist in der Betaphase und funktioniert eventuell nicht so wie erwartet. Sie könnte zum Beispiel Fehler enthalten und einige Funktionen könnten noch fehlen. Bitte melde jeden unerwarteten Fehler auf GitHub. Danke.</value>
+  </data>
+  <data name="clear-day" xml:space="preserve">
+    <value>wolkenloser Tag</value>
+  </data>
+  <data name="clear-night" xml:space="preserve">
+    <value>wolkenlose Nacht</value>
+  </data>
+  <data name="cloudy" xml:space="preserve">
+    <value>bewölkt</value>
+  </data>
+  <data name="CmdRefresh.Label" xml:space="preserve">
+    <value>Aktualisieren</value>
+  </data>
+  <data name="CmdSettings.Label" xml:space="preserve">
+    <value>Einstellungen</value>
+  </data>
+  <data name="ContributeFifthLine.Text" xml:space="preserve">
+    <value>Folge diesem Link, um mehr Informationen zu erhalten.</value>
+  </data>
+  <data name="ContributeFirstLine.Text" xml:space="preserve">
+    <value>Dieses Projekt ist Open Source. Du hast viele Möglichkeiten mitzuhelfen</value>
+  </data>
+  <data name="ContributeFourthLine.Text" xml:space="preserve">
+    <value>• den Quellcode der App bearbeiten</value>
+  </data>
+  <data name="ContributeSecondLine.Text" xml:space="preserve">
+    <value>• Fehler melden</value>
+  </data>
+  <data name="ContributeSixthLine.Text" xml:space="preserve">
+    <value>und bei dieser App mitzumachen. :)</value>
+  </data>
+  <data name="ContributeThirdLine.Text" xml:space="preserve">
+    <value>• Funktionen vorschlagen</value>
+  </data>
+  <data name="ContributeTitle.Text" xml:space="preserve">
+    <value>Unterstützen</value>
+  </data>
+  <data name="Dark.Text" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="DataContent1.Text" xml:space="preserve">
+    <value>Daten von</value>
+  </data>
+  <data name="DataContent2.Text" xml:space="preserve">
+    <value>und diese App steht in keiner Beziehung zu</value>
+  </data>
+  <data name="DataTitle.Text" xml:space="preserve">
+    <value>Daten</value>
+  </data>
+  <data name="DynamicTileLabel.Text" xml:space="preserve">
+    <value>Live-Tile regelmäßig updaten</value>
+  </data>
+  <data name="DynamicTileTitle.Text" xml:space="preserve">
+    <value>Dynamische Live-Tile</value>
+  </data>
+  <data name="EmptyDailyForecast.Text" xml:space="preserve">
+    <value>Momentan haben wir leider keine Wetterdaten für die Tagesvorhersage :(</value>
+  </data>
+  <data name="EmptyHourlyForecast.Text" xml:space="preserve">
+    <value>Momentan haben wir leider keine Wetterdaten für die Stundenvorhersage:(</value>
+  </data>
+  <data name="FeedbackButton.Content" xml:space="preserve">
+    <value>eine Email senden</value>
+  </data>
+  <data name="FeedbackLabel.Text" xml:space="preserve">
+    <value>per Email eine Verbesserung vorschlagen oder einen Fehler melden</value>
+  </data>
+  <data name="FeedbackTitle.Text" xml:space="preserve">
+    <value>Meine Anfragen</value>
+  </data>
+  <data name="FeelsLike" xml:space="preserve">
+    <value>fühlt sich eher an wie</value>
+  </data>
+  <data name="FindLocationManually.Text" xml:space="preserve">
+    <value>die Stadt manuell suchen</value>
+  </data>
+  <data name="FindMe.Text" xml:space="preserve">
+    <value>finde mich</value>
+  </data>
+  <data name="fog" xml:space="preserve">
+    <value>Nebel</value>
+  </data>
+  <data name="GithubRepository.Text" xml:space="preserve">
+    <value>GitHub repository</value>
+  </data>
+  <data name="hail" xml:space="preserve">
+    <value>Hagel</value>
+  </data>
+  <data name="ImagesSourceContent.Text" xml:space="preserve">
+    <value>Bilder sind von</value>
+  </data>
+  <data name="ImagesSourceTitle.Text" xml:space="preserve">
+    <value>Bilder</value>
+  </data>
+  <data name="LanguageButton.Content" xml:space="preserve">
+    <value>Sprache</value>
+  </data>
+  <data name="Loading.Text" xml:space="preserve">
+    <value>Lädt...</value>
+  </data>
+  <data name="LocationAutoDetect.Text" xml:space="preserve">
+    <value>Deine aktuelle Postion wird automatisch erkannt.</value>
+  </data>
+  <data name="partly-cloudy-day" xml:space="preserve">
+    <value>über den Tag hinweg teilweise bewölkt</value>
+  </data>
+  <data name="partly-cloudy-night" xml:space="preserve">
+    <value>in der Nacht teilweise bewölkt</value>
+  </data>
+  <data name="PersonalizationPivot.Header" xml:space="preserve">
+    <value>Personalisierung</value>
+  </data>
+  <data name="rain" xml:space="preserve">
+    <value>Regen</value>
+  </data>
+  <data name="RatingButton.Content" xml:space="preserve">
+    <value>Die App bewerten</value>
+  </data>
+  <data name="RatingLabel.Text" xml:space="preserve">
+    <value>Die App im Store rezensieren</value>
+  </data>
+  <data name="RatingTitle.Text" xml:space="preserve">
+    <value>Bewertung</value>
+  </data>
+  <data name="SearchText.Text" xml:space="preserve">
+    <value>Suche</value>
+  </data>
+  <data name="sleet" xml:space="preserve">
+    <value>Schneeregen</value>
+  </data>
+  <data name="snow" xml:space="preserve">
+    <value>Schnee</value>
+  </data>
+  <data name="SwypeLeftToHourly.Text" xml:space="preserve">
+    <value>Wische nach links für die Tagesvorhersage</value>
+  </data>
+  <data name="SwypeRightToHourly.Text" xml:space="preserve">
+    <value>Wische nach links für die Stundenvorhersage</value>
+  </data>
+  <data name="Tasks.Text" xml:space="preserve">
+    <value>Aktualisierung</value>
+  </data>
+  <data name="Theme.Text" xml:space="preserve">
+    <value>App-Modus</value>
+  </data>
+  <data name="ThemeSwitch.OffContent" xml:space="preserve">
+    <value>Dunkel</value>
+  </data>
+  <data name="ThemeSwitch.OnContent" xml:space="preserve">
+    <value>Weiß</value>
+  </data>
+  <data name="thunderstorm" xml:space="preserve">
+    <value>Gewitter</value>
+  </data>
+  <data name="tornado" xml:space="preserve">
+    <value>Tornado</value>
+  </data>
+  <data name="wind" xml:space="preserve">
+    <value>Win</value>
+  </data>
+  <data name="ButtonRestart.Content" xml:space="preserve">
+    <value>Neustarten</value>
+  </data>
+  <data name="ItemDay.Content" xml:space="preserve">
+    <value>einmal am Tag</value>
+  </data>
+  <data name="ItemFifteenMinutes.Content" xml:space="preserve">
+    <value>alle 15 Minuten</value>
+  </data>
+  <data name="ItemHalfHour.Content" xml:space="preserve">
+    <value>jede halbe Stunde</value>
+  </data>
+  <data name="ItemHour.Content" xml:space="preserve">
+    <value>jede Stunde</value>
+  </data>
+  <data name="ItemThreeHours.Content" xml:space="preserve">
+    <value>alle drei Stunden</value>
+  </data>
+  <data name="LastTileTaskError.Text" xml:space="preserve">
+    <value>kein Fehler</value>
+  </data>
+  <data name="LastUpdatedTask.Text" xml:space="preserve">
+    <value>niemals ausführen</value>
+  </data>
+  <data name="TaskNotWorkingText.Text" xml:space="preserve">
+    <value>Wenn die Aktualisierung nicht funktioniert, solltest Du sie neustarten.</value>
+  </data>
+  <data name="TileIntervalUpdate.Header" xml:space="preserve">
+    <value>Wiederholung</value>
+  </data>
+  <data name="DynamicTileActivity.Text" xml:space="preserve">
+    <value>dynamische Live-Tile-Aktualisierung</value>
+  </data>
+  <data name="TileLastRun" xml:space="preserve">
+    <value>Live-Tile-Aktualisierung letztes mal:</value>
+  </data>
+  <data name="UnitsText.Text" xml:space="preserve">
+    <value>Einheiten</value>
+  </data>
+  <data name="LanguageSelected" xml:space="preserve">
+    <value>Sprache ausgewählt</value>
+  </data>
+  <data name="LanguageLabel.Text" xml:space="preserve">
+    <value>Sprache</value>
+  </data>
+  <data name="LanguageSubLabel.Text" xml:space="preserve">
+    <value>Angezeigte Sprache auswählen</value>
+  </data>
+  <data name="UnitsSubLabel.Text" xml:space="preserve">
+    <value>Temperatur-Einheit auswählen</value>
+  </data>
+  <data name="ButtonPrivacyPolicyGitHub.Content" xml:space="preserve">
+    <value>Datenschutzbestimmung auf GitHub</value>
+  </data>
+  <data name="ContactMeLabel.Text" xml:space="preserve">
+    <value>Du kannst mich über diese Email-Adresse kontaktieren</value>
+  </data>
+  <data name="ContactMeTwitterLabel.Text" xml:space="preserve">
+    <value>Du kannst mich aber auch auf Twitter anschreiben</value>
+  </data>
+  <data name="LocationInformationLabel.Text" xml:space="preserve">
+    <value>Positions Informationen</value>
+  </data>
+  <data name="LocationLine0.Text" xml:space="preserve">
+    <value>Deine Positions-Informationen werden nur genutzt für die</value>
+  </data>
+  <data name="LocationLine1.Text" xml:space="preserve">
+    <value>Deine Position wird nur zum automatischen erfassen deiner Stadt verwendet, sodass dir die richtigen Wetterdaten zur Verfügung gestellt werden.</value>
+  </data>
+  <data name="LocationLine2.Text" xml:space="preserve">
+    <value>Wir sammeln deine Daten nicht, auch nicht für spätere Weiterverwendung.</value>
+  </data>
+  <data name="LocationLine3.Text" xml:space="preserve">
+    <value>Wir senden deine Daten an keine Dritten.</value>
+  </data>
+  <data name="LocationLine4.Text" xml:space="preserve">
+    <value>Du kannst überprüfen, was mit deinen Daten passiert indem du dir folgendes durchliest:</value>
+  </data>
+  <data name="LocationLine5.Text" xml:space="preserve">
+    <value>Quellcode</value>
+  </data>
+  <data name="PrivacyPivot.Header" xml:space="preserve">
+    <value>Datenschutzbestimmung</value>
+  </data>
+  <data name="PrivacyPolicyLine0.Text" xml:space="preserve">
+    <value>Deine Privatsphäre ist für uns wichtig und wir respektieren sie.</value>
+  </data>
+  <data name="PrivacyPolicyLine1.Text" xml:space="preserve">
+    <value>• Wir teilen keine persönlichen Informationen mit Dritten</value>
+  </data>
+  <data name="PrivacyPolicyLine2.Text" xml:space="preserve">
+    <value>• Wir speichern deine persönlichen Informationen nicht</value>
+  </data>
+  <data name="CloudCover.Text" xml:space="preserve">
+    <value>bedeckt</value>
+  </data>
+  <data name="Highest.Text" xml:space="preserve">
+    <value>Höchsttemperatur</value>
+  </data>
+  <data name="Humidity.Text" xml:space="preserve">
+    <value>Luftfeuchtigkeit</value>
+  </data>
+  <data name="Lowest.Text" xml:space="preserve">
+    <value>Tiefsttemperatur</value>
+  </data>
+  <data name="Pressure.Text" xml:space="preserve">
+    <value>Druck</value>
+  </data>
+  <data name="Probability.Text" xml:space="preserve">
+    <value>Wahrscheinlichkeit</value>
+  </data>
+  <data name="Sunrise.Text" xml:space="preserve">
+    <value>Sonnenaufgang</value>
+  </data>
+  <data name="Sunset.Text" xml:space="preserve">
+    <value>Sonnenuntergang</value>
+  </data>
+  <data name="WindSpeed.Text" xml:space="preserve">
+    <value>Geschwindigkeit</value>
+  </data>
+  <data name="UpdateVersion.Text" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="MoonPhase.Text" xml:space="preserve">
+    <value>Mondphase</value>
+  </data>
+  <data name="MoonPhaseFirstQuarter" xml:space="preserve">
+    <value>erstes Viertel</value>
+  </data>
+  <data name="MoonPhaseFullMoon" xml:space="preserve">
+    <value>Vollmond</value>
+  </data>
+  <data name="MoonPhaseNewMoon" xml:space="preserve">
+    <value>Neumond</value>
+  </data>
+  <data name="MoonPhaseThirdQuarter" xml:space="preserve">
+    <value>Dreiviertelmond</value>
+  </data>
+  <data name="MoonPhaseWaningCrescent" xml:space="preserve">
+    <value>abnehmender Sichelmond</value>
+  </data>
+  <data name="MoonPhaseWaningGibbous" xml:space="preserve">
+    <value>abnehmender Dreiviertelmond</value>
+  </data>
+  <data name="MoonPhaseWaxingCrescent" xml:space="preserve">
+    <value>zunehmender Sichelmond</value>
+  </data>
+  <data name="MoonPhaseWaxingGibbous" xml:space="preserve">
+    <value>zunehmender Dreiviertelmond</value>
+  </data>
+  <data name="CmdLocations.Label" xml:space="preserve">
+    <value>Orte</value>
+  </data>
+  <data name="CmdAddNewCity.Label" xml:space="preserve">
+    <value>Neu</value>
+  </data>
+  <data name="CmdCancel.Label" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="TitleLocations.Text" xml:space="preserve">
+    <value>Meine Orte</value>
+  </data>
+  <data name="MyCurrentPosition" xml:space="preserve">
+    <value>Meine aktuelle Position</value>
+  </data>
+  <data name="LoadingLocationsBlock.Text" xml:space="preserve">
+    <value>Orte werden geladen</value>
+  </data>
+  <data name="LocationFailedText.Text" xml:space="preserve">
+    <value>Sieht so aus als wärst du nicht auf der Erde. Bitte überprüfe deine GPS-Einstellungen und deine Internetverbindung.</value>
+  </data>
+  <data name="LocationListItem.RightLabel" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="LocationSettingsButton.Text" xml:space="preserve">
+    <value>Ort-Einstellungen</value>
+  </data>
+  <data name="NoLocationFoundBlock.Text" xml:space="preserve">
+    <value>Sorry, aber es gibt kein Ergebnis für deine Anfrage. Versuche irgendetwas ähnliches.</value>
+  </data>
+  <data name="TryAgainButton.Text" xml:space="preserve">
+    <value>Erneut versuchen</value>
+  </data>
+  <data name="CmdDeleteSavedLocation.Text" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="WindDirection.Text" xml:space="preserve">
+    <value>Richtung</value>
+  </data>
+  <data name="LoadingStuck.Text" xml:space="preserve">
+    <value>Manchmal bricht das Laden der GPS-Verbindung ab oder hängt fest. Versuche die App neuzustarten, wenn das passiert.</value>
+  </data>
+  <data name="DescriptionPressure" xml:space="preserve">
+    <value>Der Meeresspiegel-Druck.</value>
+  </data>
+  <data name="BlockDeactivateBackgroundColor.Text" xml:space="preserve">
+    <value>Deaktivieren der Verlaufsanimation auf der Startseite</value>
+  </data>
+  <data name="BlockDontUseGPS.Text" xml:space="preserve">
+    <value>Wenn du deine GPS-Position nicht verwenden willst, kannst du die Orte auch manuell hinzufügen.</value>
+  </data>
+  <data name="ButtonAddLocationManually.Text" xml:space="preserve">
+    <value>Ort manuell hinzufügen</value>
+  </data>
+  <data name="BlockTheme.Text" xml:space="preserve">
+    <value>Thema</value>
+  </data>
+  <data name="Moonrise.Text" xml:space="preserve">
+    <value>Mondaufgang</value>
+  </data>
+  <data name="Moonset.Text" xml:space="preserve">
+    <value>Monduntergang</value>
+  </data>
+  <data name="CmdPinLocation.Text" xml:space="preserve">
+    <value>anpinnen</value>
+  </data>
+  <data name="CmdUnpinLocation.Text" xml:space="preserve">
+    <value>abpinnen</value>
+  </data>
+  <data name="Unpin" xml:space="preserve">
+    <value>abpinnen</value>
+  </data>
+  <data name="Pin" xml:space="preserve">
+    <value>anpinnen</value>
+  </data>
+  <data name="AnimationsLabel.Text" xml:space="preserve">
+    <value>Animationen</value>
+  </data>
+  <data name="FeedbackPivot.Header" xml:space="preserve">
+    <value>Feedback</value>
+  </data>
+  <data name="ThanksMade.Text" xml:space="preserve">
+    <value>Diese App wurde gemacht mit der Unterstützung von</value>
+  </data>
+  <data name="APICallMadeLabel.Text" xml:space="preserve">
+    <value>API Zugriffe, die heute gemacht wurden</value>
+  </data>
+  <data name="WhyDonate1.Text" xml:space="preserve">
+    <value>Wenn du spendest, unterstützt du die Entwicklung von Feels.</value>
+  </data>
+  <data name="WhyDonate2.Text" xml:space="preserve">
+    <value>Feels nutzt die DarkSky API, die nur für die ersten 1000 Zugriffe kostenlos ist (ein Zugriff wird normalerweiser bei jedem aufrufen der Wetterdaten).</value>
+  </data>
+  <data name="WhyDonate3.Text" xml:space="preserve">
+    <value>Und damit ich mit dem Entwickeln dieser App weitermache, brauche ich eure Hilfe.</value>
+  </data>
+  <data name="WhyDonateTitle.Text" xml:space="preserve">
+    <value>Wieso sollte man spenden?</value>
+  </data>
+  <data name="PurchaseStatusAlreadyPurchased" xml:space="preserve">
+    <value>Der angemeldete Benutzer hat das Produkt bereit gekauft.</value>
+  </data>
+  <data name="PurchaseStatusNetworkError" xml:space="preserve">
+    <value>Der Kauf war nicht erfolgreich. Du hast keine Verbindung zum Netzwerk.</value>
+  </data>
+  <data name="PurchaseStatusNotPurchased" xml:space="preserve">
+    <value>Der Kauf war nicht erfolgreich. Vielleicht hast Du ihn abgebrochen.</value>
+  </data>
+  <data name="PurchaseStatusServerError" xml:space="preserve">
+    <value>Der Kauf ist durch einen Serverfehler fehlgeschlagen.</value>
+  </data>
+  <data name="PurchaseStatusSucceeded" xml:space="preserve">
+    <value>Der Kauf war erfolgreich. Vielen Dank für deine Spenden.</value>
+  </data>
+  <data name="PurchaseStatusUknownError" xml:space="preserve">
+    <value>Der Kauf ist durch einen unbekannten Fehler fehlgeschlagen.</value>
+  </data>
+  <data name="CmdDonations.Label" xml:space="preserve">
+    <value>Spenden</value>
+  </data>
+  <data name="LocationListItem.LeftLabel" xml:space="preserve">
+    <value>anpinnen</value>
+  </data>
+  <data name="PinSuccess" xml:space="preserve">
+    <value>Die Live-Tile wurde angepinnt.</value>
+  </data>
+  <data name="UnpinSuccess" xml:space="preserve">
+    <value>Die Live-Tile wurde korrekt entfernt.</value>
+  </data>
+  <data name="EmptyViewSecondaryTasksLabel.Text" xml:space="preserve">
+    <value>Es existieren momentan keine untergeordenten Aktualisierungen.</value>
+  </data>
+  <data name="PrimaryTasksPivot.Header" xml:space="preserve">
+    <value>Übergeordnete Aktualisierung</value>
+  </data>
+  <data name="SecondaryTasksExplanations1.Text" xml:space="preserve">
+    <value>Wenn Du einen Ort an den Startbildschirm anpinnst, aktualisiert er sich periodisch jede Stunde.</value>
+  </data>
+  <data name="SecondaryTasksExplanations2.Text" xml:space="preserve">
+    <value>Auf dieser Seite kannst du aktive Aktualisierungaufgaben deaktivieren, ausser die, der übergeordneten Aktualisierung für die Live-Tile, welche du links findest.</value>
+  </data>
+  <data name="SecondaryTasksPivot.Header" xml:space="preserve">
+    <value>Untergeordnete Aktualisierung</value>
+  </data>
+  <data name="OnLabel.Text" xml:space="preserve">
+    <value>ein</value>
+  </data>
+  <data name="StoreHeroImage.Text" xml:space="preserve">
+    <value>Das Titelbild im Store ist von</value>
+  </data>
+  <data name="LoadingTryingLocalize.Text" xml:space="preserve">
+    <value>Wir versuchen Dich irgendwo auf der Erde zu finden.</value>
+  </data>
+  <data name="SuccessMessageLocationName" xml:space="preserve">
+    <value>Wir haben Sie an der folgenden Position gefunden</value>
+  </data>
+</root>

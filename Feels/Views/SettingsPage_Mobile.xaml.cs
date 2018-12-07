@@ -295,6 +295,11 @@ namespace Feels.Views {
                 LanguageSelection.SelectedIndex = 2;
                 return;
             }
+
+            if (culture.CompareInfo.IndexOf(language, "de", CompareOptions.IgnoreCase) >= 0) {
+                LanguageSelection.SelectedIndex = 3;
+                return;
+            }
         }
 
         private void LanguageSelection_SelectionChanged(object sender, SelectionChangedEventArgs e) {

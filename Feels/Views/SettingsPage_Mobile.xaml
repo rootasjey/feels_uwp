@@ -123,6 +123,7 @@
                                 <ComboBoxItem Content="English" Tag="EN"/>
                                 <ComboBoxItem Content="Français" Tag="FR"/>
                                 <ComboBoxItem Content="Russian" Tag="RU"/>
+                                <ComboBoxItem Content="Deutch" Tag="DE"/>
                             </ComboBox>
                         </StackPanel>
 

@@ -12,7 +12,7 @@ namespace Feels.Data {
 
         public DarkSkyService Client { get; set; }
 
-        private const string _APIKey = "ENTER_YOUR_API_KEY_HERE";
+        private const string _APIKey = "57281e87e833689d3150c587198f04c6";
 
         public async Task FetchCurrentForecast(double latitude, double longitude) {
             if (!NetworkInterface.GetIsNetworkAvailable()) { return; }
@@ -48,6 +48,10 @@ namespace Feels.Data {
 
             if (culture.CompareInfo.IndexOf(lang, "ru", CompareOptions.IgnoreCase) >= 0) {
                 return Language.Russian;
+            }
+
+            if (culture.CompareInfo.IndexOf(lang, "de", CompareOptions.IgnoreCase) >= 0) {
+                return Language.German;
             }
 
             return Language.English;
