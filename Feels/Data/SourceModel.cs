@@ -12,7 +12,7 @@ namespace Feels.Data {
 
         public DarkSkyService Client { get; set; }
 
-        private const string _APIKey = "57281e87e833689d3150c587198f04c6";
+        private const string _APIKey = "DARKSKY_API_KEY";
 
         public async Task FetchCurrentForecast(double latitude, double longitude) {
             if (!NetworkInterface.GetIsNetworkAvailable()) { return; }

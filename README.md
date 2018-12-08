@@ -1,5 +1,10 @@
 # Feels
+
+[![Build status](https://build.appcenter.ms/v0.1/apps/a01670f1-98b9-4596-a894-72597d0d96ec/branches/master/badge)](https://appcenter.ms)
+
 Minimalistic weather app
+
+>NOTE: To run this app locally, be sure to create an account on  [DarkSky](https://darksky.net/dev/login?next=/account) and create a new personal key to use in Feels app. See [section](#API-key).
 
 ## screenshot
 <img src="./home.png" height="400" alt="cloudy weather animation" style="display: inline-block;"/>
@@ -62,9 +67,11 @@ You can contribute to improve this project by:
 * Windows 10
 
 
-## Get a personal API key
+## API key
 
-To run this project, it's better to get your personal API key from Unsplash:
+### Retrieve a new API key from DarkSky
+
+To run this project, it's better to get your personal API key from DarkSky:
 
 1. Login or Register a new account on [DarkSky](https://darksky.net/dev/login?next=/account)
 2. On the account page, you'll get your Secret Key
@@ -73,3 +80,17 @@ To run this project, it's better to get your personal API key from Unsplash:
 ```csharp
 var client = new DarkSkyService("YOUR API KEY HERE");
 ```
+
+### Where to past my DarkSky API key ?
+
+Go in the `SourceModel` class in `Feels.Data` namespace (path `/Feels/Data/SourceModel.cs`).
+
+You can then edit the line number `15` and paste your personal key
+
+```cs
+private const string _APIKey = "DARKSKY_API_KEY";
+```
+
+Replace the `DARKSKY_API_KEY` value by your new API key.
+
+It should now work :)
