@@ -1,19 +1,21 @@
 # Feels
 
+Minimalistic weather app for universal windows platform.
+
+![mobile app presentation](./screenshots/presentation.png)
+
+<img src="./screenshots/feels_tile.gif" height="200" />
+
+## Status
+
 [![Build status](https://build.appcenter.ms/v0.1/apps/a01670f1-98b9-4596-a894-72597d0d96ec/branches/master/badge)](https://appcenter.ms)
 
-Minimalistic weather app
+> This project is NOT maintained anymore.
 
->NOTE: To run this app locally, be sure to create an account on  [DarkSky](https://darksky.net/dev/login?next=/account) and create a new personal key to use in Feels app. See [section](#API-key).
+> NOTE: To run this app locally, be sure to create an account on  [DarkSky](https://darksky.net/dev/login?next=/account) and create a new personal key to use in Feels app. See [section](#API-key).
 
-## screenshot
-<img src="./home.png" height="400" alt="cloudy weather animation" style="display: inline-block;"/>
 
-<img src="./hourly.png"  height="400" alt="hourly weather" style="display: inline-block;" />
-
-<img src="./feels_tile.gif" height="200" />
-
-## features
+## Features
 
 * Current weather based on geolocalization
 * Add city manually
@@ -23,7 +25,7 @@ Minimalistic weather app
 * Pin multiple locations to start view
 * Lockscreen text status
 
-## setup
+## Setup
 Steps to build and run this project:
 
 1. Clone or download this repository
@@ -33,7 +35,7 @@ Steps to build and run this project:
 5. Choose your favorite platform and click on Run :)
 
 
-## architecture overview
+## Architecture overview
 
 This section describes the way I've organized my files and directories
 to build this app in the clearest way possible.
@@ -48,7 +50,7 @@ All data are managed inside the ```Data/``` folder.
 
 For more information, visit the corresponding folders.
 
-## contributing
+## Contributing
 
 You can contribute to improve this project by:
 
@@ -57,11 +59,11 @@ You can contribute to improve this project by:
 * submitting new ideas / features suggestions
 * reporting a bug
 
-## todo
+## Todo
 
 * Lockscreen background
 
-## platforms
+## Platforms
 
 * Windows Mobile 10
 * Windows 10
